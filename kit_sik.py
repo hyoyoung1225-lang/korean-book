@@ -35,10 +35,12 @@ EXTRA_CSS = f"""
 """
 
 HEAD = f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
 <style>{CSS}</style>
 <style>
-body {{ font-family:'Pretendard','Noto Sans CJK KR',sans-serif; }}
-.serif {{ font-family:'Noto Serif CJK KR',serif !important; }}
+body {{ font-family:'Arimo','Liberation Sans','Noto Sans KR','Noto Sans CJK KR',sans-serif; }}
+h2.sec, .formbig, .serif {{ font-family:'Noto Serif KR','Noto Serif CJK KR',serif !important; }}
+.enc {{ font-family:'Noto Sans KR','Noto Sans CJK KR',sans-serif; }}
 {EXTRA_CSS}</style>
 </head>"""
 
@@ -60,13 +62,14 @@ def vcard(word, lv, mean, ex, hanja=""):
       <div class="mean">{mean}</div><div class="ex">{ex}</div></div>'''
 
 def sitebox_img(img_svg, quote, source):
-    return f'''<div class="sitebox" style="margin-bottom:22px;">
+    """1·2과식: 그림+인용 가운데 정렬, 인용문은 본문체(세리프 X), 목표 문법만 <b>."""
+    return f'''<div class="sitebox" style="margin-bottom:14px;">
       <div class="head">현장에서 만나기</div>
-      <div class="body" style="display:flex;align-items:center;gap:22px;text-align:left;">
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
         <div style="flex:none;">{img_svg}</div>
-        <div style="flex:1;">
-          <div class="serif" style="font-size:18px;line-height:1.6;color:{DEEP};">"{quote}"</div>
-          <div style="font-size:12px;color:{SUB};margin-top:8px;">{source}</div></div></div></div>'''
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:{INK};">"{quote}"</div>
+          <div style="font-size:12px;color:{SUB};margin-top:7px;">{source}</div></div></div></div>'''
 
 def connect(left, right, lw=140, rw=150, gap=96, rowgap=18):
     """1·2과식: 좌 항목(번호+말) 오른끝에 점 정렬, 우 항목 왼끝 점, 가운데 넓게.
