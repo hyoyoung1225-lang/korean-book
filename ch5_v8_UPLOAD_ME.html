@@ -1,0 +1,449 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+@page { size:794px 1123px; margin:0; }
+body { font-family:'Pretendard',sans-serif; color:#22272B; letter-spacing:-0.01em; word-break:keep-all; }
+.serif { font-family:'Noto Serif CJK KR',serif; letter-spacing:0; }
+
+.page { width:794px; height:1123px; page-break-after:always; position:relative;
+         background:#fff; padding:64px 64px 0 64px; overflow:hidden; }
+
+/* 본문 줄글: 양쪽 맞춤. 단 마지막 줄은 왼쪽 정렬(리버 방지) */
+.prose { text-align:justify; text-align-last:left; font-size:15.5px;
+          line-height:1.85; }
+
+/* 문제/빈칸/표/캡션: 왼쪽 맞춤 */
+.left { text-align:left; }
+
+/* 푸터: y 고정 → 푸터 위 여백 항상 일정 */
+.footer { position:absolute; top:1059px; left:64px; right:64px;
+           border-top:1px solid #D8DDE1; padding-top:10px;
+           display:flex; flex-direction:column; gap:3px; }
+.footer .frow { display:flex; justify-content:space-between; font-size:11px; color:#6E7681; letter-spacing:.06em; }
+.footer .cr { font-size:9.5px; color:#9AA0A6; letter-spacing:.02em; }
+
+/* 섹션 헤더 (좌측 기준선 정렬) */
+.eyebrow { font-size:12px; font-weight:700; color:#3E6AB8; letter-spacing:.28em; margin-bottom:8px; }
+h2.sec { font-family:'Noto Serif CJK KR',serif; font-size:27px; font-weight:700;
+          padding-bottom:14px; border-bottom:2px solid #24418E; margin-bottom:22px; }
+
+/* 요소 칩 */
+.el { margin-bottom:14px; }
+.el span { display:inline-block; background:#24418E; color:#fff; font-size:13.5px; font-weight:800;
+            letter-spacing:.16em; padding:6px 16px; border-radius:3px; }
+
+.num { display:inline-flex; width:30px; height:30px; border-radius:50%; background:#24418E;
+        color:#fff; font-weight:800; font-size:16px; align-items:center; justify-content:center; }
+.lv { font-size:11.5px; font-weight:800; letter-spacing:.12em; padding:4px 10px; border-radius:3px; }
+.lv.b { background:#EEF4FB; color:#24418E; }
+.lv.a { background:#24418E; color:#fff; }
+.formbig { font-family:'Noto Serif CJK KR',serif; font-size:24px; font-weight:700; }
+
+/* 표 (셀 패딩 고정) */
+table.f { width:100%; border-collapse:collapse; font-size:15.5px; line-height:1.7; text-align:left; }
+table.f th { background:#EEF4FB; color:#1B2E6B; font-size:13px; letter-spacing:.06em;
+              padding:9px 12px; text-align:left; border:1px solid #D8DDE1; }
+table.f td { padding:9px 12px; border:1px solid #D8DDE1; vertical-align:top; }
+
+.x { color:#C8102E; font-weight:600; }
+
+/* 컴포넌트 박스 (패딩 고정) */
+.tintbox { background:#EEF4FB; border-left:3px solid #24418E; padding:14px 20px;
+            font-size:15.5px; line-height:1.85; }
+.caution { border:1.5px solid #C8102E; border-radius:6px; padding:14px 20px; }
+.drill { border:1px solid #D8DDE1; border-radius:6px; padding:16px 20px; background:#FBFCFE; }
+
+/* 강조 박스: 가운데 정렬 (현장에서 만나기) */
+.sitebox { border:1.5px solid #24418E; border-radius:8px; overflow:hidden; }
+.sitebox .head { background:#24418E; color:#fff; text-align:center; font-size:13.5px;
+                  font-weight:800; letter-spacing:.22em; padding:8px 0; }
+.sitebox .body { background:#fff; text-align:center; padding:11px 24px; }
+</style>
+<style>
+body { font-family:'Arimo','Liberation Sans','Noto Sans KR','Noto Sans CJK KR',sans-serif; }
+h2.sec, .formbig, .serif { font-family:'Noto Serif KR','Noto Serif CJK KR',serif !important; }
+.enc { font-family:'Noto Sans KR','Noto Sans CJK KR',sans-serif; }
+
+/* 어휘 카드 (2열) */
+.vgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.vcard { border:1px solid #D8DDE1; border-radius:8px; padding:11px 15px; }
+.vcard .top { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
+.vcard .w { font-family:'Noto Serif KR',serif; font-size:19px; font-weight:700; color:#1B2E6B; }
+.vcard .hanja { font-size:13px; color:#6E7681; }
+.vcard .badge { margin-left:auto; }
+.vcard .mean { font-size:13.5px; color:#22272B; line-height:1.45; }
+.vcard .ex { font-size:12.5px; color:#6E7681; line-height:1.45; border-top:1px dashed #D8DDE1;
+             padding-top:6px; margin-top:6px; }
+/* 원형 A·B·C / 번호 배지 (큰) */
+.cbadge { display:inline-flex; width:30px; height:30px; border-radius:50%; background:#24418E;
+           color:#fff; font-weight:800; font-size:15px; align-items:center; justify-content:center; }
+.sechead { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.sechead .t { font-weight:800; font-size:15.5px; }
+/* 워드뱅크 (음영 박스 중앙) */
+.wbank { background:#EEF4FB; border-radius:6px; text-align:center; padding:12px;
+          font-size:15px; font-weight:700; color:#24418E; letter-spacing:.06em; margin-bottom:16px; }
+/* 표지/장치 카드 그리드 */
+.scard { border:1px solid #D8DDE1; border-radius:8px; padding:14px 10px; text-align:center; }
+.scard .nm { font-weight:700; font-size:15px; color:#1B2E6B; margin-top:8px; }
+.scard .han { font-size:11.5px; color:#6E7681; margin-top:2px; }
+.scard .ds { font-size:12px; color:#22272B; margin-top:4px; line-height:1.4; }
+/* 밑줄 빈칸 */
+.bl { display:inline-block; border-bottom:1.3px solid #333; }
+/* 원문자(①㉠ 등) 크기 통일 — 한 폰트에서 렌더 */
+.enc { font-family:'Noto Sans CJK KR',sans-serif; font-size:1em; }
+/* 배지(.el) — Canva 임포트 시 상자/글자 분리돼도 가운데 유지 */
+.el span { display:inline-flex !important; align-items:center; justify-content:center;
+            text-align:center; letter-spacing:.10em; padding:7px 18px; line-height:1.2; }
+</style>
+</head><body><div class="page" data-document-role="page" data-label="제5과 도비라" style="padding:0;">
+  <div style="position:absolute; top:44px; left:64px; right:64px; display:flex; justify-content:space-between; border-bottom:2px solid #24418E; padding-bottom:12px;">
+    <span style="font-size:13px; letter-spacing:.42em; color:#22272B; font-weight:600;">산업안전한국어</span>
+    <span style="font-size:13px; letter-spacing:.14em; color:#24418E; font-weight:800;">2부 · 작업절차</span></div>
+  <div style="position:absolute; right:0; top:96px; width:330px; height:470px; overflow:hidden;
+     background:linear-gradient(180deg,#DFE8F6 0%,#EEF3FB 100%);">
+  <svg width="330" height="470" viewBox="0 0 330 470" style="position:absolute; left:0; top:0;">
+    <rect x="30" y="250" width="42" height="220" fill="#C3D2EA"/><rect x="86" y="300" width="34" height="170" fill="#B4C6E4"/>
+    <rect x="250" y="270" width="46" height="200" fill="#C3D2EA"/><rect x="300" y="320" width="30" height="150" fill="#B4C6E4"/>
+    <rect x="150" y="0" width="26" height="470" fill="#24418E" transform="skewX(-8)"/></svg>
+  <div style="position:absolute; left:50px; top:60px; width:230px; background:#fff; border-radius:14px;
+       box-shadow:0 8px 24px rgba(27,46,107,.18); padding:14px; display:grid; grid-template-columns:1fr 1fr; gap:12px;"><div style="text-align:center;"><svg width="84" height="84" viewBox="0 0 100 100"><rect x="16" y="40" width="68" height="44" rx="5" fill="#EEF4FB" stroke="#24418E" stroke-width="5"/><path d="M22 40 V26 H78 V40" fill="none" stroke="#24418E" stroke-width="5"/><line x1="30" y1="50" x2="30" y2="74" stroke="#24418E" stroke-width="4"/><line x1="44" y1="50" x2="44" y2="74" stroke="#24418E" stroke-width="4"/><line x1="58" y1="50" x2="58" y2="74" stroke="#24418E" stroke-width="4"/><line x1="72" y1="50" x2="72" y2="74" stroke="#24418E" stroke-width="4"/></svg><div style="font-size:11px; color:#3A4046; margin-top:2px; font-weight:700;">방호 덮개</div></div><div style="text-align:center;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#EEF4FB" stroke="#24418E" stroke-width="5"/><circle cx="50" cy="46" r="18" fill="#C8102E"/><rect x="36" y="62" width="28" height="8" rx="3" fill="#24418E"/></svg><div style="font-size:11px; color:#3A4046; margin-top:2px; font-weight:700;">비상 정지</div></div><div style="text-align:center;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="34" cy="42" r="20" fill="none" stroke="#24418E" stroke-width="6"/><circle cx="66" cy="42" r="20" fill="none" stroke="#24418E" stroke-width="6"/><path d="M50 66 L44 88 M50 66 L56 88" stroke="#C8102E" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="42" r="5" fill="#C8102E"/></svg><div style="font-size:11px; color:#3A4046; margin-top:2px; font-weight:700;">끼임 주의</div></div><div style="text-align:center;"><svg width="84" height="84" viewBox="0 0 100 100"><path d="M20 22 H80 V40 L60 52 H40 L20 40 Z" fill="#24418E"/><path d="M20 78 H80 V62 L60 52 H40 L20 62 Z" fill="#B4C6E4"/><line x1="50" y1="12" x2="50" y2="22" stroke="#24418E" stroke-width="6"/></svg><div style="font-size:11px; color:#3A4046; margin-top:2px; font-weight:700;">금형</div></div></div></div>
+  <div style="position:absolute; left:64px; top:130px; width:360px;">
+    <div class="serif" style="font-size:120px; font-weight:900; color:#24418E; line-height:.95;">05</div>
+    <div style="display:inline-block; background:#1B2E6B; color:#fff; font-size:13.5px; font-weight:800; letter-spacing:.3em; padding:7px 18px; margin:16px 0 14px 0;">제 5 과</div>
+    <div class="serif" style="font-size:44px; font-weight:900; color:#22272B;">설비 안전수칙 읽기</div></div>
+  <div style="position:absolute; top:604px; left:64px; right:64px; display:flex; gap:26px;">
+    <div style="flex:1.05;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+        <svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#24418E" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="#24418E" stroke-width="2"/><circle cx="12" cy="12" r="1.5" fill="#24418E"/></svg>
+        <span style="font-size:17px; font-weight:800;">학습 목표</span><div style="flex:1; height:1px; background:#D8DDE1;"></div></div>
+      <div style="display:flex; gap:13px; align-items:flex-start; margin-bottom:14px;">
+      <span style="flex:none; display:inline-flex; width:27px; height:27px; border-radius:50%; background:#24418E; color:#fff; font-weight:800; font-size:14.5px; align-items:center; justify-content:center;">1</span>
+      <span style="font-size:15.5px; line-height:1.7; padding-top:1px;">설비 안전 어휘로 기계의 <b>금지·주의 항목</b>을 읽고 이해한다.</span></div><div style="display:flex; gap:13px; align-items:flex-start; margin-bottom:14px;">
+      <span style="flex:none; display:inline-flex; width:27px; height:27px; border-radius:50%; background:#24418E; color:#fff; font-weight:800; font-size:14.5px; align-items:center; justify-content:center;">2</span>
+      <span style="font-size:15.5px; line-height:1.7; padding-top:1px;">피동과 사동을 구별해 기계의 <b>위험(끼이다)과 조작(작동시키다)</b>을 말한다.</span></div><div style="display:flex; gap:13px; align-items:flex-start; margin-bottom:14px;">
+      <span style="flex:none; display:inline-flex; width:27px; height:27px; border-radius:50%; background:#24418E; color:#fff; font-weight:800; font-size:14.5px; align-items:center; justify-content:center;">3</span>
+      <span style="font-size:15.5px; line-height:1.7; padding-top:1px;">설비 안전수칙을 읽고 <b>금지와 예외</b>를 찾아낸다.</span></div></div>
+    <div style="flex:1; align-self:flex-start; background:#EEF4FB; border-radius:10px; padding:20px 24px;">
+      <div style="display:flex; align-items:center; gap:9px; margin-bottom:12px;">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 3 a6 6 0 0 1 3 11 v3 h-6 v-3 a6 6 0 0 1 3 -11 Z M10 20 h4" fill="none" stroke="#24418E" stroke-width="2"/></svg>
+        <span style="font-size:16px; font-weight:800;">생각해 보기</span></div>
+      <div style="font-size:15px; line-height:2.0;">기계의 덮개를 열어 본 적이 있습니까?
+      <div style="border-top:1px dashed #D8DDE1; margin:10px 0;"></div>그 덮개가 왜 거기에 있는지, 언제 열어도 되는지 한국어로 설명할 수 있을까요?</div></div></div>
+  <div style="position:absolute; top:872px; left:64px; right:64px; display:flex; gap:6px;"><div style="flex:1; text-align:center;">
+      <div style="width:52px; height:52px; border-radius:50%; background:#EEF4FB; margin:0 auto 8px auto; display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M4 4 h16 v12 h-9 l-5 4 v-4 h-2 Z" fill="none" stroke="#24418E" stroke-width="2"/><path d="M8 9 h8 M8 12 h5" stroke="#24418E" stroke-width="2"/></svg></div>
+      <div style="display:inline-block; background:#24418E; color:#fff; font-size:13px; font-weight:800; padding:5px 16px; border-radius:16px;">1교시 · 어휘</div>
+      <div style="font-size:12.5px; color:#6E7681; line-height:1.6; margin-top:7px;">설비 안전장치와<br>금지 어휘 12개</div></div><div style="align-self:center; color:#D8DDE1; font-size:22px;">›</div><div style="flex:1; text-align:center;">
+      <div style="width:52px; height:52px; border-radius:50%; background:#EEF4FB; margin:0 auto 8px auto; display:flex; align-items:center; justify-content:center;"><span class="serif" style="font-size:22px; font-weight:900; color:#24418E;">Aa</span></div>
+      <div style="display:inline-block; background:#3E6AB8; color:#fff; font-size:13px; font-weight:800; padding:5px 16px; border-radius:16px;">2교시 · 문형</div>
+      <div style="font-size:12.5px; color:#6E7681; line-height:1.6; margin-top:7px;">피동↔사동 · 다만<br>N(이)란 …을 말한다</div></div><div style="align-self:center; color:#D8DDE1; font-size:22px;">›</div><div style="flex:1; text-align:center;">
+      <div style="width:52px; height:52px; border-radius:50%; background:#EEF4FB; margin:0 auto 8px auto; display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 5 q-4 -3 -9 -2 v15 q5 -1 9 2 q4 -3 9 -2 V3 q-5 -1 -9 2 Z M12 5 v15" fill="none" stroke="#24418E" stroke-width="2"/></svg></div>
+      <div style="display:inline-block; background:#1B2E6B; color:#fff; font-size:13px; font-weight:800; padding:5px 16px; border-radius:16px;">3교시 · 읽기</div>
+      <div style="font-size:12.5px; color:#6E7681; line-height:1.6; margin-top:7px;">설비 안전수칙 읽기<br>우리 기계 안전 카드</div></div></div>
+  <div style="position:absolute; top:1059px; left:64px; right:64px; border-top:1px solid #D8DDE1; padding-top:14px; display:flex; align-items:center; gap:10px;">
+    <svg width="20" height="22" viewBox="0 0 22 24"><path d="M11 1 L21 5 V12 q0 8 -10 11 Q1 20 1 12 V5 Z" fill="#24418E"/><path d="M11 7 v6 M8 10 h6" stroke="#fff" stroke-width="2.2"/></svg>
+    <span style="font-size:14px; font-weight:700; color:#22272B;">가동 중인 기계 앞 — 먼저 읽고, 그다음 움직입니다.</span>
+    <span style="margin-left:auto; font-size:13px; font-weight:800; color:#24418E;">05</span></div>
+</div><div class="page" data-document-role="page" data-label="핵심어휘12"><div class="eyebrow">1교시 · 어휘</div>
+<h2 class="sec">핵심 어휘 12</h2>
+<div style="font-size:12.5px;color:#6E7681;margin-bottom:14px;"><span class="lv b" style="margin-right:6px;">기본</span>모든 학생 필수 &nbsp;·&nbsp; <span class="lv a" style="margin-right:6px;">심화</span>법규·점검표의 문어 표현 — 읽고 이해하면 충분합니다.</div>
+<div class="vgrid"><div class="vcard"><div class="top"><span class="w">방호장치</span><span class="badge lv b">기본</span></div>
+      <div class="mean">위험한 부분에서 사람을 지키는 장치 — 3과 '방호'와 장치가 만난 말</div><div class="ex">기계의 방호장치를 함부로 떼면 안 됩니다.</div></div><div class="vcard"><div class="top"><span class="w">덮개</span><span class="badge lv b">기본</span></div>
+      <div class="mean">위험한 부분을 덮어서 막는 것</div><div class="ex">회전부에 덮개가 설치되어 있습니다.</div></div><div class="vcard"><div class="top"><span class="w">울</span><span class="badge lv b">기본</span></div>
+      <div class="mean">위험한 곳 둘레를 막는 틀 (방호울)</div><div class="ex">동력전달부에는 덮개 또는 울을 설치합니다.</div></div><div class="vcard"><div class="top"><span class="w">금형</span><span class="badge lv b">기본</span></div>
+      <div class="mean">프레스에서 재료를 눌러 모양을 만드는 틀</div><div class="ex">금형 사이에 손을 넣지 마십시오.</div></div><div class="vcard"><div class="top"><span class="w">안전블록</span><span class="badge lv b">기본</span></div>
+      <div class="mean">슬라이드가 내려오지 않게 받치는 블록</div><div class="ex">금형을 교체할 때는 안전블록을 설치합니다.</div></div><div class="vcard"><div class="top"><span class="w">비상정지장치</span><span class="badge lv b">기본</span></div>
+      <div class="mean">위급할 때 기계를 바로 멈추는 장치</div><div class="ex">빨간 비상정지 버튼의 위치를 먼저 확인하십시오.</div></div><div class="vcard"><div class="top"><span class="w">작동</span><span class="badge lv b">기본</span></div>
+      <div class="mean">기계가 움직여서 일을 함</div><div class="ex">비상정지장치가 정상적으로 작동하는지 점검합니다.</div></div><div class="vcard"><div class="top"><span class="w">끼이다</span><span class="badge lv b">기본</span></div>
+      <div class="mean">두 물체 사이에 껴서 빠지지 않게 되다</div><div class="ex">손이 금형 사이에 끼일 우려가 있습니다.</div></div><div class="vcard"><div class="top"><span class="w">해체</span><span class="badge lv a">심화</span></div>
+      <div class="mean">설치된 장치를 떼어 냄</div><div class="ex">방호장치의 해체를 금지합니다.</div></div><div class="vcard"><div class="top"><span class="w">임의</span><span class="badge lv a">심화</span></div>
+      <div class="mean">정해진 절차 없이 마음대로 (임의로)</div><div class="ex">임의로 덮개를 열어서는 안 됩니다.</div></div><div class="vcard"><div class="top"><span class="w">개조</span><span class="badge lv a">심화</span></div>
+      <div class="mean">구조를 마음대로 바꿔 고침</div><div class="ex">스위치를 임의로 개조하면 방호 기능이 사라집니다.</div></div><div class="vcard"><div class="top"><span class="w">여부</span><span class="badge lv a">심화</span></div>
+      <div class="mean">그러한지 아닌지 (문서·점검표의 말)</div><div class="ex">작동 여부를 확인한 후에 보고하십시오.</div></div></div>
+<div style="margin-top:16px;border-top:1px dashed #D8DDE1;padding-top:10px;font-size:13px;color:#22272B;line-height:1.6;"><b>기억하기 · 해제 vs 해체</b> — 4과의 <b>해제</b>는 잠근 것을 푸는 것(잠금 해제), 5과의 <b>해체</b>는 붙어 있는 장치를 떼어 내는 것. 방호장치는 <span class="x">해체 ✗</span>, 잠금장치는 작업 후 해제 ○.</div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>02</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="어휘연습"><div class="eyebrow">1교시 · 어휘</div>
+<h2 class="sec">어휘 연습</h2>
+<div style="margin-bottom:30px;"><div class="sechead"><span class="cbadge">A</span><span class="t">단어와 뜻을 연결하십시오.</span></div>
+<div style="display:flex;gap:96px;"><div><div style="display:flex;align-items:center;gap:9px;margin-bottom:24px;width:150px;"><span><span class="enc">①</span></span><span style="flex:1;">덮개</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:24px;width:150px;"><span><span class="enc">②</span></span><span style="flex:1;">금형</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:24px;width:150px;"><span><span class="enc">③</span></span><span style="flex:1;">임의</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:24px;width:150px;"><span><span class="enc">④</span></span><span style="flex:1;">여부</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:24px;width:150px;"><span><span class="enc">⑤</span></span><span style="flex:1;">해체</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div></div><div><div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉠</span></span><span>그러한지 아닌지</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉡</span></span><span>위험 부분을 덮는 것</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉢</span></span><span>장치를 떼어 냄</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉣</span></span><span>절차 없이 마음대로</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉤</span></span><span>모양을 만드는 틀</span></div></div></div></div>
+<div style="margin-bottom:30px;"><div class="sechead"><span class="cbadge">B</span><span class="t">알맞은 단어를 골라 빈칸을 채우십시오.</span></div>
+<div class="wbank">방호장치 &nbsp;·&nbsp; 비상정지장치 &nbsp;·&nbsp; 안전블록 &nbsp;·&nbsp; 작동</div>
+<div class="left">
+ <div style="margin-bottom:26px;line-height:1.95;"><span class="enc">①</span> 위급할 때는 먼저 <span class="bl" style="min-width:150px;">&nbsp;</span>의 빨간 버튼을 누르십시오.</div>
+ <div style="margin-bottom:26px;line-height:1.95;"><span class="enc">②</span> 금형을 교체하기에 앞서 <span class="bl" style="min-width:130px;">&nbsp;</span>을 설치하십시오.</div>
+ <div style="margin-bottom:26px;line-height:1.95;"><span class="enc">③</span> 기계·기구에 설치한 <span class="bl" style="min-width:130px;">&nbsp;</span>를 해체해서는 안 됩니다.</div>
+ <div style="margin-bottom:0px;line-height:1.95;"><span class="enc">④</span> 점검표에 장치의 <span class="bl" style="min-width:90px;">&nbsp;</span> 여부를 표시하십시오.</div></div></div>
+<div style="margin-bottom:0px;"><div class="sechead"><span class="cbadge">C</span><span class="t">맞는 것을 고르십시오.</span></div>
+<div class="left" style="line-height:2.0;">
+ <div style="margin-bottom:15px;"><span class="enc">①</span> 작업이 끝난 후 잠금장치를 ( 해제 / 해체 )했습니다.</div>
+ <div style="margin-bottom:15px;"><span class="enc">②</span> 방호 덮개를 임의로 ( 해제 / 해체 )해서는 안 됩니다.</div>
+ <div><span class="enc">③</span> 장갑이 회전부에 ( 끼이지 / 끼우지 ) 않도록 주의하십시오.</div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>03</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="개념"><div class="eyebrow">1교시 · 어휘</div>
+<h2 class="sec">두 개의 안전 — 멈춘 기계와 움직이는 기계</h2>
+<div class="prose" style="margin-bottom:18px;">4과에서 우리는 <b>멈춘 기계</b>의 안전을 배웠습니다 — 정비하기에 앞서 운전을 정지하고, 전원을 차단하고, 잠금장치를 설치했습니다. 5과는 <b>움직이는 기계</b>의 안전입니다. 기계가 가동 중일 때 사람을 지키는 것은 절차가 아니라 <b>장치</b>입니다. 덮개와 울이 위험한 부분을 막고, 비상정지장치가 마지막 순간에 기계를 멈춥니다.</div>
+<div style="margin-bottom:20px;"><table class="f">
+ <tr><th style="width:22%;"></th><th style="width:39%;">4과 · 멈춘 기계</th><th>5과 · 움직이는 기계</th></tr>
+ <tr><td><b>언제</b></td><td>정비·청소·수리할 때</td><td>가동 중 작업할 때</td></tr>
+ <tr><td><b>무엇으로</b></td><td>절차 — 정지·차단·잠금·표지</td><td>장치 — 덮개·울·비상정지장치</td></tr>
+ <tr><td><b>핵심 규칙</b></td><td>잠그지 않은 채 만져서는 안 된다</td><td>방호장치를 해체해서는 안 된다</td></tr>
+ <tr><td><b>관련 조문</b></td><td>제92조 (운전정지)</td><td>제93조 (방호장치의 해체 금지)</td></tr></table></div>
+<div style="margin-bottom:22px;"><div class="el"><span>위험점 — 기계의 어디가 위험한가</span></div><div style="margin-top:12px;"><div class="prose" style="margin-bottom:14px;">움직이는 기계에는 <b>몸이 끼이는 지점</b>이 정해져 있습니다. 이 지점을 알면 덮개와 울이 왜 거기에 있는지 보입니다.</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+ <div class="scard"><svg width="64" height="64" viewBox="0 0 100 100"><circle cx="50" cy="50" r="17" fill="none" stroke="#24418E" stroke-width="6"/><g stroke="#24418E" stroke-width="6" stroke-linecap="round"><line x1="50" y1="22" x2="50" y2="32"/><line x1="50" y1="68" x2="50" y2="78"/><line x1="22" y1="50" x2="32" y2="50"/><line x1="68" y1="50" x2="78" y2="50"/><line x1="30" y1="30" x2="37" y2="37"/><line x1="63" y1="63" x2="70" y2="70"/><line x1="30" y1="70" x2="37" y2="63"/><line x1="63" y1="37" x2="70" y2="30"/></g></svg><div class="nm">회전부</div><div class="ds">돌아가는 축·기어 —<br>장갑·옷이 <b>감긴다</b></div></div>
+ <div class="scard"><svg width="64" height="64" viewBox="0 0 100 100"><circle cx="34" cy="42" r="20" fill="none" stroke="#24418E" stroke-width="6"/><circle cx="66" cy="42" r="20" fill="none" stroke="#24418E" stroke-width="6"/><path d="M50 66 L44 88 M50 66 L56 88" stroke="#C8102E" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="42" r="5" fill="#C8102E"/></svg><div class="nm">물림점</div><div class="ds">맞물리는 롤러 사이 —<br>손이 <b>말려 들어간다</b></div></div>
+ <div class="scard"><svg width="64" height="64" viewBox="0 0 100 100"><path d="M20 22 H80 V40 L60 52 H40 L20 40 Z" fill="#24418E"/><path d="M20 78 H80 V62 L60 52 H40 L20 62 Z" fill="#B4C6E4"/><line x1="50" y1="12" x2="50" y2="22" stroke="#24418E" stroke-width="6"/></svg><div class="nm">끼임점</div><div class="ds">내려오는 금형 사이 —<br>몸이 <b>끼인다</b></div></div></div></div></div>
+<div style="margin-bottom:0px;"><div class="el"><span>확인</span></div><div style="margin-top:12px;"><div class="left" style="line-height:2.0;">
+ <div style="margin-bottom:10px;"><span class="enc">①</span> 가동 중인 기계에서 사람을 지키는 것은 ( 절차 / 장치 )입니다.</div>
+ <div><span class="enc">②</span> 3과에서 배운 '감김'은 위 세 위험점 중 <span class="bl" style="min-width:90px;">&nbsp;</span>에서 일어납니다.</div></div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>04</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="어휘확장1"><div class="eyebrow">1교시 · 어휘</div>
+<h2 class="sec">어휘 확장 ① <small>프레스 방호장치의 네 얼굴</small></h2>
+<div class="prose" style="margin-bottom:18px;">프레스는 끼임 사고가 가장 많은 기계입니다. 그래서 방호장치의 형식도 여럿입니다 — 이름은 어렵지만 원리는 하나, <b>손이 위험한 곳에 있으면 기계가 움직이지 못하게</b> 하는 것입니다. 점검표와 안전검사표에는 이 이름들이 그대로 나오므로, 뜻은 몰라도 <b>이름을 읽고 알아보는 것</b>이 목표입니다.</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;">
+ <div class="scard" style="text-align:left;padding:24px 18px;"><div style="display:flex;align-items:center;gap:12px;"><svg width="56" height="56" viewBox="0 0 100 100"><rect x="18" y="30" width="64" height="48" rx="6" fill="#EEF4FB" stroke="#24418E" stroke-width="5"/><line x1="30" y1="38" x2="30" y2="70" stroke="#24418E" stroke-width="4"/><line x1="44" y1="38" x2="44" y2="70" stroke="#24418E" stroke-width="4"/><line x1="58" y1="38" x2="58" y2="70" stroke="#24418E" stroke-width="4"/><line x1="72" y1="38" x2="72" y2="70" stroke="#24418E" stroke-width="4"/></svg><div><div class="nm" style="margin-top:0;">가드식 (덮개)</div><div class="ds">문(가드)을 닫아야 기계가 움직이고, 움직이는 동안에는 열 수 없다.</div></div></div></div>
+ <div class="scard" style="text-align:left;padding:24px 18px;"><div style="display:flex;align-items:center;gap:12px;"><svg width="56" height="56" viewBox="0 0 100 100"><circle cx="22" cy="50" r="9" fill="#24418E"/><circle cx="78" cy="50" r="9" fill="#24418E"/><line x1="31" y1="50" x2="69" y2="50" stroke="#C8102E" stroke-width="4" stroke-dasharray="7 6"/></svg><div><div class="nm" style="margin-top:0;">광전자식 (빛)</div><div class="ds">보이지 않는 빛의 선을 손이 지나가면 기계가 즉시 멈춘다.</div></div></div></div>
+ <div class="scard" style="text-align:left;padding:24px 18px;"><div style="display:flex;align-items:center;gap:12px;"><svg width="56" height="56" viewBox="0 0 100 100"><circle cx="30" cy="60" r="13" fill="#24418E"/><circle cx="70" cy="60" r="13" fill="#24418E"/><path d="M24 38 Q30 26 36 38 M64 38 Q70 26 76 38" stroke="#24418E" stroke-width="5" fill="none" stroke-linecap="round"/></svg><div><div class="nm" style="margin-top:0;">양수조작식 (두 손)</div><div class="ds">두 손으로 버튼을 동시에 눌러야 작동한다 — 손이 금형 밖에 있게 된다.</div></div></div></div>
+ <div class="scard" style="text-align:left;padding:24px 18px;"><div style="display:flex;align-items:center;gap:12px;"><svg width="56" height="56" viewBox="0 0 100 100"><path d="M22 26 H78 V38 H22 Z" fill="#24418E"/><path d="M22 74 H78 V62 H22 Z" fill="#B4C6E4"/><rect x="42" y="38" width="16" height="24" fill="#C8102E"/></svg><div><div class="nm" style="margin-top:0;">안전블록 (받침)</div><div class="ds">금형을 만질 때 슬라이드가 내려오지 않게 사이를 받친다.</div></div></div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>읽어 보기</span></div><div style="margin-top:12px;"><div class="prose">점검표에는 이렇게 적혀 있습니다: "양손으로 조작하지 않으면 슬라이드가 <b>작동되지</b> 않아야 하며, 작동 중에 누름버튼에서 손이 하나라도 떨어지면 슬라이드 작동이 <b>정지할</b> 것." — 장치가 사람을 대신해 규칙을 지킵니다. 그래서 방호장치가 고장 나면 <b>기계 전체를 세우는 것</b>이 원칙입니다 — 4과에서 배운 제91조·제92조(고장 난 기계의 정비)가 여기와 이어집니다.</div></div></div>
+<div style="margin-bottom:0px;"><div class="el"><span>확인</span></div><div style="margin-top:12px;"><div class="left" style="line-height:2.0;">
+ <div style="margin-bottom:10px;"><span class="enc">①</span> 두 손으로 눌러야 작동하는 방호장치는 <span class="bl" style="min-width:110px;">&nbsp;</span>식입니다.</div>
+ <div style="margin-bottom:10px;"><span class="enc">②</span> 빛의 선으로 손을 감지하는 방호장치는 <span class="bl" style="min-width:110px;">&nbsp;</span>식입니다.</div>
+ <div style="margin-bottom:10px;"><span class="enc">③</span> 금형 교체 작업에서 슬라이드를 받치는 것은 <span class="bl" style="min-width:110px;">&nbsp;</span>입니다.</div>
+ <div><span class="enc">④</span> 네 장치의 공통 원리를 한 문장으로 쓰십시오. → 손이 위험한 곳에 있으면 기계가 <span class="bl" style="min-width:160px;">&nbsp;</span>.</div></div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>05</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="어휘확장2"><div class="eyebrow">1교시 · 어휘</div>
+<h2 class="sec">어휘 확장 ② <small>기계별 금지 항목 — 지게차·컨베이어·프레스</small></h2>
+<div class="prose" style="margin-bottom:14px;">기계마다 사고의 모양이 다르므로 금지 항목도 다릅니다. 기계 앞에 서면 <b>이 기계의 금지가 무엇인지</b>부터 확인하십시오. 아래는 세 기계의 대표 금지 항목입니다.</div>
+<div style="margin-bottom:16px;"><table class="f" style="font-size:13.5px;line-height:1.6;">
+ <tr><th style="width:18%;">기계</th><th style="width:44%;">대표 금지 항목</th><th>왜 위험한가</th></tr>
+ <tr><td><b>지게차</b></td><td>포크에 사람을 태워서는 안 된다<br>시동키를 꽂아 둔 채 자리를 떠나서는 안 된다</td><td>떨어짐 ·<br>다른 사람의 임의 운전</td></tr>
+ <tr><td><b>컨베이어</b></td><td>가동 중에 청소·수리를 해서는 안 된다<br>덮개·울을 열어 둔 채 가동해서는 안 된다</td><td>벨트·롤러에<br>말려 들어감 (3과 '감김')</td></tr>
+ <tr><td><b>프레스</b></td><td>금형 사이에 손을 넣어서는 안 된다<br>방호장치를 해체·개조해서는 안 된다</td><td>금형 사이에<br>끼임</td></tr></table></div>
+<div style="margin-bottom:22px;"><div class="el"><span>근거 조문 미리 보기</span></div><div style="margin-top:12px;"><div class="prose" style="font-size:14.5px;">덮개·울은 규칙이 정한 장치입니다 — 제87조는 "회전축·기어·풀리 등 위험 부위에 <b>덮개·울</b> 등을 설치"하도록 정합니다. 3과에서 배운 '회전부'가 조문에서는 '회전축'으로 나타납니다. 다음 쪽 문형을 배우면 이런 조문을 직접 읽습니다.</div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>함께 보기 · 주의 항목은 '확인'의 말</span></div><div style="margin-top:12px;"><div class="prose" style="font-size:14.5px;">금지 항목이 "하지 마라"라면, 주의 항목은 "먼저 확인하라"입니다: 작업을 시작하기에 앞서 <b>방호장치의 작동 여부</b>, <b>비상정지장치의 위치</b>, <b>덮개·울의 설치 상태</b>를 확인합니다. 이 세 가지가 5과의 can-do — 기계 앞에서 금지·주의 항목을 먼저 확인한다 — 입니다.</div></div></div>
+<div style="margin-bottom:0px;"><div class="el"><span>확인</span></div><div style="margin-top:12px;"><div class="left" style="line-height:1.85;">
+ <div style="margin-bottom:8px;"><span class="enc">①</span> 지게차의 <span class="bl" style="min-width:70px;">&nbsp;</span>에 사람을 태워서는 안 됩니다.</div>
+ <div style="margin-bottom:8px;"><span class="enc">②</span> 컨베이어는 <span class="bl" style="min-width:90px;">&nbsp;</span> 중에 청소를 해서는 안 됩니다.</div>
+ <div style="margin-bottom:8px;"><span class="enc">③</span> 프레스의 방호장치를 임의로 <span class="bl" style="min-width:90px;">&nbsp;</span>해서는 안 됩니다.</div>
+ <div><span class="enc">④</span> 세 기계 중 3과의 '감김' 위험이 가장 큰 것은 <span class="bl" style="min-width:90px;">&nbsp;</span>입니다.</div></div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>06</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형1"><div class="eyebrow">2교시 · 문형</div>
+<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px;">
+      <span class="cbadge" style="width:30px;height:30px;flex:none;">1</span><span class="formbig" style="font-size:24px;white-space:nowrap;">작동되다 ↔ 작동시키다</span>
+      <span class="lv b" style="margin-left:4px;flex:none;">기본</span>
+      <span style="margin-left:auto;font-size:12.5px;color:#6E7681;flex:none;">결합: 동사</span></div>
+<div class="sitebox" style="margin-bottom:14px;">
+      <div class="head">현장에서 만나기</div>
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
+        <div style="flex:none;"><div style="width:78px;height:78px;border-radius:50%;background:#EEF4FB;display:flex;align-items:center;justify-content:center;"><svg width="64" height="64" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="#EEF4FB"/><g stroke="#24418E" stroke-width="6" fill="none" stroke-linecap="round"><path d="M28 52 Q28 40 36 40 Q44 40 44 52"/><path d="M56 52 Q56 40 64 40 Q72 40 72 52"/></g><rect x="20" y="52" width="26" height="14" rx="5" fill="#24418E"/><rect x="54" y="52" width="26" height="14" rx="5" fill="#24418E"/><circle cx="50" cy="76" r="6" fill="#C8102E"/></svg></div></div>
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:#22272B;">"장갑이 롤러에 <b>끼이지</b> 않도록, 수리 후에는 담당자만 기계를 <b>작동시키십시오</b>."</div>
+          <div style="font-size:12px;color:#6E7681;margin-top:7px;">설비 안전작업수칙</div></div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>의미와 쓰임</span></div><div style="margin-top:12px;"><div class="prose">1과에서 배운 <b>피동</b>은 '당하는' 문장입니다 — 손이 <b>끼이다</b>, 기계가 <b>작동되다</b>. 이번에 배우는 <b>사동 '-시키다'</b>는 '하게 만드는' 문장입니다 — 기계를 <b>작동시키다</b>, 운전을 <b>정지시키다</b>. 사고 보고서는 피동으로, 조작 지시는 사동으로 씁니다. <b>방향이 반대인 한 쌍</b>으로 기억하십시오.</div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>비교</span></div><div style="margin-top:12px;"><table class="f"><tr><th style="width:26%;">쌍</th><th style="width:37%;">피동 — 당하다 <span style="font-weight:500;color:#6E7681;">(1과)</span></th><th>사동 — 하게 하다 <span style="font-weight:500;color:#6E7681;">(새로 배움)</span></th></tr>
+ <tr><td><b>끼다</b></td><td>손이 <b>끼이다</b></td><td>부품을 <b>끼우다</b></td></tr>
+ <tr><td><b>작동</b></td><td>기계가 <b>작동되다</b></td><td>기계를 <b>작동시키다</b></td></tr>
+ <tr><td><b>정지</b></td><td>기계가 <b>정지되다</b></td><td>운전을 <b>정지시키다</b></td></tr>
+ <tr><td><b>말리다</b></td><td>옷이 <b>말려 들어가다</b> <span style="font-weight:500;color:#6E7681;">(3과 '감김')</span></td><td>— (사동 없음: 짝이 없는 피동도 있다)</td></tr></table></div></div>
+<div style="margin-bottom:0px;"><div class="el"><span>연습</span></div><div style="margin-top:12px;"><div style="margin-bottom:12px;">알맞은 형태를 고르거나 쓰십시오.</div><div class="left">
+ <div style="margin-bottom:19px;line-height:1.85;"><span class="enc">①</span> 청소할 때는 기계를 반드시 ( 정지되십시오 / 정지시키십시오 ).</div>
+ <div style="margin-bottom:19px;line-height:1.85;"><span class="enc">②</span> 점검 중에 소재 이송 장치가 갑자기 (작동하다, 피동) → <span class="bl" style="min-width:130px;">&nbsp;</span> 사고가 났습니다.</div>
+ <div style="margin-bottom:0px;line-height:1.9;"><span class="enc">③</span> 롤러 사이에 손이 (끼다, 피동) → <span class="bl" style="min-width:110px;">&nbsp;</span> 우려가 있습니다.</div></div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>07</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형2"><div class="eyebrow">2교시 · 문형</div>
+<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px;">
+      <span class="cbadge" style="width:30px;height:30px;flex:none;">2</span><span class="formbig" style="font-size:23px;white-space:nowrap;">다만, -(으)ㄴ/는 경우에는 그러하지 아니하다</span>
+      </div>
+<div class="sitebox" style="margin-bottom:14px;">
+      <div class="head">현장에서 만나기</div>
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
+        <div style="flex:none;"><div style="width:78px;height:78px;border-radius:50%;background:#EEF4FB;display:flex;align-items:center;justify-content:center;"><svg width="64" height="64" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="#EEF4FB"/><rect x="30" y="24" width="40" height="52" rx="4" fill="#fff" stroke="#24418E" stroke-width="4"/><line x1="37" y1="36" x2="63" y2="36" stroke="#24418E" stroke-width="3.5"/><line x1="37" y1="46" x2="63" y2="46" stroke="#24418E" stroke-width="3.5"/><line x1="37" y1="56" x2="55" y2="56" stroke="#C8102E" stroke-width="3.5"/></svg></div></div>
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:#22272B;">"방호장치를 해체해서는 아니 된다. <b>다만</b>, 수리·조정 등의 작업을 하는 <b>경우에는 그러하지 아니하다</b>."</div>
+          <div style="font-size:12px;color:#6E7681;margin-top:7px;">산업안전보건기준에 관한 규칙 제93조</div></div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>의미와 쓰임</span></div><div style="margin-top:12px;"><div class="prose">법의 문장은 두 단으로 되어 있습니다 — 앞은 <b>원칙(금지)</b>, '다만' 뒤는 <b>예외</b>. '그러하지 아니하다'는 "앞의 규칙이 적용되지 않는다"라는 뜻의 법률 문어입니다. 이 문형은 <b>말하기용이 아니라 읽기용</b>입니다: 조문에서 '다만'이 보이면 "예외 조건이 나온다"라고 읽어 내면 됩니다. 3과의 '-(으)ㄹ 경우'가 여기서 다시 쓰입니다.</div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>비교</span></div><div style="margin-top:12px;"><table class="f"><tr><th style="width:30%;">표현</th><th style="width:34%;">뜻</th><th>쓰는 곳</th></tr>
+ <tr><td><b>다만, … 그러하지 아니하다</b></td><td>예외: 이때는 금지가 풀린다</td><td>법령 조문</td></tr>
+ <tr><td>-지만 / 그런데</td><td>대조 (일상)</td><td>대화·일반 글</td></tr>
+ <tr><td>-(으)ㄹ 경우 <span style="font-weight:500;color:#6E7681;">(3과)</span></td><td>조건 (문어)</td><td>수칙·안내문</td></tr></table></div></div>
+<div style="margin-bottom:0px;"><div class="el"><span>연습</span></div><div style="margin-top:12px;"><div style="margin-bottom:12px;">조문을 읽고 답하십시오: "방호장치를 해체하거나 사용을 정지해서는 아니 된다. 다만, 방호장치의 수리·조정 및 교체 등의 작업을 하는 경우에는 그러하지 아니하다."</div><div class="left">
+ <div style="margin-bottom:22px;line-height:1.9;"><span class="enc">①</span> 원칙(금지)에 밑줄을 치십시오.</div>
+ <div style="margin-bottom:22px;line-height:1.9;"><span class="enc">②</span> 예외가 시작되는 한 단어를 찾아 쓰십시오. → <span class="bl" style="min-width:80px;">&nbsp;</span></div>
+ <div style="margin-bottom:0px;line-height:1.9;"><span class="enc">③</span> 방호장치를 떼어도 되는 경우는 언제입니까? → <span class="bl" style="min-width:200px;">&nbsp;</span> 작업을 할 때</div></div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>08</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형3"><div class="eyebrow">2교시 · 문형</div>
+<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px;">
+      <span class="cbadge" style="width:30px;height:30px;flex:none;">3</span><span class="formbig" style="font-size:24px;white-space:nowrap;">N(이)란 …을/를 말한다</span>
+      <span class="lv a" style="margin-left:4px;flex:none;">심화</span>
+      <span style="margin-left:auto;font-size:12.5px;color:#6E7681;flex:none;">결합: 명사</span></div>
+<div class="sitebox" style="margin-bottom:14px;">
+      <div class="head">현장에서 만나기</div>
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
+        <div style="flex:none;"><div style="width:78px;height:78px;border-radius:50%;background:#EEF4FB;display:flex;align-items:center;justify-content:center;"><svg width="64" height="64" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="#EEF4FB"/><path d="M50 30 C42 24 30 24 24 27 V70 C30 67 42 67 50 73 C58 67 70 67 76 70 V27 C70 24 58 24 50 30 Z" fill="#fff" stroke="#24418E" stroke-width="5"/><line x1="50" y1="30" x2="50" y2="73" stroke="#24418E" stroke-width="4"/><line x1="30" y1="40" x2="44" y2="40" stroke="#24418E" stroke-width="3.5"/><line x1="30" y1="50" x2="44" y2="50" stroke="#C8102E" stroke-width="3.5"/><line x1="56" y1="40" x2="70" y2="40" stroke="#24418E" stroke-width="3.5"/></svg></div></div>
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:#22272B;">"프레스<b>란</b> 금형과 금형 사이에 재료를 넣고 압축, 절단 또는 조형하는 기계<b>를 말한다</b>."</div>
+          <div style="font-size:12px;color:#6E7681;margin-top:7px;">안전검사 고시 · 정의 조항</div></div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>의미와 쓰임</span></div><div style="margin-top:12px;"><div class="prose">법령·규정은 첫머리에서 말의 뜻을 <b>정의</b>하고 시작합니다. 그 공식이 <b>'N(이)란 …을/를 말한다'</b>입니다. 'N은/는 N이다'보다 격식이 높고, "이 문서에서 이 말은 정확히 이 뜻"이라고 못 박는 힘이 있습니다. 받침이 있으면 <b>-이란</b>(울이란), 없으면 <b>-란</b>(덮개란)입니다.</div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>비교</span></div><div style="margin-top:12px;"><table class="f"><tr><th style="width:30%;">표현</th><th style="width:34%;">뜻·힘</th><th>쓰는 곳</th></tr>
+ <tr><td><b>N(이)란 …을/를 말한다</b></td><td>공식 정의 (강함)</td><td>법령·규정·고시</td></tr>
+ <tr><td>N은/는 N이다</td><td>일반 설명</td><td>교과서·설명문</td></tr>
+ <tr><td>N(이)라고 하다</td><td>이름 붙이기</td><td>대화·소개</td></tr></table></div></div>
+<div style="margin-bottom:0px;"><div class="el"><span>연습</span></div><div style="margin-top:12px;"><div style="margin-bottom:12px;">'N(이)란 …을/를 말한다'로 정의문을 완성하십시오.</div><div class="left">
+ <div style="margin-bottom:16px;line-height:1.85;"><span class="enc">①</span> 방호장치 / 위험한 부분에서 사람을 지키는 장치<br>→ 방호장치<span class="bl" style="min-width:60px;">&nbsp;</span> 위험한 부분에서 사람을 지키는 장치<span class="bl" style="min-width:90px;">&nbsp;</span>.</div>
+ <div style="margin-bottom:16px;line-height:1.85;"><span class="enc">②</span> 비상정지장치 / 위급할 때 기계를 바로 멈추는 장치 → <span class="bl" style="min-width:300px;">&nbsp;</span></div>
+ <div style="margin-bottom:0px;line-height:1.85;"><span class="enc">③</span> 우리 작업장의 기계 하나를 골라 정의문을 쓰십시오. → <span class="bl" style="min-width:300px;">&nbsp;</span></div></div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>09</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형종합"><div class="eyebrow">2교시 · 문형</div>
+<h2 class="sec">문형 종합</h2>
+<div style="margin-bottom:20px;"><table class="f">
+ <tr><th style="width:8%;text-align:center;">번호</th><th style="width:38%;">문형</th><th style="width:27%;">하는 일</th><th>어디서</th></tr>
+ <tr><td style="text-align:center;"><span class="enc">①</span></td><td><b>피동 ↔ 사동</b> (끼이다/끼우다 · 작동되다/작동시키다)</td><td>위험은 피동, 조작은 사동</td><td>보고서 · 조작 지시</td></tr>
+ <tr><td style="text-align:center;"><span class="enc">②</span></td><td><b>다만, … 그러하지 아니하다</b></td><td>조문의 예외를 읽어 냄</td><td>법령 조문</td></tr>
+ <tr><td style="text-align:center;"><span class="enc">③</span></td><td><b>N(이)란 …을/를 말한다</b></td><td>말의 뜻을 공식으로 정의</td><td>규정 · 정의 조항</td></tr></table></div>
+<div style="margin-bottom:22px;"><div class="el"><span>한 문서 안에서 만나기</span></div><div style="margin-top:12px;"><div class="prose" style="margin-bottom:14px;">세 문형은 한 장의 규정 안에서 이렇게 함께 삽니다 — 첫 줄이 말의 뜻을 정하고, 둘째 줄이 금지하고, 셋째 줄이 예외를 엽니다. 각 문장이 어느 문형인지 괄호에 번호를 쓰십시오.</div>
+<div class="tintbox" style="padding:16px 22px;">
+ <div style="font-size:15px;line-height:2.35;">"비상정지장치<b>란</b> 위급할 때 기계를 즉시 멈추는 장치<b>를 말한다</b>. ( &nbsp; )<br>
+ 방호장치가 해체된 기계는 <b>작동시켜서는</b> 아니 된다. ( &nbsp; )<br>
+ <b>다만</b>, 수리를 위하여 시험 운전을 하는 <b>경우에는 그러하지 아니하다</b>. ( &nbsp; )</div></div></div></div>
+<div style="margin-bottom:0px;"><div class="el"><span>바꿔 쓰기</span></div><div style="margin-top:12px;"><div class="left" style="line-height:2.0;">
+ <div style="margin-bottom:30px;"><span class="enc">①</span> "기계가 갑자기 움직여서 손을 다쳤어요" → 보고서 문장(피동)으로: 기계가 불시에 <span class="bl" style="min-width:110px;">&nbsp;</span> 손이 <span class="bl" style="min-width:90px;">&nbsp;</span>.</div>
+ <div style="margin-bottom:30px;"><span class="enc">②</span> "고칠 때만 떼도 돼요" → 규정 문장으로: 해체해서는 아니 된다. <span class="bl" style="min-width:70px;">&nbsp;</span>, 수리하는 <span class="bl" style="min-width:130px;">&nbsp;</span>.</div>
+ <div style="margin-bottom:0px;"><span class="enc">③</span> "안전블록? 그거 받침대예요" → 정의문으로: <span class="bl" style="min-width:320px;">&nbsp;</span></div></div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>10</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="실물자료읽기"><div class="eyebrow">3교시 · 읽기</div>
+<h2 class="sec">실물 자료 읽기</h2>
+<div style="margin-bottom:14px;"><div style="border:1.5px solid #24418E;border-radius:9px;overflow:hidden;">
+  <div style="background:#24418E;color:#fff;padding:12px 18px;">
+    <div class="serif" style="font-size:17px;font-weight:700;">설비 안전수칙 — 프레스·컨베이어 라인</div>
+    <div style="font-size:11.5px;opacity:.85;margin-top:3px;">제3공장 · 안전관리팀</div></div>
+  <div style="padding:12px 18px 4px;">
+    <div style="font-size:15.5px;line-height:1.7;margin-bottom:10px;padding-bottom:9px;border-bottom:1px dashed #D8DDE1;">방호장치<b>란</b> 기계의 위험한 부분에서 작업자를 지키는 장치<b>를 말한다</b>.</div>
+    <div style="display:flex;gap:10px;margin-bottom:9px;font-size:16px;line-height:1.7;"><span style="flex:none;font-weight:800;color:#24418E;">1.</span><span>방호장치를 임의로 해체하거나 개조<b>해서는 안 된다</b>. <b>다만</b>, 수리·조정을 위한 작업의 <b>경우에는 그러하지 아니하다</b>. <span style="color:#6E7681;font-size:12.5px;">(규칙 제93조)</span></span></div>
+    <div style="display:flex;gap:10px;margin-bottom:9px;font-size:16px;line-height:1.7;"><span style="flex:none;font-weight:800;color:#24418E;">2.</span><span>수리가 끝나면 <b>즉시</b> 방호장치를 원래대로 되돌린다. <span style="color:#6E7681;font-size:12.5px;">(규칙 제93조)</span></span></div>
+    <div style="display:flex;gap:10px;margin-bottom:9px;font-size:16px;line-height:1.7;"><span style="flex:none;font-weight:800;color:#24418E;">3.</span><span>가동 중에는 덮개와 울을 열어서는 안 된다. 손이 <b>끼일</b> 우려가 있다.</span></div>
+    <div style="display:flex;gap:10px;margin-bottom:9px;font-size:16px;line-height:1.7;"><span style="flex:none;font-weight:800;color:#24418E;">4.</span><span>머리카락이나 옷이 <b>말려 들어갈 우려</b>가 있으면 작업모·작업복을 착용한다. <span style="color:#6E7681;font-size:12.5px;">(규칙 제94조)</span></span></div>
+    <div style="display:flex;gap:10px;margin-bottom:9px;font-size:16px;line-height:1.7;"><span style="flex:none;font-weight:800;color:#24418E;">5.</span><span>회전하는 기계 앞에서는 <b>밀착되는 가죽 장갑을 끼지 않는다</b>. <span style="color:#6E7681;font-size:12.5px;">(규칙 제95조)</span></span></div>
+    <div style="display:flex;gap:10px;margin-bottom:9px;font-size:16px;line-height:1.7;"><span style="flex:none;font-weight:800;color:#24418E;">6.</span><span>이상이 있으면 기계를 <b>정지시키고</b> 관리자에게 알린다.</span></div></div>
+  <div style="border-top:1px solid #D8DDE1;padding:9px 18px;">
+    <div style="font-weight:800;color:#1B2E6B;font-size:14.5px;margin-bottom:8px;">작업 시작 전 점검표</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 22px;font-size:14.5px;">
+      <div>☐ 방호장치의 <b>작동 여부</b></div><div>☐ 비상정지장치의 <b>위치·기능</b></div>
+      <div>☐ 덮개·울의 <b>설치 상태</b></div><div>☐ 금형·볼트의 <b>고정 상태</b></div></div></div></div>
+<div style="font-size:11px;color:#6E7681;margin-top:7px;">※ 수업용 재구성 (근거: 산업안전보건기준에 관한 규칙 제93~95조 · KOSHA 프레스 안전작업 자료)</div></div>
+<div class="tintbox" style="margin-bottom:12px;padding:10px 20px;">
+  <div style="font-weight:800;color:#24418E;margin-bottom:7px;">읽기 전략 · 3단계 + 1</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 26px;font-size:13px;line-height:1.65;">
+    <div><b><span class="enc">①</span> 제목·번호 항목부터.</b> 무엇의 수칙인지 먼저 본다.</div>
+    <div><b><span class="enc">②</span> 금지 종결 찾기.</b> '-서는 안 된다'에 표시.</div>
+    <div><b><span class="enc">③</span> '다만' 찾기.</b> 금지가 풀리는 예외가 시작되는 곳이다.</div>
+    <div><b>+ 모르는 단어는 표시만.</b> 멈추지 말고 끝까지 읽는다.</div></div></div>
+<div class="drill" style="padding:11px 20px;"><div class="el"><span>문제</span></div>
+  <div style="margin:11px 0 0;"><div class="left">
+    <div style="margin-bottom:10px;line-height:1.8;"><span class="enc">①</span> 금지를 나타내는 문장('-서는 안 된다')에 모두 밑줄을 치십시오.</div>
+    <div style="margin-bottom:10px;line-height:1.8;"><span class="enc">②</span> 예외가 시작되는 한 단어를 찾아 쓰고, 어떤 경우인지 쓰십시오. → <span class="bl" style="min-width:70px;">&nbsp;</span> / <span class="bl" style="min-width:120px;">&nbsp;</span>을 위한 작업</div>
+    <div style="margin-bottom:0;line-height:1.8;"><span class="enc">③</span> 핵심 어휘 12개 중 이 문서에 나온 단어를 모두 찾아 ○ 표시하십시오.</div></div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>11</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="읽고답하기"><div class="eyebrow">3교시 · 읽기</div>
+<h2 class="sec">읽고 답하기</h2>
+<div style="margin-bottom:24px;"><div class="sechead"><span class="cbadge">A</span><span class="t">맞으면 O, 틀리면 X 하십시오.</span></div>
+<div class="left" style="line-height:2.1;">
+ <div style="margin-bottom:15px;"><span class="enc">①</span> 방호장치는 어떤 경우에도 해체할 수 없다. ( &nbsp; )</div>
+ <div style="margin-bottom:15px;"><span class="enc">②</span> 방호장치 수리가 끝나면 즉시 정상 기능을 되돌려야 한다. ( &nbsp; )</div>
+ <div style="margin-bottom:15px;"><span class="enc">③</span> 회전하는 기계 앞에서는 밀착되는 가죽 장갑을 끼는 것이 안전하다. ( &nbsp; )</div>
+ <div style="margin-bottom:15px;"><span class="enc">④</span> 머리카락이 말려 들어갈 우려가 있으면 작업모를 착용해야 한다. ( &nbsp; )</div>
+ <div style="margin-bottom:0px;"><span class="enc">⑤</span> 방호장치의 사용을 잠시 정지하는 것은 해체가 아니므로 언제나 괜찮다. ( &nbsp; )</div></div></div>
+<div style="margin-bottom:24px;"><div class="sechead"><span class="cbadge">B</span><span class="t">문서에서 근거를 찾아 쓰십시오.</span></div>
+<div class="left" style="line-height:2.0;">
+ <div style="margin-bottom:22px;"><span class="enc">①</span> A-<span class="enc">①</span>번이 틀린 이유를 수칙 1번에서 찾아 쓰십시오.<br>→ 다만, <span class="bl" style="min-width:140px;">&nbsp;</span>을 위한 작업의 경우에는 <span class="bl" style="min-width:160px;">&nbsp;</span></div>
+ <div style="margin-bottom:22px;"><span class="enc">②</span> 수칙 5번이 밀착 가죽 장갑을 금지하는 이유는 무엇입니까?<br>→ 손이 <span class="bl" style="min-width:200px;">&nbsp;</span> 위험이 있기 때문에</div>
+ <div style="margin-bottom:0px;"><span class="enc">③</span> 수칙 2번: 수리가 끝나면 무엇을 해야 합니까?<br>→ 즉시 방호장치를 <span class="bl" style="min-width:130px;">&nbsp;</span> 되돌린다</div></div></div>
+<div style="margin-bottom:0px;"><div class="sechead"><span class="cbadge">C</span><span class="t">상황에 어긋난 수칙 번호를 고르십시오.</span></div>
+<div class="left" style="line-height:2.0;">
+ <div style="margin-bottom:16px;"><span class="enc">①</span> 동료가 광전자식 방호장치가 자꾸 멈춘다며 테이프로 가려 놓았다. → 수칙 ( &nbsp;&nbsp; )번 위반</div>
+ <div style="margin-bottom:16px;"><span class="enc">②</span> 선반 작업에 새로 온 사람이 밀착 가죽 장갑을 끼고 있다. → 수칙 ( &nbsp;&nbsp; )번 위반</div>
+ <div style="margin-bottom:0px;"><span class="enc">③</span> 머리카락이 긴 작업자가 드릴 작업에 작업모 없이 투입됐다. → 수칙 ( &nbsp;&nbsp; )번 위반</div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>12</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="연습"><div class="eyebrow">3교시 · 읽기</div>
+<h2 class="sec">연습</h2>
+<div style="margin-bottom:18px;"><div class="sechead"><span class="cbadge">A</span><span class="t">문형으로 바꿔 쓰십시오.</span></div>
+<div class="left" style="line-height:2.0;">
+ <div style="margin-bottom:22px;"><span class="enc">①</span> "덮개 떼고 쓰지 마세요" → 수칙 문장으로: 덮개를 <span class="bl" style="min-width:90px;">&nbsp;</span> 채 사용해서는 안 된다.</div>
+ <div style="margin-bottom:22px;"><span class="enc">②</span> "컨베이어 돌아가는데 청소하면 손 빨려 들어가요" → 격식체로: 가동 중에 청소하면 손이 <span class="bl" style="min-width:130px;">&nbsp;</span> 우려가 있습니다.</div>
+ <div style="margin-bottom:0px;"><span class="enc">③</span> "울? 위험한 데 못 가게 막는 거예요" → 정의문으로: <span class="bl" style="min-width:320px;">&nbsp;</span></div></div></div>
+<div style="margin-bottom:18px;"><div class="sechead"><span class="cbadge">B</span><span class="t">무엇을 어떻게 합니까? 연결하십시오.</span></div>
+<div style="display:flex;gap:96px;"><div><div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;width:170px;"><span><span class="enc">①</span></span><span style="flex:1;">덮개를</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;width:170px;"><span><span class="enc">②</span></span><span style="flex:1;">비상정지장치를</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;width:170px;"><span><span class="enc">③</span></span><span style="flex:1;">안전블록을</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;width:170px;"><span><span class="enc">④</span></span><span style="flex:1;">작동 여부를</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;width:170px;"><span><span class="enc">⑤</span></span><span style="flex:1;">기계를</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div></div><div><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉠</span></span><span>누르다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉡</span></span><span>설치하다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉢</span></span><span>확인하다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉣</span></span><span>정지시키다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;width:230px;white-space:nowrap;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span><span class="enc">㉤</span></span><span>받치다</span></div></div></div></div>
+<div style="margin-bottom:0px;"><div class="sechead"><span class="cbadge">C</span><span class="t">점검표를 완성하십시오.</span></div>
+<div class="prose" style="margin-bottom:12px;">작업 시작 전, 점검표의 빈칸에 알맞은 말을 쓰십시오.</div>
+<table class="f" style="font-size:14px;">
+ <tr><th style="width:10%;text-align:center;">확인</th><th>점검 항목</th></tr>
+ <tr><td style="text-align:center;">☐</td><td>방호장치의 <span class="bl" style="min-width:80px;">&nbsp;</span> 여부 — 정상적으로 움직이는가</td></tr>
+ <tr><td style="text-align:center;">☐</td><td><span class="bl" style="min-width:120px;">&nbsp;</span>의 위치 — 위급할 때 바로 누를 수 있는가</td></tr>
+ <tr><td style="text-align:center;">☐</td><td>덮개·울의 설치 상태 — <span class="bl" style="min-width:80px;">&nbsp;</span>로 열려 있지 않은가</td></tr></table></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>13</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="상황쓰기"><div class="eyebrow">3교시 · 읽기</div>
+<h2 class="sec">상황 쓰기 <small>우리 기계 안전 카드 만들기</small></h2>
+<div class="tintbox" style="padding:16px 22px;margin-bottom:20px;">
+ <div style="font-weight:800;color:#24418E;margin-bottom:8px;">상황</div>
+ <div class="prose" style="font-size:14.5px;">새로 온 동료가 여러분의 작업장 기계를 처음 봅니다. 그 기계가 무엇인지, 무엇을 하면 안 되는지, 무엇을 먼저 확인해야 하는지를 <b>안전 카드 한 장</b>으로 써서 건네십시오. (기계가 없으면 이 과의 지게차·컨베이어·프레스 중 하나를 고르십시오.)</div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>1단계 · 정의</span></div><div style="margin-top:10px;" class="left">
+ <div style="font-size:13.5px;color:#6E7681;margin-bottom:8px;">문형 <span class="enc">③</span> — N(이)란 …을/를 말한다</div>
+ <div style="border-bottom:1px solid #D8DDE1;height:34px;margin-bottom:8px;width:640px;"></div><div style="border-bottom:1px solid #D8DDE1;height:34px;margin-bottom:8px;width:640px;"></div><div style="border-bottom:1px solid #D8DDE1;height:34px;margin-bottom:8px;width:640px;"></div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>2단계 · 금지 두 가지</span></div><div style="margin-top:10px;" class="left">
+ <div style="font-size:13.5px;color:#6E7681;margin-bottom:8px;">'-아/어서는 안 된다' — 피동·사동을 하나 이상 넣으십시오 (끼이다 · 작동시키다 …)</div>
+ <div style="border-bottom:1px solid #D8DDE1;height:34px;margin-bottom:8px;width:640px;"></div><div style="border-bottom:1px solid #D8DDE1;height:34px;margin-bottom:8px;width:640px;"></div><div style="border-bottom:1px solid #D8DDE1;height:34px;margin-bottom:8px;width:640px;"></div></div></div>
+<div style="margin-bottom:0px;"><div class="el"><span>3단계 · 먼저 확인할 것</span></div><div style="margin-top:10px;" class="left">
+ <div style="font-size:13.5px;color:#6E7681;margin-bottom:8px;">'…의 작동 여부 / 위치 / 상태를 확인한다'</div>
+ <div style="border-bottom:1px solid #D8DDE1;height:34px;margin-bottom:8px;width:640px;"></div><div style="border-bottom:1px solid #D8DDE1;height:34px;margin-bottom:8px;width:640px;"></div><div style="border-bottom:1px solid #D8DDE1;height:34px;margin-bottom:8px;width:640px;"></div>
+ <div style="font-size:12px;color:#6E7681;margin-top:6px;">※ 이 카드는 모듈 말 과제 노트에 옮겨 적어 두십시오 — 기말 말하기(사진 → 90초)의 재료가 됩니다.</div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>14</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="정리"><div class="eyebrow">3교시 · 읽기</div>
+<h2 class="sec">정리</h2>
+<div style="margin-bottom:24px;">
+<div style="display:flex;gap:12px;margin-bottom:11px;"><span class="num" style="width:26px;height:26px;font-size:14px;flex:none;">1</span><div style="padding-top:3px;font-size:15px;line-height:1.6;">움직이는 기계에서 나를 지키는 것은 <b>장치</b>다 — 덮개·울·비상정지장치·방호장치.</div></div>
+<div style="display:flex;gap:12px;margin-bottom:11px;"><span class="num" style="width:26px;height:26px;font-size:14px;flex:none;">2</span><div style="padding-top:3px;font-size:15px;line-height:1.6;">위험은 <b>피동</b>(끼이다·작동되다)으로, 조작은 <b>사동</b>(작동시키다·정지시키다)으로 쓴다.</div></div>
+<div style="display:flex;gap:12px;margin-bottom:11px;"><span class="num" style="width:26px;height:26px;font-size:14px;flex:none;">3</span><div style="padding-top:3px;font-size:15px;line-height:1.6;">조문은 <b>원칙 + 다만(예외)</b>으로 읽고, 규정의 첫머리 정의는 <b>N(이)란 …을/를 말한다</b>로 읽는다.</div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>자가 점검 ① 체크리스트</span></div><div style="margin-top:12px;"><div style="display:flex;flex-direction:column;">
+ <div style="font-size:15px;margin-bottom:11px;">☐ 설비 안전 어휘 6개(방호장치·덮개·울·비상정지장치·해체·여부)를 말할 수 있다</div>
+ <div style="font-size:15px;margin-bottom:11px;">☐ 지게차·컨베이어·프레스의 대표 금지 항목을 하나씩 말할 수 있다</div>
+ <div style="font-size:15px;margin-bottom:11px;">☐ 피동↔사동 세 쌍(끼이다/끼우다 · 작동되다/작동시키다 · 정지되다/정지시키다)을 구별할 수 있다</div>
+ <div style="font-size:15px;margin-bottom:11px;">☐ 수칙에서 금지와 예외(금지가 풀리는 경우)의 짝을 찾을 수 있다</div>
+ <div style="font-size:15px;margin-bottom:11px;">☐ 우리 기계의 안전 카드를 정의문으로 쓸 수 있다 (모듈 말 과제 노트)</div></div></div></div>
+<div style="margin-bottom:22px;"><div class="el"><span>자가 점검 ② 문제로 확인</span></div><div style="margin-top:12px;"><div class="left">
+ <div style="font-size:15px;margin-bottom:11px;line-height:1.8;"><span class="enc">①</span> '기계를 (정지하다, 사동)' → 청소하기에 앞서 기계를 <span class="bl" style="min-width:120px;">&nbsp;</span>.</div>
+ <div style="font-size:15px;margin-bottom:11px;line-height:1.8;"><span class="enc">②</span> '방호장치 / 사람을 지키는 장치'를 정의문으로 → 방호장치<span class="bl" style="min-width:50px;">&nbsp;</span> 사람을 지키는 장치<span class="bl" style="min-width:80px;">&nbsp;</span>.</div>
+ <div style="font-size:15px;margin-bottom:8px;line-height:1.8;"><span class="enc">③</span> 안전 수칙상 <b>틀린</b> 것을 고르십시오. ( &nbsp; )</div></div>
+ <div style="margin-left:16px;font-size:15px;line-height:1.9;margin-bottom:10px;"><span class="enc">㉮</span> 가동 중 이물질은 기계를 정지시킨 후 제거한다 &nbsp;&nbsp; <span class="enc">㉯</span> 광전자식 방호장치가 번거로우면 잠시 가려 둔다 &nbsp;&nbsp; <span class="enc">㉰</span> 회전 기계 앞에서는 밀착 가죽 장갑을 끼지 않는다</div>
+ <div class="left" style="margin-top:4px;"><div style="font-size:15px;line-height:1.8;"><span class="enc">④</span> "덮개 떼면 안 돼요. 근데 고칠 땐 돼요"를 수칙 문장으로('다만' 사용) → <span class="bl" style="min-width:260px;">&nbsp;</span></div></div></div></div>
+<div style="margin-bottom:0px;"><div class="el"><span>10초 어휘 셀프 체크</span></div><div style="margin-top:12px;"><div style="font-size:12px;color:#6E7681;margin-bottom:10px;">뜻이 3초 안에 안 떠오르면 ☐에 표시하고 2쪽으로 돌아가 다시 읽으십시오.</div>
+ <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px 20px;"><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>방호장치</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>덮개</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>울</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>금형</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>안전블록</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>비상정지장치</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>작동</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>끼이다</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>해체</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>임의</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>개조</span></div><div style="display:flex;gap:8px;font-size:15px;"><span>☐</span><span>여부</span></div></div></div></div>
+<div class="footer">
+      <div class="frow"><span>산업안전한국어 · 2부 작업절차 제5과 설비 안전수칙 읽기</span><span>15</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div></body></html>
