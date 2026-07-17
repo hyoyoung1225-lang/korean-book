@@ -1,0 +1,570 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+@page { size:794px 1123px; margin:0; }
+body { font-family:'Pretendard',sans-serif; color:#22272B; letter-spacing:-0.01em; word-break:keep-all; }
+.serif { font-family:'Noto Serif CJK KR',serif; letter-spacing:0; }
+
+.page { width:794px; height:1123px; page-break-after:always; position:relative;
+         background:#fff; padding:64px 64px 0 64px; overflow:hidden; }
+
+/* 본문 줄글: 양쪽 맞춤. 단 마지막 줄은 왼쪽 정렬(리버 방지) */
+.prose { text-align:justify; text-align-last:left; font-size:15.5px;
+          line-height:1.85; }
+
+/* 문제/빈칸/표/캡션: 왼쪽 맞춤 */
+.left { text-align:left; }
+
+/* 푸터: y 고정 → 푸터 위 여백 항상 일정 */
+.footer { position:absolute; top:1059px; left:64px; right:64px;
+           border-top:1px solid #D8DDE1; padding-top:10px;
+           display:flex; flex-direction:column; gap:3px; }
+.footer .frow { display:flex; justify-content:space-between; font-size:11px; color:#6E7681; letter-spacing:.06em; }
+.footer .cr { font-size:9.5px; color:#9AA0A6; letter-spacing:.02em; }
+
+/* 섹션 헤더 (좌측 기준선 정렬) */
+.eyebrow { font-size:12px; font-weight:700; color:#3E6AB8; letter-spacing:.28em; margin-bottom:8px; }
+h2.sec { font-family:'Noto Serif CJK KR',serif; font-size:27px; font-weight:700;
+          padding-bottom:14px; border-bottom:2px solid #24418E; margin-bottom:22px; }
+
+/* 요소 칩 */
+.el { margin-bottom:14px; }
+.el span { display:inline-block; background:#24418E; color:#fff; font-size:13.5px; font-weight:800;
+            letter-spacing:.16em; padding:6px 16px; border-radius:3px; }
+
+.num { display:inline-flex; width:30px; height:30px; border-radius:50%; background:#24418E;
+        color:#fff; font-weight:800; font-size:16px; align-items:center; justify-content:center; }
+.lv { font-size:11.5px; font-weight:800; letter-spacing:.12em; padding:4px 10px; border-radius:3px; }
+.lv.b { background:#EEF4FB; color:#24418E; }
+.lv.a { background:#24418E; color:#fff; }
+.formbig { font-family:'Noto Serif CJK KR',serif; font-size:24px; font-weight:700; }
+
+/* 표 (셀 패딩 고정) */
+table.f { width:100%; border-collapse:collapse; font-size:15.5px; line-height:1.7; text-align:left; }
+table.f th { background:#EEF4FB; color:#1B2E6B; font-size:13px; letter-spacing:.06em;
+              padding:9px 12px; text-align:left; border:1px solid #D8DDE1; }
+table.f td { padding:9px 12px; border:1px solid #D8DDE1; vertical-align:top; }
+
+.x { color:#C8102E; font-weight:600; }
+
+/* 컴포넌트 박스 (패딩 고정) */
+.tintbox { background:#EEF4FB; border-left:3px solid #24418E; padding:14px 20px;
+            font-size:15.5px; line-height:1.85; }
+.caution { border:1.5px solid #C8102E; border-radius:6px; padding:14px 20px; }
+.drill { border:1px solid #D8DDE1; border-radius:6px; padding:16px 20px; background:#FBFCFE; }
+
+/* 강조 박스: 가운데 정렬 (현장에서 만나기) */
+.sitebox { border:1.5px solid #24418E; border-radius:8px; overflow:hidden; }
+.sitebox .head { background:#24418E; color:#fff; text-align:center; font-size:13.5px;
+                  font-weight:800; letter-spacing:.22em; padding:8px 0; }
+.sitebox .body { background:#fff; text-align:center; padding:11px 24px; }
+</style>
+<style>
+body { font-family:'Arimo','Liberation Sans','Noto Sans KR','Noto Sans CJK KR',sans-serif; }
+h2.sec, .formbig, .serif { font-family:'Noto Serif KR','Noto Serif CJK KR',serif !important; }
+.enc { font-family:'Noto Sans KR','Noto Sans CJK KR',sans-serif; }
+
+/* 어휘 카드 (2열) */
+.vgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.vcard { border:1px solid #D8DDE1; border-radius:8px; padding:11px 15px; }
+.vcard .top { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
+.vcard .w { font-family:'Noto Serif KR',serif; font-size:19px; font-weight:700; color:#1B2E6B; }
+.vcard .hanja { font-size:13px; color:#6E7681; }
+.vcard .badge { margin-left:auto; }
+.vcard .mean { font-size:13.5px; color:#22272B; line-height:1.45; }
+.vcard .ex { font-size:12.5px; color:#6E7681; line-height:1.45; border-top:1px dashed #D8DDE1;
+             padding-top:6px; margin-top:6px; }
+/* 원형 A·B·C / 번호 배지 (큰) */
+.cbadge { display:inline-flex; width:30px; height:30px; border-radius:50%; background:#24418E;
+           color:#fff; font-weight:800; font-size:15px; align-items:center; justify-content:center; }
+.sechead { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.sechead .t { font-weight:800; font-size:15.5px; }
+/* 워드뱅크 (음영 박스 중앙) */
+.wbank { background:#EEF4FB; border-radius:6px; text-align:center; padding:12px;
+          font-size:15px; font-weight:700; color:#24418E; letter-spacing:.06em; margin-bottom:16px; }
+/* 표지/장치 카드 그리드 */
+.scard { border:1px solid #D8DDE1; border-radius:8px; padding:14px 10px; text-align:center; }
+.scard .nm { font-weight:700; font-size:15px; color:#1B2E6B; margin-top:8px; }
+.scard .han { font-size:11.5px; color:#6E7681; margin-top:2px; }
+.scard .ds { font-size:12px; color:#22272B; margin-top:4px; line-height:1.4; }
+/* 밑줄 빈칸 */
+.bl { display:inline-block; border-bottom:1.3px solid #333; }
+/* 원문자(①㉠ 등) 크기 통일 — 한 폰트에서 렌더 */
+.enc { font-family:'Noto Sans CJK KR',sans-serif; font-size:1em; }
+/* 배지(.el) — Canva 임포트 시 상자/글자 분리돼도 가운데 유지 */
+.el span { display:inline-flex !important; align-items:center; justify-content:center;
+            text-align:center; letter-spacing:.10em; padding:7px 18px; line-height:1.2; }
+
+.vcard .w{font-family:'Arimo','Noto Sans KR','Noto Sans CJK KR',sans-serif !important;
+  font-size:18px; font-weight:800; color:#1B2E6B;}
+.vcard .ex b{color:#24418E;}
+.rightrow{display:flex; align-items:flex-start; gap:14px;}
+.who{flex:none; width:64px; text-align:center; font-size:12px; font-weight:800;
+  letter-spacing:.08em; padding:5px 0; border-radius:4px;}
+.who.co{background:#24418E; color:#fff;}
+.who.me{background:#EEF4FB; color:#24418E; border:1px solid #24418E;}
+.lawq{font-size:13.5px; line-height:1.72; color:#22272B; background:#FBFCFE;
+  border:1px solid #D8DDE1; border-radius:6px; padding:11px 14px;}
+.easyq{font-size:14.5px; line-height:1.72; color:#22272B;}
+.rtitle{font-weight:800; font-size:14.5px; color:#1B2E6B; margin-bottom:8px;}
+.lnote{font-size:11.5px; color:#6E7681; margin-top:4px;}
+</style>
+</head><body><div class="page" data-document-role="page" data-label="도비라">
+  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #24418E;padding-bottom:11px;">
+    <span style="font-size:13px;font-weight:700;letter-spacing:.5em;color:#22272B;">산업안전한국어</span>
+    <span style="font-size:13px;font-weight:800;letter-spacing:.14em;color:#24418E;">3부 · 권리</span>
+  </div>
+  <div style="display:flex;gap:26px;margin-top:34px;">
+    <div style="flex:1;padding-top:20px;">
+      <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:118px;font-weight:900;
+        color:#24418E;line-height:.95;">07</div>
+      <div style="margin-top:14px;"><span style="display:inline-block;background:#1B2E6B;color:#fff;
+        font-size:12.5px;font-weight:800;letter-spacing:.34em;padding:7px 16px 7px 20px;">제 7 과</span></div>
+      <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:46px;font-weight:900;
+        color:#22272B;margin-top:22px;">권리와 의무</div>
+    </div>
+    <div style="flex:none;width:322px;height:462px;position:relative;background:#E7EDF6;overflow:hidden;">
+      <div style="position:absolute;top:120px;left:24px;width:56px;height:400px;background:#D8E1EF;"></div>
+      <div style="position:absolute;top:230px;right:16px;width:70px;height:300px;background:#D1DBEC;"></div>
+      <div style="position:absolute;top:-70px;left:150px;width:52px;height:640px;background:#24418E;transform:rotate(16deg);"></div>
+      <div style="position:absolute;top:52px;left:34px;right:34px;background:#fff;border-radius:16px;
+        box-shadow:0 10px 26px rgba(20,35,80,.16);padding:26px 20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;justify-items:center;">
+          <svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M38 70 V46 a4 4 0 0 1 8 0 V42 a4 4 0 0 1 8 0 V44 a4 4 0 0 1 8 0 V50 l6 -6 a4 4 0 0 1 6 6 L62 64 a14 14 0 0 1 -24 8 Z" fill="#fff"/></svg><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M50 28 L78 40 L50 52 L22 40 Z" fill="#fff"/>
+      <path d="M34 46 v14 q16 10 32 0 v-14" fill="none" stroke="#fff" stroke-width="5"/></svg><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M26 34 h48 v28 h-30 l-10 10 v-10 h-8 Z" fill="#fff"/>
+      <text x="50" y="54" text-anchor="middle" font-size="15" font-weight="bold" fill="#24418E">가 A</text></svg><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M50 24 L72 32 V52 q0 18 -22 26 q-22 -8 -22 -26 V32 Z" fill="#fff"/>
+      <path d="M40 50 l8 8 l14 -16" fill="none" stroke="#24418E" stroke-width="6" stroke-linecap="round"/></svg></div></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:26px;margin-top:40px;">
+    <div style="flex:1.06;">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:16px;">
+        <svg width="19" height="19" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#24418E" stroke-width="10"/><circle cx="50" cy="50" r="16" fill="#24418E"/></svg><span style="font-size:16px;font-weight:800;color:#22272B;">학습 목표</span>
+        <div style="flex:1;border-top:1px solid #D8DDE1;"></div></div>
+      <div style="display:flex;flex-direction:column;gap:13px;font-size:14.5px;line-height:1.6;">
+        <div style="display:flex;gap:11px;"><span class="num" style="flex:none;width:26px;height:26px;font-size:14px;">1</span><span style="padding-top:2px;">법이 정한 나의 권리 세 가지를 말할 수 있습니다.</span></div>
+        <div style="display:flex;gap:11px;"><span class="num" style="flex:none;width:26px;height:26px;font-size:14px;">2</span><span style="padding-top:2px;">규정문의 <b>권리(-ㄹ 수 있다)</b>와 <b>의무(-여야 한다)</b>를 구별하며 읽습니다.</span></div>
+        <div style="display:flex;gap:11px;"><span class="num" style="flex:none;width:26px;height:26px;font-size:14px;">3</span><span style="padding-top:2px;">조문 발췌를 쉬운 말과 대조하며 이해합니다.</span></div>
+      </div>
+    </div>
+    <div style="flex:1;background:#EDF2FA;border-radius:12px;padding:20px 24px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:11px;">
+        <svg width="17" height="17" viewBox="0 0 100 100"><path d="M50 12 a26 26 0 0 1 14 48 v10 h-28 v-10 a26 26 0 0 1 14 -48 Z" fill="none" stroke="#24418E" stroke-width="9"/><line x1="40" y1="82" x2="60" y2="82" stroke="#24418E" stroke-width="8"/></svg><span style="font-size:15px;font-weight:800;color:#22272B;">생각해 보기</span></div>
+      <div style="font-size:13.5px;line-height:1.75;color:#22272B;">위험해서 일을 멈추면, 회사가 나를 해고할 수 있을까요?</div>
+      <div style="border-top:1px dashed #C9D2E2;margin:11px 0;"></div>
+      <div style="font-size:13.5px;line-height:1.75;color:#22272B;">우리 회사의 안전보건표지에는 어떤 언어가 있습니까?</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:center;align-items:flex-start;gap:4px;margin-top:42px;">
+    <div style="width:200px;text-align:center;"><div style="width:62px;height:62px;border-radius:50%;background:#EEF4FB;
+      display:flex;align-items:center;justify-content:center;margin:0 auto 10px auto;"><svg width="30" height="30" viewBox="0 0 100 100"><path d="M14 22 h72 v44 h-40 l-16 16 v-16 h-16 Z" fill="none" stroke="#24418E" stroke-width="8" stroke-linejoin="round"/><line x1="30" y1="38" x2="70" y2="38" stroke="#24418E" stroke-width="7"/><line x1="30" y1="52" x2="58" y2="52" stroke="#24418E" stroke-width="7"/></svg></div>
+      <div><span style="display:inline-block;background:#24418E;color:#fff;font-size:12.5px;font-weight:800;
+        letter-spacing:.1em;padding:6px 15px;border-radius:15px;">1교시 · 어휘</span></div>
+      <div style="font-size:12px;color:#6E7681;line-height:1.6;margin-top:9px;">핵심 어휘 12개 + 연습<br>법 문서 속 사람들</div></div>
+    <div style="color:#C4CBD7;font-size:15px;margin-top:26px;">〉</div>
+    <div style="width:200px;text-align:center;"><div style="width:62px;height:62px;border-radius:50%;background:#EEF4FB;
+      display:flex;align-items:center;justify-content:center;margin:0 auto 10px auto;"><span style="font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900;color:#24418E;">Aa</span></div>
+      <div><span style="display:inline-block;background:#3E6AB8;color:#fff;font-size:12.5px;font-weight:800;
+        letter-spacing:.1em;padding:6px 15px;border-radius:15px;">2교시 · 문형</span></div>
+      <div style="font-size:12px;color:#6E7681;line-height:1.6;margin-top:9px;">N에 따라 · -여야 하며<br>-(으)ㄹ 수 있다 + 종합</div></div>
+    <div style="color:#C4CBD7;font-size:15px;margin-top:26px;">〉</div>
+    <div style="width:200px;text-align:center;"><div style="width:62px;height:62px;border-radius:50%;background:#EEF4FB;
+      display:flex;align-items:center;justify-content:center;margin:0 auto 10px auto;"><svg width="30" height="30" viewBox="0 0 100 100"><path d="M50 26 q-16 -10 -34 -4 v52 q18 -6 34 4 q16 -10 34 -4 v-52 q-18 -6 -34 4 Z M50 26 v52" fill="none" stroke="#24418E" stroke-width="8" stroke-linejoin="round"/></svg></div>
+      <div><span style="display:inline-block;background:#1B2E6B;color:#fff;font-size:12.5px;font-weight:800;
+        letter-spacing:.1em;padding:6px 15px;border-radius:15px;">3교시 · 읽기</span></div>
+      <div style="font-size:12px;color:#6E7681;line-height:1.6;margin-top:9px;">조문·쉬운 말 대조 독해<br>상황 쓰기 + 정리</div></div>
+  </div>
+  <div style="position:absolute;top:1059px;left:64px;right:64px;border-top:1px solid #D8DDE1;
+    padding-top:12px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:800;color:#22272B;">
+      <svg width="15" height="15" viewBox="0 0 100 100"><path d="M50 8 L86 20 V52 q0 28 -36 40 q-36 -12 -36 -40 V20 Z" fill="#24418E"/><path d="M36 50 l10 10 l20 -22" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/></svg> 권리를 알면 나를 지킬 수 있습니다.</span>
+    <span style="font-size:13px;font-weight:800;color:#24418E;">01</span>
+  </div></div><div class="page" data-document-role="page" data-label="핵심어휘"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">핵심 어휘 12</h2>
+  <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:#6E7681; margin-bottom:16px;">
+    <span class="lv b">기본</span><span>모든 학생 필수</span>
+    <span class="lv a" style="margin-left:10px;">심화</span><span>법규·보고서의 문어 표현 — 읽고 이해할 수 있으면 충분합니다.</span></div>
+  <div class="vgrid" style="gap:10px;"><div class="vcard"><div class="top"><span class="w">권리</span><span class="badge lv b">기본</span></div>
+      <div class="mean">법이 나에게 주는 힘입니다. 내가 요구할 수 있는 것입니다.</div><div class="ex">일을 멈출 <b>권리</b>는 법이 정한 것입니다.</div></div><div class="vcard"><div class="top"><span class="w">의무</span><span class="badge lv b">기본</span></div>
+      <div class="mean">반드시 해야 하는 일입니다. 법이 정한 책임입니다.</div><div class="ex">안전 기준을 지키는 것은 나의 <b>의무</b>입니다.</div></div><div class="vcard"><div class="top"><span class="w">근로자</span><span class="badge lv b">기본</span></div>
+      <div class="mean">회사에서 일하고 임금을 받는 사람입니다. 법률 문서의 말입니다.</div><div class="ex"><b>근로자</b>는 작업을 중지하고 대피할 수 있습니다.</div></div><div class="vcard"><div class="top"><span class="w">사업주</span><span class="badge lv b">기본</span></div>
+      <div class="mean">사업의 주인입니다. 법에서 회사 쪽을 가리키는 말입니다.</div><div class="ex"><b>사업주</b>는 안전 교육을 하여야 합니다.</div></div><div class="vcard"><div class="top"><span class="w">중지</span><span class="badge lv b">기본</span></div>
+      <div class="mean">하던 일을 멈추는 것입니다.</div><div class="ex">위험하면 작업 <b>중지</b>를 말할 수 있습니다.</div></div><div class="vcard"><div class="top"><span class="w">해고</span><span class="badge lv b">기본</span></div>
+      <div class="mean">회사가 근로자를 내보내는 것입니다.</div><div class="ex">정당한 이유 없는 <b>해고</b>는 할 수 없습니다.</div></div><div class="vcard"><div class="top"><span class="w">모국어</span><span class="badge lv b">기본</span></div>
+      <div class="mean">내가 태어나서 배운 나의 나라 말입니다.</div><div class="ex">표지를 <b>모국어</b>로도 만들어야 합니다.</div></div><div class="vcard"><div class="top"><span class="w">채용</span><span class="badge lv b">기본</span></div>
+      <div class="mean">회사가 사람을 뽑는 것입니다.</div><div class="ex"><b>채용</b>될 때 안전 교육을 받습니다.</div></div><div class="vcard"><div class="top"><span class="w">급박하다</span><span class="badge lv a">심화</span></div>
+      <div class="mean">위험이 아주 가까이 왔다는 뜻입니다.</div><div class="ex"><b>급박한</b> 위험이 있으면 피할 수 있습니다.</div></div><div class="vcard"><div class="top"><span class="w">처우</span><span class="badge lv a">심화</span></div>
+      <div class="mean">사람을 대하는 방법입니다. '불리한 처우'로 자주 씁니다.</div><div class="ex">불리한 <b>처우</b>를 해서는 안 됩니다.</div></div><div class="vcard"><div class="top"><span class="w">관리감독자</span><span class="badge lv a">심화</span></div>
+      <div class="mean">현장을 관리하는 책임자입니다. 반장님의 법률 이름입니다.</div><div class="ex"><b>관리감독자</b>에게 바로 보고합니다.</div></div><div class="vcard"><div class="top"><span class="w">유해</span><span class="badge lv a">심화</span></div>
+      <div class="mean">몸에 해롭다는 뜻입니다. '유해하거나 위험한'으로 씁니다.</div><div class="ex"><b>유해</b>하거나 위험한 장소에 표지를 붙입니다.</div></div></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>02</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="어휘연습"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">어휘 연습</h2>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">알맞은 단어를 골라 빈칸을 채우십시오.</span></div>
+  <div class="wbank" style="margin-bottom:22px;">급박 · 채용 · 관리감독자 · 유해</div>
+  <div class="left" style="font-size:15px; line-height:2.75; margin-bottom:48px;">
+    ① <span style="letter-spacing:0;">＿＿＿＿＿＿</span>될 때와 작업 내용이 바뀔 때 안전 교육을 받습니다.<br>
+    ② 기계가 이상하면 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span>에게 바로 보고하십시오.<br>
+    ③ <span style="letter-spacing:0;">＿＿＿＿＿＿</span>한 위험이 있으면 작업을 중지할 수 있습니다.<br>
+    ④ <span style="letter-spacing:0;">＿＿＿＿＿＿</span>하거나 위험한 물질에는 경고 표지가 있습니다.</div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">짝이 되는 말을 선으로 연결하십시오.</span></div>
+  <div style="margin-bottom:48px;">
+  <div style="display:flex;gap:96px;"><div><div style="display:flex;align-items:center;gap:9px;margin-bottom:30px;width:150px;"><span class="enc">①</span><span style="flex:1;">작업을</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:30px;width:150px;"><span class="enc">②</span><span style="flex:1;">교육을</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:30px;width:150px;"><span class="enc">③</span><span style="flex:1;">표지를</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:30px;width:150px;"><span class="enc">④</span><span style="flex:1;">사실을</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:30px;width:150px;"><span class="enc">⑤</span><span style="flex:1;">기준을</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div></div><div><div style="display:flex;align-items:center;gap:10px;margin-bottom:30px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉠</span><span>받다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:30px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉡</span><span>지키다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:30px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉢</span><span>중지하다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:30px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉣</span><span>읽다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:30px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉤</span><span>보고하다</span></div></div></div>
+  </div>
+  <div class="sechead"><span class="cbadge">C</span><span class="t">B에서 연결한 표현 중 두 개를 골라 문장을 쓰십시오.</span></div>
+  <div class="left" style="font-size:15px; line-height:3.4;">
+    ① <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    ② <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>03</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="개념"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">나의 권리 세 가지, 나의 의무 하나</h2>
+  <div class="prose" style="margin-bottom:18px;">산업안전보건법은 근로자에게 세 가지 권리를 줍니다. 그리고 한 가지 의무도 정합니다. 이 지도를 먼저 봅니다.</div>
+  <div style="display:flex; flex-direction:column; gap:21px; margin-bottom:34px;">
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:19px 18px; display:flex; gap:18px; align-items:center;">
+      <div style="flex:none;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M38 70 V46 a4 4 0 0 1 8 0 V42 a4 4 0 0 1 8 0 V44 a4 4 0 0 1 8 0 V50 l6 -6 a4 4 0 0 1 6 6 L62 64 a14 14 0 0 1 -24 8 Z" fill="#fff"/></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:baseline; gap:10px;">
+          <span style="font-weight:800; font-size:16.5px; color:#1B2E6B;">일을 멈출 권리</span>
+          <span style="font-size:12px; color:#6E7681;">제52조</span></div>
+        <div style="font-size:14px; line-height:1.6; margin-top:5px;">급박한 위험이 있으면 작업을 중지하고 피할 수 있습니다.</div></div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:19px 18px; display:flex; gap:18px; align-items:center;">
+      <div style="flex:none;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M50 28 L78 40 L50 52 L22 40 Z" fill="#fff"/>
+      <path d="M34 46 v14 q16 10 32 0 v-14" fill="none" stroke="#fff" stroke-width="5"/></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:baseline; gap:10px;">
+          <span style="font-weight:800; font-size:16.5px; color:#1B2E6B;">안전 교육을 받을 권리</span>
+          <span style="font-size:12px; color:#6E7681;">제29조</span></div>
+        <div style="font-size:14px; line-height:1.6; margin-top:5px;">회사는 정기적으로, 그리고 채용할 때 교육을 해야 합니다.</div></div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:19px 18px; display:flex; gap:18px; align-items:center;">
+      <div style="flex:none;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M26 34 h48 v28 h-30 l-10 10 v-10 h-8 Z" fill="#fff"/>
+      <text x="50" y="54" text-anchor="middle" font-size="15" font-weight="bold" fill="#24418E">가 A</text></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:baseline; gap:10px;">
+          <span style="font-weight:800; font-size:16.5px; color:#1B2E6B;">모국어 표지를 볼 권리</span>
+          <span style="font-size:12px; color:#6E7681;">제37조</span></div>
+        <div style="font-size:14px; line-height:1.6; margin-top:5px;">회사는 안전보건표지를 내 모국어로도 만들어야 합니다.</div></div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:19px 18px; display:flex; gap:18px; align-items:center;">
+      <div style="flex:none;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M50 24 L72 32 V52 q0 18 -22 26 q-22 -8 -22 -26 V32 Z" fill="#fff"/>
+      <path d="M40 50 l8 8 l14 -16" fill="none" stroke="#24418E" stroke-width="6" stroke-linecap="round"/></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:baseline; gap:10px;">
+          <span style="font-weight:800; font-size:16.5px; color:#1B2E6B;">나의 의무</span>
+          <span style="font-size:12px; color:#6E7681;">제6조</span></div>
+        <div style="font-size:14px; line-height:1.6; margin-top:5px;">나도 안전 기준을 지켜야 하며, 안전 조치에 따라야 합니다.</div></div></div>
+  </div>
+  <div class="tintbox">
+    <div style="font-weight:800; color:#1B2E6B; margin-bottom:6px;">주어를 보면 알 수 있어요</div>
+    <div style="font-size:14.5px; line-height:1.85;">법 문장의 주어를 봅니다. 주어가 <b>사업주</b>이면 회사의 의무입니다. 회사의 의무는 곧 나의 권리입니다. 주어가 <b>근로자</b>이면 나의 권리 또는 나의 의무입니다.</div>
+  <div style="height:14px;"></div>
+  </div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>04</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="어휘확장1"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">어휘 확장 ① — 법 문서 속 사람들</h2>
+  <div class="prose" style="margin-bottom:18px;">법률과 규정에는 사람을 부르는 이름이 따로 있습니다. 현장의 말과 짝을 지어 기억합니다.</div>
+  <table class="f cellwide" style="margin-bottom:34px;">
+    <tr><th style="width:150px;">법률의 말</th><th style="width:150px;">현장의 말</th><th>누구입니까?</th></tr>
+    <tr><td><b>근로자</b></td><td>직원, 사원, 나</td><td>일하고 임금을 받는 사람</td></tr>
+    <tr><td><b>사업주</b></td><td>회사, 사장님</td><td>사업의 주인, 회사 쪽</td></tr>
+    <tr><td><b>관리감독자</b></td><td>반장님, 팀장님</td><td>현장을 직접 관리하는 책임자</td></tr>
+  </table>
+  <div class="tintbox" style="margin-bottom:22px;">
+    <div style="font-weight:800; color:#1B2E6B; margin-bottom:6px;">6과에서 배운 '반장님'</div>
+    <div style="font-size:14.5px; line-height:1.85;">6과에서 반장님에게 보고하는 법을 배웠습니다. 법 문서에서는 그 반장님을 <b>관리감독자</b>라고 부릅니다. 같은 사람의 두 이름입니다.</div>
+  </div>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">법률의 말로 바꿔 쓰십시오.</span></div>
+  <div class="drill left" style="font-size:15px; line-height:2.85;">
+    <span class="enc">①</span> 저는 이 회사 직원입니다. → 저는 이 회사 <span style="letter-spacing:0;">＿＿＿＿＿＿</span>입니다.<br>
+    <span class="enc">②</span> 반장님에게 보고했습니다. → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿</span>에게 보고했습니다.<br>
+    <span class="enc">③</span> 회사는 교육을 해야 합니다. → <span style="letter-spacing:0;">＿＿＿＿＿＿</span>는 교육을 하여야 합니다.</div>
+  <div style="height:34px;"></div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">누가 합니까? 알맞은 사람을 고르십시오.</span></div>
+  <div class="drill left" style="font-size:15px; line-height:2.85;">
+    <span class="enc">①</span> 안전보건교육을 실시합니다. ( 근로자 · 사업주 )<br>
+    <span class="enc">②</span> 작업 중지를 보고합니다. ( 근로자 · 관리감독자 )</div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>05</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="어휘확장2"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">어휘 확장 ② — 함께 쓰는 말</h2>
+  <div class="prose" style="margin-bottom:18px;">법률의 말은 정해진 짝과 함께 다닙니다. 짝을 통째로 기억하면 문서가 빨리 읽힙니다.</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:17px; margin-bottom:34px;">
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:18px 17px;">
+      <div style="font-size:17px; font-weight:800; color:#1B2E6B;">급박한 <span style="color:#3E6AB8;">+</span> 위험</div>
+      <div style="font-size:13.5px; margin-top:5px; line-height:1.6;">위험이 아주 가까이 온 상태입니다. 멈출 권리의 조건입니다.</div>
+      <div style="font-size:12.5px; color:#6E7681; border-top:1px dashed #D8DDE1; margin-top:8px; padding-top:7px;"><b>급박한 위험</b>이 있는 경우에는 대피할 수 있다.</div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:18px 17px;">
+      <div style="font-size:17px; font-weight:800; color:#1B2E6B;">불리한 <span style="color:#3E6AB8;">+</span> 처우</div>
+      <div style="font-size:13.5px; margin-top:5px; line-height:1.6;">나에게 나쁘게 대하는 것입니다. 해고, 감봉 등입니다.</div>
+      <div style="font-size:12.5px; color:#6E7681; border-top:1px dashed #D8DDE1; margin-top:8px; padding-top:7px;">해고나 그 밖의 <b>불리한 처우</b>를 할 수 없습니다.</div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:18px 17px;">
+      <div style="font-size:17px; font-weight:800; color:#1B2E6B;">유해하거나 <span style="color:#3E6AB8;">+</span> 위험한</div>
+      <div style="font-size:13.5px; margin-top:5px; line-height:1.6;">몸에 해롭거나 다칠 수 있는 곳을 말합니다.</div>
+      <div style="font-size:12.5px; color:#6E7681; border-top:1px dashed #D8DDE1; margin-top:8px; padding-top:7px;"><b>유해하거나 위험한</b> 장소에 표지를 붙입니다.</div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:18px 17px;">
+      <div style="font-size:17px; font-weight:800; color:#1B2E6B;">작업 <span style="color:#3E6AB8;">+</span> 중지</div>
+      <div style="font-size:13.5px; margin-top:5px; line-height:1.6;">하던 일을 멈추는 것입니다. 나의 권리입니다.</div>
+      <div style="font-size:12.5px; color:#6E7681; border-top:1px dashed #D8DDE1; margin-top:8px; padding-top:7px;"><b>작업 중지</b>를 보고하였습니다.</div></div>
+  </div>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">알맞은 짝을 골라 문장을 완성하십시오.</span></div>
+  <div class="wbank" style="margin-bottom:20px;">급박한 · 불리한 · 유해하거나 · 작업</div>
+  <div class="drill left" style="font-size:15px; line-height:2.5;">
+    <span class="enc">①</span> <span style="letter-spacing:0;">＿＿＿＿＿</span> 위험이 있으면 일을 멈출 수 있습니다.<br>
+    <span class="enc">②</span> 회사는 <span style="letter-spacing:0;">＿＿＿＿＿</span> 처우를 할 수 없습니다.<br>
+    <span class="enc">③</span> <span style="letter-spacing:0;">＿＿＿＿＿＿＿</span> 위험한 물질에는 경고 표지가 있습니다.<br>
+    <span class="enc">④</span> <span style="letter-spacing:0;">＿＿＿＿</span> 중지를 지체 없이 보고하였습니다.</div>
+  <div style="height:34px;"></div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">짝을 넣어 한 문장을 쓰십시오.</span></div>
+  <div class="drill left" style="font-size:15px; line-height:2.8;">
+    '급박한 위험'을 넣어서 — <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>06</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형1"><div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
+    <span class="num">1</span>
+    <span class="formbig" style="white-space:nowrap;">N에 따라 · N(으)로 인하여</span>
+    <span class="lv a">심화</span>
+    <span style="margin-left:auto; font-size:13.5px; color:#6E7681;">결합: <b style="color:#22272B;">명사</b></span></div>
+  <div style="margin-bottom:30px;"><div class="sitebox" style="margin-bottom:14px;">
+      <div class="head">현장에서 만나기</div>
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
+        <div style="flex:none;"><svg width="92" height="92" viewBox="0 0 100 100">
+  <rect x="18" y="12" width="64" height="76" rx="4" fill="#fff" stroke="#24418E" stroke-width="4"/>
+  <rect x="26" y="22" width="48" height="7" fill="#24418E"/>
+  <line x1="26" y1="40" x2="74" y2="40" stroke="#D8DDE1" stroke-width="4"/>
+  <line x1="26" y1="52" x2="74" y2="52" stroke="#D8DDE1" stroke-width="4"/>
+  <line x1="26" y1="64" x2="60" y2="64" stroke="#D8DDE1" stroke-width="4"/></svg></div>
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:#22272B;">"규정<b>에 따라</b> 안전 교육을 실시합니다."</div>
+          <div style="font-size:12px;color:#6E7681;margin-top:7px;">사내 게시문</div></div></div></div></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>의미와 쓰임</span></div></div>
+  <div class="prose" style="margin-bottom:21px;"><b>N에 따라</b>는 'N이 정한 대로'라는 뜻입니다. 법과 규정을 말할 때 씁니다. <b>N(으)로 인하여</b>는 'N 때문에'의 문어입니다. 서류와 규정문에서 만납니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>비교 · 3과에서 배운 말</span></div></div>
+  <div style="font-size:14.5px; line-height:1.8; margin-bottom:21px;">3과에서 <b>N(으)로 인해</b>를 배웠습니다. 서류에서는 더 긴 꼴 <b>N(으)로 인하여</b>로 씁니다. 뜻은 같습니다. 격이 더 높은 글에 씁니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>자주 하는 오류</span></div></div>
+  <div class="caution" style="font-size:14.5px; line-height:2.0; margin-bottom:28px;"><span class="x">✗ 위험에 인하여 작업을 중지했습니다.</span><br>
+      ○ 위험<b>으로 인하여</b> 작업을 중지했습니다.<br>
+      <span style="font-size:13px; color:#6E7681;">'인하여' 앞에는 (으)로가 옵니다. '에'가 아닙니다.</span></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>연습</span></div></div>
+  <div class="drill left" style="font-size:15px; line-height:2.95;"><span class="enc">①</span> 법<span style="letter-spacing:0;">＿＿＿＿</span> 안전보건표지를 붙입니다. (따라)<br>
+      <span class="enc">②</span> 급박한 위험<span style="letter-spacing:0;">＿＿＿＿＿</span> 작업을 중지하였습니다. (인하여)<br>
+      <span class="enc">③</span> 회사 규정<span style="letter-spacing:0;">＿＿＿＿</span> 보호구를 착용합니다. (따라)</div><div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>07</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형2"><div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
+    <span class="num">2</span>
+    <span class="formbig" style="white-space:nowrap;">-여야 하며, …-여야 한다</span>
+    <span class="lv a">심화</span>
+    <span style="margin-left:auto; font-size:13.5px; color:#6E7681;">결합: <b style="color:#22272B;">동사</b></span></div>
+  <div style="margin-bottom:30px;"><div class="sitebox" style="margin-bottom:14px;">
+      <div class="head">현장에서 만나기</div>
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
+        <div style="flex:none;"><svg width="92" height="92" viewBox="0 0 100 100">
+  <rect x="10" y="16" width="80" height="56" rx="4" fill="#EEF4FB" stroke="#24418E" stroke-width="4"/>
+  <rect x="18" y="24" width="30" height="40" fill="#fff" stroke="#24418E" stroke-width="2.5"/>
+  <rect x="54" y="24" width="28" height="18" fill="#fff" stroke="#24418E" stroke-width="2.5"/>
+  <path d="M46 88 L50 72 L54 88" stroke="#24418E" stroke-width="4" fill="none"/></svg></div>
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:#22272B;">"기준을 지켜<b>야 하며</b>, 조치에 따라<b>야 한다</b>."</div>
+          <div style="font-size:12px;color:#6E7681;margin-top:7px;">안전보건관리규정</div></div></div></div></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>의미와 쓰임</span></div></div>
+  <div class="prose" style="margin-bottom:21px;">규정문이 의무를 말하는 꼴입니다. <b>하여야</b>는 '해야'의 문어입니다. <b>-며</b>로 의무를 이어서 나열합니다. 회사 규정과 법에서 이 꼴로 만납니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>비교 · 2과에서 배운 말</span></div></div>
+  <div style="font-size:14.5px; line-height:1.8; margin-bottom:21px;">2과에서 <b>반드시 -아/어야 하다</b>를 배웠습니다. 말로 할 때는 "지켜야 해요"라고 합니다. 규정문에서는 "지켜<b>야 하며</b> … 따라<b>야 한다</b>"로 씁니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>자주 하는 오류</span></div></div>
+  <div class="caution" style="font-size:14.5px; line-height:2.0; margin-bottom:28px;"><span class="x">✗ 기준을 지켜야 하며를 조치에 따라야 한다.</span><br>
+      ○ 기준을 지켜야 하며<b>,</b> 조치에 따라야 한다.<br>
+      <span style="font-size:13px; color:#6E7681;">'-며' 뒤에는 쉼표를 찍고 문장을 잇습니다.</span></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>연습</span></div></div>
+  <div class="drill left" style="font-size:15px; line-height:2.95;"><span class="enc">①</span> 사업주는 교육을 하<span style="letter-spacing:0;">＿＿＿＿</span> 하며, 표지를 붙<span style="letter-spacing:0;">＿＿＿＿</span> 한다.<br>
+      <span class="enc">②</span> 근로자는 기준을 지<span style="letter-spacing:0;">＿＿＿＿</span> 하며, 조치에 따<span style="letter-spacing:0;">＿＿＿＿</span> 한다.<br>
+      <span class="enc">③</span> (말→규정문) "교육을 꼭 해야 해요." → 교육을 하<span style="letter-spacing:0;">＿＿＿＿＿＿</span></div><div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>08</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형3"><div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
+    <span class="num">3</span>
+    <span class="formbig" style="white-space:nowrap;">-(으)ㄹ 수 있다 ↔ -(으)ㄹ 수 없다</span>
+    <span class="lv b">기본</span>
+    <span style="margin-left:auto; font-size:13.5px; color:#6E7681;">결합: <b style="color:#22272B;">동사</b></span></div>
+  <div style="margin-bottom:18px;"><div class="sitebox" style="margin-bottom:14px;">
+      <div class="head">현장에서 만나기</div>
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
+        <div style="flex:none;"><svg width="92" height="92" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="42" fill="#EEF4FB" stroke="#24418E" stroke-width="4"/>
+  <path d="M40 68 V46 a4 4 0 0 1 8 0 V42 a4 4 0 0 1 8 0 V44 a4 4 0 0 1 8 0 V50 l5 -5 a4 4 0 0 1 6 6 L63 63 a13 13 0 0 1 -23 7 Z" fill="#24418E"/></svg></div>
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:#22272B;">"근로자는 작업을 중지하고 대피<b>할 수 있다</b>."</div>
+          <div style="font-size:12px;color:#6E7681;margin-top:7px;">산업안전보건법 제52조</div></div></div></div></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>의미와 쓰임</span></div></div>
+  <div class="prose" style="margin-bottom:10px;">규정문의 <b>-(으)ㄹ 수 있다</b>는 능력이 아니라 <b>권리</b>입니다. 해도 되고, 안 해도 됩니다. 내가 정합니다. <b>-(으)ㄹ 수 없다</b>는 금지입니다. 회사도 나도 할 수 없습니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>비교 · 규정문의 세 가지 끝</span></div></div>
+  <div style="font-size:14.5px; line-height:1.65; margin-bottom:10px;">규정문은 문장의 끝이 뜻을 정합니다.<br>
+      · <b>-ㄹ 수 있다</b> → 권리입니다. 내가 선택합니다.<br>
+      · <b>-여야 한다</b> → 의무입니다. 반드시 합니다.<br>
+      · <b>-ㄹ 수 없다</b> → 금지입니다. 하면 안 됩니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>자주 하는 오류</span></div></div>
+  <div class="caution" style="font-size:14.5px; line-height:1.75; margin-bottom:16px;">대피<b>할 수 있다</b>는 권리입니다.<br>
+      <span class="x">✗ '대피해야 한다'로 읽으면 의무가 됩니다.</span><br>
+      <span style="font-size:13px; color:#6E7681;">권리를 의무로 읽지 않습니다. 끝을 정확히 봅니다.</span></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>연습</span></div></div>
+  <div class="drill left" style="font-size:15px; line-height:2.25;">문장 끝을 보고 쓰십시오. (권리 / 의무 / 금지)<br>
+      <span class="enc">①</span> 작업을 중지하고 대피할 수 있다. → <span style="letter-spacing:0;">＿＿＿＿</span><br>
+      <span class="enc">②</span> 모국어로 작성하여야 한다. → <span style="letter-spacing:0;">＿＿＿＿</span><br>
+      <span class="enc">③</span> 불리한 처우를 할 수 없다. → <span style="letter-spacing:0;">＿＿＿＿</span></div><div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>09</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형종합"><div class="eyebrow">2교시 · 문형</div><h2 class="sec">문형 종합</h2>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">말을 규정문으로 바꿔 쓰십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.95;">
+    <span class="enc">①</span> "위험하면 멈춰도 돼요." → 위험한 경우 작업을 중지<span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">②</span> "교육은 꼭 해야 해요." → 사업주는 교육을 하<span style="letter-spacing:0;">＿＿＿＿＿＿</span><br>
+    <span class="enc">③</span> "위험 때문에 멈췄어요." → 위험<span style="letter-spacing:0;">＿＿＿＿＿＿</span> 작업을 중지하였다.</div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">규정문에서 찾아 쓰십시오.</span></div>
+  <div class="lawq" style="margin-bottom:16px; font-size:14.5px; line-height:2.0; padding:16px 18px;">근로자는 산업재해가 발생할 급박한 위험이 있는 경우에는 작업을 중지하고 대피할 수 있다. 작업을 중지한 근로자는 지체 없이 그 사실을 관리감독자에게 보고하여야 한다.</div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.8;">
+    <span class="enc">①</span> 권리를 나타내는 문장 끝: <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">②</span> 의무를 나타내는 문장 끝: <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="sechead"><span class="cbadge">C</span><span class="t">미니 쓰기 — 한 문장으로 쓰십시오.</span></div>
+  <div class="drill left" style="font-size:15px; line-height:2.7;">
+    나의 권리 한 가지를 규정문 꼴로 씁니다.<br>
+    근로자는 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>10</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="실물자료읽기"><div class="eyebrow">3교시 · 읽기</div><h2 class="sec">실물 읽기 — 법이 말하는 나의 권리</h2>
+  <div style="display:flex; gap:14px; font-size:12px; color:#6E7681; margin-bottom:12px;">
+    <span>왼쪽 = 법 원문 발췌</span><span>가운데 = 누구에게 말합니까?</span><span>오른쪽 = 쉬운 말</span></div>
+  <div style="margin-bottom:25px;">
+      <div class="rtitle">권리 1 · 일을 멈출 권리 <span style="font-weight:500; color:#6E7681; font-size:12px;">· 산업안전보건법 제52조</span></div><div class="rightrow" style="margin-bottom:10px;">
+      <div style="flex:1.15;"><div class="lawq">① 근로자는 산업재해가 발생할 급박한 위험이 있는 경우에는 작업을 중지하고 <b>대피할 수 있다</b>.</div></div>
+      <div class="who me">나</div>
+      <div style="flex:1;" class="easyq">위험이 급박하면 일을 멈추고 피<b>할 수 있습니다</b>.</div></div><div class="rightrow" style="margin-bottom:10px;">
+      <div style="flex:1.15;"><div class="lawq">② 제1항<b>에 따라</b> 작업을 중지하고 대피한 근로자는 지체 없이 그 사실을 관리감독자 등에게 보고<b>하여야 한다</b>.</div></div>
+      <div class="who me">나</div>
+      <div style="flex:1;" class="easyq">위험<b>으로 인하여</b> 일을 멈추었으면, 바로 관리감독자(반장님)에게 알려야 합니다.</div></div><div class="rightrow" style="margin-bottom:10px;">
+      <div style="flex:1.15;"><div class="lawq">④ 사업주는 … 작업을 중지하고 대피한 근로자에 대하여 해고나 그 밖의 불리한 처우를 해서는 아니 된다.</div><div class="lnote">아니 된다 = '안 된다'의 법률 말투</div></div>
+      <div class="who co">회사</div>
+      <div style="flex:1;" class="easyq">멈추었다는 이유로 회사는 나를 해고<b>할 수 없습니다</b>.</div></div></div>
+  <div style="margin-bottom:25px;">
+      <div class="rtitle">권리 2 · 내 말로 된 표지를 볼 권리 <span style="font-weight:500; color:#6E7681; font-size:12px;">· 제37조 제1항</span></div><div class="rightrow" style="margin-bottom:10px;">
+      <div style="flex:1.15;"><div class="lawq">외국인근로자를 사용하는 사업주는 안전보건표지를 … 해당 외국인근로자의 모국어로 작성<b>하여야 한다</b>.</div></div>
+      <div class="who co">회사</div>
+      <div style="flex:1;" class="easyq">회사는 안전보건표지를 내 모국어로도 만들어야 합니다. 이것은 법이 정한 회사의 의무입니다.</div></div></div>
+  <div style="margin-bottom:25px;">
+      <div class="rtitle">권리 3 · 교육을 받을 권리 <span style="font-weight:500; color:#6E7681; font-size:12px;">· 제29조</span></div><div class="rightrow" style="margin-bottom:10px;">
+      <div style="flex:1.15;"><div class="lawq">① 사업주는 소속 근로자에게 … 정기적으로 안전보건교육을 <b>하여야 한다</b>. ② 사업주는 근로자를 채용할 때와 작업내용을 변경할 때에는 … 안전보건교육을 <b>하여야 한다</b>.</div></div>
+      <div class="who co">회사</div>
+      <div style="flex:1;" class="easyq">회사는 정기적으로 안전 교육을 해야 합니다. 채용될 때와 작업이 바뀔 때에도 교육을 받습니다.</div></div></div>
+  <div style="margin-bottom:25px;">
+      <div class="rtitle">그리고 나의 의무 <span style="font-weight:500; color:#6E7681; font-size:12px;">· 제6조</span></div><div class="rightrow" style="margin-bottom:10px;">
+      <div style="flex:1.15;"><div class="lawq">근로자는 … 산업재해 예방을 위한 기준을 <b>지켜야 하며</b>, … 산업재해 예방에 관한 조치에 <b>따라야 한다</b>.</div></div>
+      <div class="who me">나</div>
+      <div style="flex:1;" class="easyq">나도 안전 기준을 <b>지켜야 하며</b>, 회사의 안전 조치에 <b>따라야 합니다</b>.</div></div></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>11</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="읽고답하기"><div class="eyebrow">3교시 · 읽기</div><h2 class="sec">읽고 답하기</h2>
+  <div class="tintbox" style="margin-bottom:22px; font-size:14px;">11쪽의 법 원문과 쉬운 말을 다시 보면서 답하십시오.</div>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">기본 — 맞으면 ○, 틀리면 ✗를 쓰십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.75;">
+    <span class="enc">①</span> 급박한 위험이 있으면 작업을 중지할 수 있다. ( <span style="letter-spacing:0;">＿＿</span> )<br>
+    <span class="enc">②</span> 작업을 중지한 것을 이유로 회사는 근로자를 해고할 수 있다. ( <span style="letter-spacing:0;">＿＿</span> )<br>
+    <span class="enc">③</span> 안전보건표지는 한국어로만 만든다. ( <span style="letter-spacing:0;">＿＿</span> )</div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">심화 — 원문에서 찾아 쓰십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.7;">
+    <span class="enc">①</span> 작업을 중지하고 대피한 다음, 누구에게 보고합니까?<br>
+    → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">②</span> 안전보건교육은 언제 받습니까? 두 가지를 쓰십시오.<br>
+    → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿</span> · <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="sechead"><span class="cbadge">C</span><span class="t">확장 — 생각을 쓰십시오.</span></div>
+  <div class="drill left" style="font-size:15px; line-height:2.6;">
+    제52조 ①은 권리이고, ②는 의무입니다. 문장의 어느 부분을 보고 알 수 있습니까?<br>
+    → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>12</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="연습"><div class="eyebrow">3교시 · 읽기</div><h2 class="sec">연습</h2>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">규정문을 읽고 권리·의무·금지를 고르십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.9;">
+    <span class="enc">①</span> 근로자는 보호구를 착용하여야 한다. ( 권리 · 의무 · 금지 )<br>
+    <span class="enc">②</span> 근로자는 작업을 중지하고 대피할 수 있다. ( 권리 · 의무 · 금지 )<br>
+    <span class="enc">③</span> 불리한 처우를 할 수 없다. ( 권리 · 의무 · 금지 )</div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">쉬운 말을 규정문으로 바꿔 쓰십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.9;">
+    <span class="enc">①</span> "회사는 표지를 제 모국어로도 만들어야 해요."<br>
+    → 사업주는 안전보건표지를 모국어로 작성<span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">②</span> "위험 때문에 일을 멈췄고, 반장님께 바로 말했어요."<br>
+    → 급박한 위험<span style="letter-spacing:0;">＿＿＿＿＿＿</span> 작업을 중지하고, 관리감독자에게 보고<span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span></div>
+  <div class="sechead"><span class="cbadge">C</span><span class="t">상황을 읽고 답을 쓰십시오.</span></div>
+  <div class="tintbox" style="margin-bottom:18px; font-size:14.5px;">기계에서 이상한 소리가 나고 연기가 납니다. 반장님은 지금 자리에 없습니다.</div>
+  <div class="drill left" style="font-size:15px; line-height:2.9;">
+    <span class="enc">①</span> 지금 무엇을 할 수 있습니까? → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">②</span> 그다음에 무엇을 하여야 합니까? → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>13</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="상황쓰기"><div class="eyebrow">3교시 · 쓰기</div><h2 class="sec">상황 쓰기 — 나에게 이런 권리가 있습니다</h2>
+  <div class="prose" style="margin-bottom:16px;">이번 과에서 배운 나의 권리를 내 문장으로 씁니다. 회사와 기계를 내 작업장으로 바꿔서 씁니다.</div>
+  <div class="tintbox" style="margin-bottom:22px;">
+    <div style="font-weight:800; color:#1B2E6B; margin-bottom:6px;">쓰기 공식</div>
+    <div style="font-size:14.5px; line-height:1.9;">[상황]<span class="enc">＋</span>[나는 …-(으)ㄹ 수 있습니다]<span class="enc">＋</span>[그리고 …-여야 합니다]<br><br>
+    <span style="font-size:13px; color:#6E7681;">예: 급박한 위험이 있으면 저는 작업을 중지할 수 있습니다. 그리고 관리감독자에게 보고하여야 합니다.</span></div>
+  </div>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">권리 문장 세 개를 쓰십시오.</span></div>
+  <div class="drill left" style="margin-bottom:34px; font-size:15px; line-height:3.15;">
+    <span class="enc">①</span> 일을 멈출 권리 — <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">②</span> 교육받을 권리 — <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">③</span> 모국어 표지 — <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="caution" style="font-size:14px; line-height:1.8;">
+    <b>제출</b> · 완성한 문장 세 개를 이번 주 <b>LMS 과제방</b>에 제출합니다. 이 글은 과제②(11주)에 함께 수합됩니다.</div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>14</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="정리"><div class="eyebrow">3교시 · 읽기</div><h2 class="sec">정리</h2>
+  <div style="display:flex;flex-direction:column;gap:12px;font-size:15px;line-height:1.6;margin-bottom:18px;">
+    <div style="display:flex;gap:12px;align-items:flex-start;"><span class="num">1</span><span style="padding-top:2px;"><b>-ㄹ 수 있다</b>는 권리, <b>-여야 한다</b>는 의무, <b>-ㄹ 수 없다</b>는 금지 — 문장의 끝이 먼저 말한다.</span></div>
+    <div style="display:flex;gap:12px;align-items:flex-start;"><span class="num">2</span><span style="padding-top:2px;">법의 주어가 <b>사업주</b>이면 회사의 의무 — 회사의 의무는 곧 나의 권리다.</span></div>
+    <div style="display:flex;gap:12px;align-items:flex-start;"><span class="num">3</span><span style="padding-top:2px;">멈추면 지체 없이 <b>관리감독자</b>에게 보고한다 — 멈췄다는 이유로 해고할 수 없다.</span></div>
+  </div>
+  <div style="border-top:1px solid #D8DDE1;margin-bottom:16px;"></div>
+  <div style="margin-bottom:12px;"><span style="display:inline-block;background:#1B2E6B;color:#fff;font-size:13px;font-weight:800;letter-spacing:.18em;padding:7px 16px;">자가 점검 ① 체크리스트</span></div>
+  <div class="left" style="display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;font-size:14.5px;line-height:1.55;margin-bottom:22px;">
+    <div>☐ 나의 권리 세 가지를 말할 수 있다</div>
+    <div>☐ 규정문 끝에서 권리·의무·금지를 구별할 수 있다</div>
+    <div>☐ 작업을 중지한 다음 할 일을 말할 수 있다</div>
+    <div>☐ '하여야 한다'를 쉬운 말로 바꿀 수 있다</div>
+    <div>☐ 나의 권리를 문장 세 개로 쓸 수 있다</div>
+  </div>
+  <div style="margin-bottom:12px;"><span style="display:inline-block;background:#1B2E6B;color:#fff;font-size:13px;font-weight:800;letter-spacing:.18em;padding:7px 16px;">자가 점검 ② 문제로 확인</span></div>
+  <div class="left" style="font-size:15px;line-height:2.25;margin-bottom:22px;">
+    ① 규정문에서 권리를 나타내는 문장 끝을 쓰십시오. → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    ② '대피할 수 있다'를 쉬운 말로 바꾸십시오. → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    ③ 다음 중 <u>틀린</u> 문장을 고르십시오. ( <span style="letter-spacing:0;">＿＿</span> )<br>
+    <span style="font-size:14.5px;">㉮ 표지를 모국어로 작성하여야 한다 ㉯ 근로자는 안전보건교육을 실시하여야 한다 ㉰ 급박한 위험이 있으면 대피할 수 있다</span><br>
+    ④ '위험<span class="x">에 인하여</span> 작업을 중지했다'에서 틀린 부분을 바르게 고치십시오. → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span><br>
+    ⑤ "위험하면 멈춰도 돼요."를 규정문으로 바꾸십시오. → 작업을 중지<span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿</span>.</div>
+  <div style="margin-bottom:12px;"><span style="display:inline-block;background:#1B2E6B;color:#fff;font-size:13px;font-weight:800;letter-spacing:.18em;padding:7px 16px;">10초 어휘 셀프 체크</span></div>
+  <div style="font-size:13px;color:#6E7681;margin-bottom:12px;">각 단어의 뜻이 3초 안에 떠오르지 않으면 ☐에 ✔ 하십시오. ✔한 단어는 2쪽으로 돌아가 예문과 함께 다시 읽으십시오.</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;"><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 권리</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 의무</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 근로자</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 사업주</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 중지</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 해고</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 모국어</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 채용</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 급박</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 처우</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 관리감독자</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 유해</div></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제7과 권리와 의무</span><span>15</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div></body></html>
