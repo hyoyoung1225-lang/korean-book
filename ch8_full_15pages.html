@@ -1,0 +1,547 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+@page { size:794px 1123px; margin:0; }
+body { font-family:'Pretendard',sans-serif; color:#22272B; letter-spacing:-0.01em; word-break:keep-all; }
+.serif { font-family:'Noto Serif CJK KR',serif; letter-spacing:0; }
+
+.page { width:794px; height:1123px; page-break-after:always; position:relative;
+         background:#fff; padding:64px 64px 0 64px; overflow:hidden; }
+
+/* 본문 줄글: 양쪽 맞춤. 단 마지막 줄은 왼쪽 정렬(리버 방지) */
+.prose { text-align:justify; text-align-last:left; font-size:15.5px;
+          line-height:1.85; }
+
+/* 문제/빈칸/표/캡션: 왼쪽 맞춤 */
+.left { text-align:left; }
+
+/* 푸터: y 고정 → 푸터 위 여백 항상 일정 */
+.footer { position:absolute; top:1059px; left:64px; right:64px;
+           border-top:1px solid #D8DDE1; padding-top:10px;
+           display:flex; flex-direction:column; gap:3px; }
+.footer .frow { display:flex; justify-content:space-between; font-size:11px; color:#6E7681; letter-spacing:.06em; }
+.footer .cr { font-size:9.5px; color:#9AA0A6; letter-spacing:.02em; }
+
+/* 섹션 헤더 (좌측 기준선 정렬) */
+.eyebrow { font-size:12px; font-weight:700; color:#3E6AB8; letter-spacing:.28em; margin-bottom:8px; }
+h2.sec { font-family:'Noto Serif CJK KR',serif; font-size:27px; font-weight:700;
+          padding-bottom:14px; border-bottom:2px solid #24418E; margin-bottom:22px; }
+
+/* 요소 칩 */
+.el { margin-bottom:14px; }
+.el span { display:inline-block; background:#24418E; color:#fff; font-size:13.5px; font-weight:800;
+            letter-spacing:.16em; padding:6px 16px; border-radius:3px; }
+
+.num { display:inline-flex; width:30px; height:30px; border-radius:50%; background:#24418E;
+        color:#fff; font-weight:800; font-size:16px; align-items:center; justify-content:center; }
+.lv { font-size:11.5px; font-weight:800; letter-spacing:.12em; padding:4px 10px; border-radius:3px; }
+.lv.b { background:#EEF4FB; color:#24418E; }
+.lv.a { background:#24418E; color:#fff; }
+.formbig { font-family:'Noto Serif CJK KR',serif; font-size:24px; font-weight:700; }
+
+/* 표 (셀 패딩 고정) */
+table.f { width:100%; border-collapse:collapse; font-size:15.5px; line-height:1.7; text-align:left; }
+table.f th { background:#EEF4FB; color:#1B2E6B; font-size:13px; letter-spacing:.06em;
+              padding:9px 12px; text-align:left; border:1px solid #D8DDE1; }
+table.f td { padding:9px 12px; border:1px solid #D8DDE1; vertical-align:top; }
+
+.x { color:#C8102E; font-weight:600; }
+
+/* 컴포넌트 박스 (패딩 고정) */
+.tintbox { background:#EEF4FB; border-left:3px solid #24418E; padding:14px 20px;
+            font-size:15.5px; line-height:1.85; }
+.caution { border:1.5px solid #C8102E; border-radius:6px; padding:14px 20px; }
+.drill { border:1px solid #D8DDE1; border-radius:6px; padding:16px 20px; background:#FBFCFE; }
+
+/* 강조 박스: 가운데 정렬 (현장에서 만나기) */
+.sitebox { border:1.5px solid #24418E; border-radius:8px; overflow:hidden; }
+.sitebox .head { background:#24418E; color:#fff; text-align:center; font-size:13.5px;
+                  font-weight:800; letter-spacing:.22em; padding:8px 0; }
+.sitebox .body { background:#fff; text-align:center; padding:11px 24px; }
+</style>
+<style>
+body { font-family:'Arimo','Liberation Sans','Noto Sans KR','Noto Sans CJK KR',sans-serif; }
+h2.sec, .formbig, .serif { font-family:'Noto Serif KR','Noto Serif CJK KR',serif !important; }
+.enc { font-family:'Noto Sans KR','Noto Sans CJK KR',sans-serif; }
+
+/* 어휘 카드 (2열) */
+.vgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.vcard { border:1px solid #D8DDE1; border-radius:8px; padding:11px 15px; }
+.vcard .top { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
+.vcard .w { font-family:'Noto Serif KR',serif; font-size:19px; font-weight:700; color:#1B2E6B; }
+.vcard .hanja { font-size:13px; color:#6E7681; }
+.vcard .badge { margin-left:auto; }
+.vcard .mean { font-size:13.5px; color:#22272B; line-height:1.45; }
+.vcard .ex { font-size:12.5px; color:#6E7681; line-height:1.45; border-top:1px dashed #D8DDE1;
+             padding-top:6px; margin-top:6px; }
+/* 원형 A·B·C / 번호 배지 (큰) */
+.cbadge { display:inline-flex; width:30px; height:30px; border-radius:50%; background:#24418E;
+           color:#fff; font-weight:800; font-size:15px; align-items:center; justify-content:center; }
+.sechead { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.sechead .t { font-weight:800; font-size:15.5px; }
+/* 워드뱅크 (음영 박스 중앙) */
+.wbank { background:#EEF4FB; border-radius:6px; text-align:center; padding:12px;
+          font-size:15px; font-weight:700; color:#24418E; letter-spacing:.06em; margin-bottom:16px; }
+/* 표지/장치 카드 그리드 */
+.scard { border:1px solid #D8DDE1; border-radius:8px; padding:14px 10px; text-align:center; }
+.scard .nm { font-weight:700; font-size:15px; color:#1B2E6B; margin-top:8px; }
+.scard .han { font-size:11.5px; color:#6E7681; margin-top:2px; }
+.scard .ds { font-size:12px; color:#22272B; margin-top:4px; line-height:1.4; }
+/* 밑줄 빈칸 */
+.bl { display:inline-block; border-bottom:1.3px solid #333; }
+/* 원문자(①㉠ 등) 크기 통일 — 한 폰트에서 렌더 */
+.enc { font-family:'Noto Sans CJK KR',sans-serif; font-size:1em; }
+/* 배지(.el) — Canva 임포트 시 상자/글자 분리돼도 가운데 유지 */
+.el span { display:inline-flex !important; align-items:center; justify-content:center;
+            text-align:center; letter-spacing:.10em; padding:7px 18px; line-height:1.2; }
+
+.vcard .w{font-family:'Arimo','Noto Sans KR','Noto Sans CJK KR',sans-serif !important;
+  font-size:18px; font-weight:800; color:#1B2E6B;}
+.vcard .ex b{color:#24418E;}
+.vcard{padding:13px 16px;}
+table.cellwide td{padding:16px 12px !important;}
+</style>
+</head><body><div class="page" data-document-role="page" data-label="도비라">
+  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #24418E;padding-bottom:11px;">
+    <span style="font-size:13px;font-weight:700;letter-spacing:.5em;color:#22272B;">산업안전한국어</span>
+    <span style="font-size:13px;font-weight:800;letter-spacing:.14em;color:#24418E;">3부 · 권리</span>
+  </div>
+  <div style="display:flex;gap:26px;margin-top:34px;">
+    <div style="flex:1;padding-top:20px;">
+      <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:118px;font-weight:900;color:#24418E;line-height:.95;">08</div>
+      <div style="margin-top:14px;"><span style="display:inline-block;background:#1B2E6B;color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.34em;padding:7px 16px 7px 20px;">제 8 과</span></div>
+      <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:42px;font-weight:900;color:#22272B;margin-top:22px;">작업 중지와 거절</div>
+    </div>
+    <div style="flex:none;width:322px;height:462px;position:relative;background:#E7EDF6;overflow:hidden;">
+      <div style="position:absolute;top:120px;left:24px;width:56px;height:400px;background:#D8E1EF;"></div>
+      <div style="position:absolute;top:230px;right:16px;width:70px;height:300px;background:#D1DBEC;"></div>
+      <div style="position:absolute;top:-70px;left:150px;width:52px;height:640px;background:#24418E;transform:rotate(16deg);"></div>
+      <div style="position:absolute;top:52px;left:34px;right:34px;background:#fff;border-radius:16px;box-shadow:0 10px 26px rgba(20,35,80,.16);padding:26px 20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;justify-items:center;">
+          <svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M22 50 q28 -26 56 0 q-28 26 -56 0 Z" fill="#fff"/><circle cx="50" cy="50" r="11" fill="#24418E"/></svg><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M36 22 h28 l14 14 v28 l-14 14 h-28 l-14 -14 v-28 Z" fill="#fff"/>
+      <text x="50" y="56" text-anchor="middle" font-size="15" font-weight="bold" fill="#24418E">STOP</text></svg><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M26 30 h48 v30 h-28 l-11 11 v-11 h-9 Z" fill="#fff"/>
+      <path d="M43 38 l14 14 M57 38 l-14 14" stroke="#24418E" stroke-width="6" stroke-linecap="round"/></svg><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M67 42 a20 20 0 1 0 4 16" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+      <path d="M67 26 v16 h-16" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:26px;margin-top:40px;">
+    <div style="flex:1.06;">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:16px;">
+        <svg width="19" height="19" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#24418E" stroke-width="10"/><circle cx="50" cy="50" r="16" fill="#24418E"/></svg><span style="font-size:16px;font-weight:800;color:#22272B;">학습 목표</span>
+        <div style="flex:1;border-top:1px solid #D8DDE1;"></div></div>
+      <div style="display:flex;flex-direction:column;gap:13px;font-size:14.5px;line-height:1.6;">
+        <div style="display:flex;gap:11px;"><span class="num" style="flex:none;width:26px;height:26px;font-size:14px;">1</span><span style="padding-top:2px;">"<b>우려가 있으므로 중지하겠습니다</b>"라고 격식체로 말합니다.</span></div>
+        <div style="display:flex;gap:11px;"><span class="num" style="flex:none;width:26px;height:26px;font-size:14px;">2</span><span style="padding-top:2px;">무리한 요구를 <b>조건을 붙여</b> 정중하게 거절합니다.</span></div>
+        <div style="display:flex;gap:11px;"><span class="num" style="flex:none;width:26px;height:26px;font-size:14px;">3</span><span style="padding-top:2px;">조치 완료 <b>여부를 확인</b>한 후에 작업을 재개합니다.</span></div>
+      </div>
+    </div>
+    <div style="flex:1;background:#EDF2FA;border-radius:12px;padding:20px 24px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:11px;">
+        <svg width="17" height="17" viewBox="0 0 100 100"><path d="M50 12 a26 26 0 0 1 14 48 v10 h-28 v-10 a26 26 0 0 1 14 -48 Z" fill="none" stroke="#24418E" stroke-width="9"/><line x1="40" y1="82" x2="60" y2="82" stroke="#24418E" stroke-width="8"/></svg><span style="font-size:15px;font-weight:800;color:#22272B;">생각해 보기</span></div>
+      <div style="font-size:13.5px;line-height:1.75;color:#22272B;">기계가 이상한데 물량이 급합니다. 뭐라고 말하겠습니까?</div>
+      <div style="border-top:1px dashed #C9D2E2;margin:11px 0;"></div>
+      <div style="font-size:13.5px;line-height:1.75;color:#22272B;">"그냥 계속하세요"라는 말을 들으면, 어떻게 거절하겠습니까?</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:center;align-items:flex-start;gap:4px;margin-top:42px;">
+    <div style="width:200px;text-align:center;"><div style="width:62px;height:62px;border-radius:50%;background:#EEF4FB;display:flex;align-items:center;justify-content:center;margin:0 auto 10px auto;"><svg width="30" height="30" viewBox="0 0 100 100"><path d="M14 22 h72 v44 h-40 l-16 16 v-16 h-16 Z" fill="none" stroke="#24418E" stroke-width="8" stroke-linejoin="round"/><line x1="30" y1="38" x2="70" y2="38" stroke="#24418E" stroke-width="7"/><line x1="30" y1="52" x2="58" y2="52" stroke="#24418E" stroke-width="7"/></svg></div>
+      <div><span style="display:inline-block;background:#24418E;color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.1em;padding:6px 15px;border-radius:15px;">1교시 · 어휘</span></div>
+      <div style="font-size:12px;color:#6E7681;line-height:1.6;margin-top:9px;">핵심 어휘 12개 + 연습<br>중지 절차의 말</div></div>
+    <div style="color:#C4CBD7;font-size:15px;margin-top:26px;">〉</div>
+    <div style="width:200px;text-align:center;"><div style="width:62px;height:62px;border-radius:50%;background:#EEF4FB;display:flex;align-items:center;justify-content:center;margin:0 auto 10px auto;"><span style="font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900;color:#24418E;">Aa</span></div>
+      <div><span style="display:inline-block;background:#3E6AB8;color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.1em;padding:6px 15px;border-radius:15px;">2교시 · 문형</span></div>
+      <div style="font-size:12px;color:#6E7681;line-height:1.6;margin-top:9px;">우려가 있으므로 · -기 전에는<br>N 여부 확인 + 종합</div></div>
+    <div style="color:#C4CBD7;font-size:15px;margin-top:26px;">〉</div>
+    <div style="width:200px;text-align:center;"><div style="width:62px;height:62px;border-radius:50%;background:#EEF4FB;display:flex;align-items:center;justify-content:center;margin:0 auto 10px auto;"><svg width="30" height="30" viewBox="0 0 100 100"><path d="M50 26 q-16 -10 -34 -4 v52 q18 -6 34 4 q16 -10 34 -4 v-52 q-18 -6 -34 4 Z M50 26 v52" fill="none" stroke="#24418E" stroke-width="8" stroke-linejoin="round"/></svg></div>
+      <div><span style="display:inline-block;background:#1B2E6B;color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.1em;padding:6px 15px;border-radius:15px;">3교시 · 읽기</span></div>
+      <div style="font-size:12px;color:#6E7681;line-height:1.6;margin-top:9px;">절차 안내문 + 현장 대화<br>중지 통보문 쓰기 + 정리</div></div>
+  </div>
+  <div style="position:absolute;top:1059px;left:64px;right:64px;border-top:1px solid #D8DDE1;padding-top:12px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:800;color:#22272B;">
+      <svg width="15" height="15" viewBox="0 0 100 100"><path d="M50 8 L86 20 V52 q0 28 -36 40 q-36 -12 -36 -40 V20 Z" fill="#24418E"/><path d="M36 50 l10 10 l20 -22" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/></svg> 멈춘다고 말하는 것 — 그것도 권리입니다.</span>
+    <span style="font-size:13px;font-weight:800;color:#24418E;">01</span>
+  </div></div><div class="page" data-document-role="page" data-label="핵심어휘"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">핵심 어휘 12</h2>
+  <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:#6E7681; margin-bottom:16px;">
+    <span class="lv b">기본</span><span>모든 학생 필수</span>
+    <span class="lv a" style="margin-left:10px;">심화</span><span>법규·보고서의 문어 표현 — 읽고 이해할 수 있으면 충분합니다.</span></div>
+  <div class="vgrid" style="gap:16px;"><div class="vcard"><div class="top"><span class="w">거절</span><span class="badge lv b">기본</span></div>
+      <div class="mean">하지 않겠다고 말하는 것입니다.</div><div class="ex">위험한 지시는 <b>거절</b>할 수 있습니다.</div></div><div class="vcard"><div class="top"><span class="w">요청</span><span class="badge lv b">기본</span></div>
+      <div class="mean">해 달라고 부탁하는 것입니다.</div><div class="ex">수리를 <b>요청</b>드립니다.</div></div><div class="vcard"><div class="top"><span class="w">상급자</span><span class="badge lv b">기본</span></div>
+      <div class="mean">나보다 위에 있는 사람입니다. 반장님, 팀장님입니다.</div><div class="ex"><b>상급자</b>에게 바로 알립니다.</div></div><div class="vcard"><div class="top"><span class="w">즉시</span><span class="badge lv b">기본</span></div>
+      <div class="mean">바로, 그 자리에서라는 뜻입니다.</div><div class="ex">위험하면 <b>즉시</b> 멈춥니다.</div></div><div class="vcard"><div class="top"><span class="w">발견</span><span class="badge lv b">기본</span></div>
+      <div class="mean">찾아서 알게 되는 것입니다.</div><div class="ex">위험을 <b>발견</b>하면 작업을 중지합니다.</div></div><div class="vcard"><div class="top"><span class="w">동료</span><span class="badge lv b">기본</span></div>
+      <div class="mean">같이 일하는 사람입니다.</div><div class="ex"><b>동료</b>의 위험도 중지 사유가 됩니다.</div></div><div class="vcard"><div class="top"><span class="w">판단</span><span class="badge lv b">기본</span></div>
+      <div class="mean">생각해서 결정하는 것입니다.</div><div class="ex">위험한지 스스로 <b>판단</b>합니다.</div></div><div class="vcard"><div class="top"><span class="w">재개</span><span class="badge lv b">기본</span></div>
+      <div class="mean">멈춘 일을 다시 시작하는 것입니다.</div><div class="ex">확인한 후에 작업을 <b>재개</b>합니다.</div></div><div class="vcard"><div class="top"><span class="w">행사</span><span class="badge lv a">심화</span></div>
+      <div class="mean">권리를 실제로 쓰는 것입니다.</div><div class="ex">작업중지권을 <b>행사</b>하였습니다.</div></div><div class="vcard"><div class="top"><span class="w">통보</span><span class="badge lv a">심화</span></div>
+      <div class="mean">공식적으로 알리는 것입니다.</div><div class="ex">중지 사실을 <b>통보</b>하였습니다.</div></div><div class="vcard"><div class="top"><span class="w">불이익</span><span class="badge lv a">심화</span></div>
+      <div class="mean">나에게 손해가 되는 대우입니다.</div><div class="ex">중지를 이유로 <b>불이익</b>을 줄 수 없습니다.</div></div><div class="vcard"><div class="top"><span class="w">손실</span><span class="badge lv a">심화</span></div>
+      <div class="mean">잃어버린 돈이나 시간입니다.</div><div class="ex">중지로 인한 <b>손실</b>은 회사가 부담합니다.</div></div></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>02</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="어휘연습"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">어휘 연습</h2>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">알맞은 단어를 골라 빈칸을 채우십시오.</span></div>
+  <div class="wbank" style="margin-bottom:22px;">판단 · 통보 · 재개 · 불이익</div>
+  <div class="left" style="font-size:15px; line-height:2.75; margin-bottom:48px;">
+    ① 위험한지 스스로 <span style="letter-spacing:0;">＿＿＿＿＿</span>하여 작업을 중지할 수 있습니다.<br>
+    ② 작업을 중지하였으면 관리감독자에게 <span style="letter-spacing:0;">＿＿＿＿＿</span>합니다.<br>
+    ③ 조치가 끝난 후에 작업을 <span style="letter-spacing:0;">＿＿＿＿＿</span>합니다.<br>
+    ④ 작업을 중지하였다는 이유로 <span style="letter-spacing:0;">＿＿＿＿＿＿</span>을 줄 수 없습니다.</div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">짝이 되는 말을 선으로 연결하십시오.</span></div>
+  <div style="margin-bottom:48px;">
+  <div style="display:flex;justify-content:space-between;"><div><div style="display:flex;align-items:center;gap:9px;margin-bottom:34px;width:150px;"><span class="enc">①</span><span style="flex:1;">위험을</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:34px;width:150px;"><span class="enc">②</span><span style="flex:1;">권리를</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:34px;width:150px;"><span class="enc">③</span><span style="flex:1;">여부를</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:34px;width:150px;"><span class="enc">④</span><span style="flex:1;">중지를</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div><div style="display:flex;align-items:center;gap:9px;margin-bottom:34px;width:150px;"><span class="enc">⑤</span><span style="flex:1;">작업을</span><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span></div></div><div><div style="display:flex;align-items:center;gap:10px;margin-bottom:34px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉠</span><span>행사하다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:34px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉡</span><span>재개하다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:34px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉢</span><span>발견하다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:34px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉣</span><span>통보하다</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:34px;width:230px;"><span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span><span class="enc">㉤</span><span>확인하다</span></div></div></div>
+  </div>
+  <div class="sechead"><span class="cbadge">C</span><span class="t">B에서 연결한 표현 중 두 개를 골라 문장을 쓰십시오.</span></div>
+  <div class="left" style="font-size:15px; line-height:3.4;">
+    ① <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    ② <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>03</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="개념"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">작업 중지의 다섯 단계</h2>
+  <div class="prose" style="margin-bottom:24px;">작업 중지는 한 번의 말이 아니라 절차입니다. 다섯 단계를 순서대로 기억합니다. 이번 과의 어휘가 이 지도 위에 있습니다.</div>
+  <div style="display:flex; flex-direction:column; gap:18px; margin-bottom:34px;">
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:19px 18px; display:flex; gap:18px; align-items:center;">
+      <div style="flex:none;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M22 50 q28 -26 56 0 q-28 26 -56 0 Z" fill="#fff"/><circle cx="50" cy="50" r="11" fill="#24418E"/></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:baseline; gap:10px;">
+          <span class="enc">①</span><span style="font-weight:800; font-size:16px; color:#1B2E6B;">발견</span></div>
+        <div style="font-size:14px; line-height:1.6; margin-top:5px;">위험을 발견합니다. 내 위험도, 동료의 위험도 됩니다.</div></div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:19px 18px; display:flex; gap:18px; align-items:center;">
+      <div style="flex:none;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M36 22 h28 l14 14 v28 l-14 14 h-28 l-14 -14 v-28 Z" fill="#fff"/>
+      <text x="50" y="56" text-anchor="middle" font-size="15" font-weight="bold" fill="#24418E">STOP</text></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:baseline; gap:10px;">
+          <span class="enc">②</span><span style="font-weight:800; font-size:16px; color:#1B2E6B;">중지·통보</span></div>
+        <div style="font-size:14px; line-height:1.6; margin-top:5px;">즉시 멈추고, 지체 없이 상급자에게 통보합니다.</div></div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:19px 18px; display:flex; gap:18px; align-items:center;">
+      <div style="flex:none;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M26 30 h48 v30 h-28 l-11 11 v-11 h-9 Z" fill="#fff"/>
+      <path d="M43 38 l14 14 M57 38 l-14 14" stroke="#24418E" stroke-width="6" stroke-linecap="round"/></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:baseline; gap:10px;">
+          <span class="enc">③</span><span style="font-weight:800; font-size:16px; color:#1B2E6B;">거절</span></div>
+        <div style="font-size:14px; line-height:1.6; margin-top:5px;">조치 전에 계속하라는 요구는 정중하게 거절합니다.</div></div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:19px 18px; display:flex; gap:18px; align-items:center;">
+      <div style="flex:none;"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#24418E"/>
+      <path d="M67 42 a20 20 0 1 0 4 16" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+      <path d="M67 26 v16 h-16" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:baseline; gap:10px;">
+          <span class="enc">④</span><span style="font-weight:800; font-size:16px; color:#1B2E6B;">확인·재개</span></div>
+        <div style="font-size:14px; line-height:1.6; margin-top:5px;">조치 완료 여부를 확인한 후에 작업을 재개합니다.</div></div></div>
+  </div>
+  <div class="tintbox">
+    <div style="font-weight:800; color:#1B2E6B; margin-bottom:6px;">7과와 이어집니다</div>
+    <div style="font-size:14.5px; line-height:1.85;">7과에서 이 권리를 <b>법(제52조)</b>으로 읽었습니다. 8과에서는 같은 권리를 <b>말과 문서</b>로 씁니다. 법이 준 권리는 말할 수 있을 때 내 것이 됩니다.</div>
+  </div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>04</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="어휘확장1"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">어휘 확장 ① — 누가, 무엇을 합니까?</h2>
+  <div class="prose" style="margin-bottom:18px;">중지 절차의 단계마다 하는 사람과 하는 일이 정해져 있습니다. 주어를 보면서 표를 읽습니다.</div>
+  <table class="f cellwide" style="margin-bottom:48px;">
+    <tr><th style="width:110px;">단계</th><th style="width:120px;">누가</th><th>무엇을</th></tr>
+    <tr><td>발견·판단</td><td><b>나</b></td><td>위험을 발견하고 스스로 판단합니다.</td></tr>
+    <tr><td>중지·통보</td><td><b>나</b></td><td>즉시 중지하고 상급자에게 통보합니다.</td></tr>
+    <tr><td>조치</td><td><b>회사</b></td><td>위험 요인을 즉시 확인하고 조치합니다.</td></tr>
+    <tr><td>확인·재개</td><td><b>나 + 회사</b></td><td>조치 완료 여부를 확인한 후에 재개합니다.</td></tr>
+  </table>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">알맞은 사람을 고르십시오.</span></div>
+  <div class="left" style="font-size:15px; line-height:3.15; margin-bottom:48px;">
+    ① 위험한지 판단하는 사람 ( 나 · 회사 · 나와 회사 )<br>
+    ② 위험 요인을 조치하는 쪽 ( 나 · 회사 · 나와 회사 )<br>
+    ③ 조치 완료 여부를 확인하는 쪽 ( 나 · 회사 · 나와 회사 )</div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">문장을 완성해 쓰십시오.</span></div>
+  <div class="left" style="font-size:15px; line-height:3.1;">
+    ① 위험을 발견하면 즉시 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿</span>.<br>
+    ② 중지한 사실을 상급자에게 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿</span>.<br>
+    ③ 조치가 끝난 후에 작업을 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿</span>.</div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>05</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="어휘확장2"><div class="eyebrow">1교시 · 어휘</div><h2 class="sec">어휘 확장 ② — 함께 쓰는 말</h2>
+  <div class="prose" style="margin-bottom:24px;">권리의 말도 짝과 함께 다닙니다. 짝을 통째로 기억하면 문서와 대화가 빨라집니다.</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:48px;">
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:24px 18px;">
+      <div style="font-size:17px; font-weight:800; color:#1B2E6B;">권리를 <span style="color:#3E6AB8;">+</span> 행사하다</div>
+      <div style="font-size:13.5px; margin-top:5px; line-height:1.6;">권리를 실제로 쓴다는 뜻입니다. 문서의 말입니다.</div>
+      <div style="font-size:12.5px; color:#6E7681; border-top:1px dashed #D8DDE1; margin-top:12px; padding-top:11px; line-height:1.7;">작업중지권을 <b>행사</b>한 근로자</div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:24px 18px;">
+      <div style="font-size:17px; font-weight:800; color:#1B2E6B;">불이익을 <span style="color:#3E6AB8;">+</span> 주다·받다</div>
+      <div style="font-size:13.5px; margin-top:5px; line-height:1.6;">손해가 되는 대우를 한다는 뜻입니다.</div>
+      <div style="font-size:12.5px; color:#6E7681; border-top:1px dashed #D8DDE1; margin-top:12px; padding-top:11px; line-height:1.7;">중지를 이유로 <b>불이익을 줄</b> 수 없습니다.</div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:24px 18px;">
+      <div style="font-size:17px; font-weight:800; color:#1B2E6B;">손실을 <span style="color:#3E6AB8;">+</span> 부담하다</div>
+      <div style="font-size:13.5px; margin-top:5px; line-height:1.6;">손해를 책임진다는 뜻입니다.</div>
+      <div style="font-size:12.5px; color:#6E7681; border-top:1px dashed #D8DDE1; margin-top:12px; padding-top:11px; line-height:1.7;">중지로 인한 <b>손실은</b> 회사가 <b>부담</b>합니다.</div></div>
+    <div style="border:1px solid #D8DDE1; border-radius:8px; padding:24px 18px;">
+      <div style="font-size:17px; font-weight:800; color:#1B2E6B;">이상 <span style="color:#3E6AB8;">+</span> 유무</div>
+      <div style="font-size:13.5px; margin-top:5px; line-height:1.6;">이상이 있는지 없는지를 말합니다. 점검표의 말입니다.</div>
+      <div style="font-size:12.5px; color:#6E7681; border-top:1px dashed #D8DDE1; margin-top:12px; padding-top:11px; line-height:1.7;">설비 <b>이상 유무</b>를 확인하였습니다.</div></div>
+  </div>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">알맞은 짝을 골라 문장을 완성하십시오.</span></div>
+  <div class="wbank" style="margin-bottom:26px;">행사 · 불이익 · 손실 · 유무</div>
+  <div class="left" style="font-size:15px; line-height:3.45;">
+    ① 근로자는 작업중지권을 <span style="letter-spacing:0;">＿＿＿＿</span>할 수 있습니다.<br>
+    ② 중지를 이유로 <span style="letter-spacing:0;">＿＿＿＿＿</span>을 주어서는 안 됩니다.<br>
+    ③ 설비의 이상 <span style="letter-spacing:0;">＿＿＿＿</span>를 먼저 확인하십시오.<br>
+    ④ 중지로 인한 <span style="letter-spacing:0;">＿＿＿＿</span>은 회사가 부담합니다.</div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>06</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형1"><div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
+    <span class="num">1</span>
+    <span class="formbig" style="white-space:nowrap;">-(으)ㄹ 우려가 있으므로 …-겠습니다</span>
+    <span class="lv a">심화</span>
+    <span style="margin-left:auto; font-size:13.5px; color:#6E7681;">결합: <b style="color:#22272B;">동사</b></span></div>
+  <div style="margin-bottom:28px;"><div class="sitebox" style="margin-bottom:14px;">
+      <div class="head">현장에서 만나기</div>
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
+        <div style="flex:none;"><svg width="92" height="92" viewBox="0 0 100 100">
+  <rect x="18" y="12" width="64" height="76" rx="4" fill="#fff" stroke="#24418E" stroke-width="4"/>
+  <rect x="26" y="22" width="48" height="7" fill="#24418E"/>
+  <line x1="26" y1="40" x2="74" y2="40" stroke="#D8DDE1" stroke-width="4"/>
+  <line x1="26" y1="52" x2="74" y2="52" stroke="#D8DDE1" stroke-width="4"/>
+  <line x1="26" y1="64" x2="60" y2="64" stroke="#D8DDE1" stroke-width="4"/></svg></div>
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:#22272B;">"말려들 <b>우려가 있으므로</b> 작업을 중지<b>하겠습니다</b>."</div>
+          <div style="font-size:12px;color:#6E7681;margin-top:7px;">작업 중지 통보문</div></div></div></div></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>의미와 쓰임</span></div></div>
+  <div class="prose" style="margin-bottom:20px;">중지를 선언하는 공식입니다. 앞에는 이유(<b>우려가 있으므로</b>), 뒤에는 나의 결정(<b>-겠습니다</b>)이 옵니다. 허락을 구하는 말이 아니라 권리를 쓰는 말입니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>비교 · 말할 때와 쓸 때</span></div></div>
+  <div style="font-size:14.5px; line-height:1.8; margin-bottom:20px;">'우려'는 1과와 5과에서 배웠습니다. 이제 내 문장의 재료가 됩니다.<br>
+      · 말할 때 — 우려가 있<b>어서</b> 중지하겠습니다.<br>
+      · 통보문에 쓸 때 — 우려가 있<b>으므로</b> 중지하겠습니다.<br>
+      · 조치를 부탁할 때 — 수리를 <b>요청드립니다</b>. (권리 행사와 구별)</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>자주 하는 오류</span></div></div>
+  <div class="caution" style="font-size:14.5px; line-height:2.0; margin-bottom:26px;"><span class="x">✗ 우려가 있으니까 중지하겠습니다.</span><br>
+      ○ 우려가 있<b>으므로</b> 중지하겠습니다.<br>
+      <span style="font-size:13px; color:#6E7681;">'-니까'는 대화의 말입니다. 통보문에는 '-으므로'를 씁니다.</span></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>연습</span></div></div>
+  <div class="drill left" style="font-size:15px; line-height:3.0;"><span class="enc">①</span> 손이 끼일 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span> 작업을 중지하겠습니다.<br>
+      <span class="enc">②</span> 부품이 떨어질 우려가 있으므로 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿</span>.<br>
+      <span class="enc">③</span> (말→통보문) "감전될 것 같아서 멈추겠습니다." → 감전될 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿</span></div><div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>07</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형2"><div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
+    <span class="num">2</span>
+    <span class="formbig" style="white-space:nowrap;">-기 전에는 -(으)ㄹ 수 없습니다</span>
+    <span class="lv a">심화</span>
+    <span style="margin-left:auto; font-size:13.5px; color:#6E7681;">결합: <b style="color:#22272B;">동사</b></span></div>
+  <div style="margin-bottom:28px;"><div class="sitebox" style="margin-bottom:14px;">
+      <div class="head">현장에서 만나기</div>
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
+        <div style="flex:none;"><svg width="92" height="92" viewBox="0 0 100 100">
+  <path d="M34 14 h32 l20 20 v32 l-20 20 h-32 l-20 -20 v-32 Z" fill="#C62828" stroke="#fff" stroke-width="3"/>
+  <text x="50" y="57" text-anchor="middle" font-size="17" font-weight="bold" fill="#fff">STOP</text></svg></div>
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:#22272B;">"죄송하지만, 방호장치가 고쳐지<b>기 전에는</b> 작업<b>할 수 없습니다</b>."</div>
+          <div style="font-size:12px;color:#6E7681;margin-top:7px;">현장 대화</div></div></div></div></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>의미와 쓰임</span></div></div>
+  <div class="prose" style="margin-bottom:20px;">조건을 붙여 거절하는 공식입니다. 무엇이 되기 <b>전에는</b> 할 수 <b>없다</b>고 말합니다. 조건이 있어서 정중하고, '없습니다'가 있어서 명확합니다. 앞에 "죄송하지만"을 붙이면 더 부드럽습니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>비교 · 7과에서 배운 말</span></div></div>
+  <div style="font-size:14.5px; line-height:1.8; margin-bottom:20px;">7과에서 규정문의 <b>-ㄹ 수 없다</b>(금지)를 읽었습니다. 8과에서는 같은 형태로 내가 <b>거절</b>합니다. 읽던 말이 내 말이 됩니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>자주 하는 오류</span></div></div>
+  <div class="caution" style="font-size:14.5px; line-height:2.0; margin-bottom:26px;"><span class="x">✗ 좀 어려울 것 같습니다.</span> — 애매한 거절은 다시 요구가 옵니다.<br>
+      ○ 고쳐지<b>기 전에는</b> 작업<b>할 수 없습니다</b>.<br>
+      <span style="font-size:13px; color:#6E7681;">안전 거절은 애매하게 말하지 않습니다. 조건을 말합니다.</span></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>연습</span></div></div>
+  <div class="drill left" style="font-size:15px; line-height:3.0;"><span class="enc">①</span> 방호장치가 수리되<span style="letter-spacing:0;">＿＿＿＿＿</span> 라인을 켤 수 없습니다.<br>
+      <span class="enc">②</span> 안전 확인이 끝나<span style="letter-spacing:0;">＿＿＿＿＿</span> 들어갈 수 없습니다.<br>
+      <span class="enc">③</span> "그냥 계속하세요." → 죄송하지만, <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div><div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>08</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형3"><div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
+    <span class="num">3</span>
+    <span class="formbig" style="white-space:nowrap;">N 여부를 확인하다</span>
+    <span class="lv a">심화</span>
+    <span style="margin-left:auto; font-size:13.5px; color:#6E7681;">결합: <b style="color:#22272B;">명사</b></span></div>
+  <div style="margin-bottom:26px;"><div class="sitebox" style="margin-bottom:14px;">
+      <div class="head">현장에서 만나기</div>
+      <div class="body" style="display:flex;align-items:center;justify-content:center;gap:26px;padding:16px 24px;">
+        <div style="flex:none;"><svg width="92" height="92" viewBox="0 0 100 100">
+  <rect x="14" y="16" width="72" height="68" rx="6" fill="#fff" stroke="#24418E" stroke-width="4"/>
+  <rect x="24" y="28" width="14" height="14" fill="none" stroke="#24418E" stroke-width="3"/>
+  <path d="M26 34 l5 5 l8 -10" stroke="#24418E" stroke-width="4" fill="none"/>
+  <line x1="46" y1="35" x2="76" y2="35" stroke="#D8DDE1" stroke-width="4"/>
+  <rect x="24" y="52" width="14" height="14" fill="none" stroke="#24418E" stroke-width="3"/>
+  <line x1="46" y1="59" x2="76" y2="59" stroke="#D8DDE1" stroke-width="4"/></svg></div>
+        <div style="text-align:center;">
+          <div style="font-size:18px;line-height:1.6;color:#22272B;">"조치 완료 <b>여부를 확인</b>한 후에 재개합니다."</div>
+          <div style="font-size:12px;color:#6E7681;margin-top:7px;">작업 재개 점검표</div></div></div></div></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>의미와 쓰임</span></div></div>
+  <div class="prose" style="margin-bottom:18px;"><b>여부</b>는 '했는지 안 했는지'를 한 단어로 줄인 말입니다. 점검표와 보고서의 말입니다. 완료 여부, 작동 여부처럼 명사 뒤에 붙습니다.</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>비교 · 비슷한 말</span></div></div>
+  <div style="font-size:14.5px; line-height:1.65; margin-bottom:18px;">· 말할 때 — 조치가 끝났<b>는지</b> 확인하겠습니다.<br>
+      · 문서에 쓸 때 — 조치 완료 <b>여부</b>를 확인하였습니다.<br>
+      · <b>유무</b> — 있는지 없는지. "설비 이상 <b>유무</b> 확인" (5과 점검표에서 봤습니다)</div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>자주 하는 오류</span></div></div>
+  <div class="caution" style="font-size:14.5px; line-height:1.75; margin-bottom:24px;"><span class="x">✗ 완료했는지 여부를 확인합니다.</span><br>
+      ○ 완료 <b>여부</b>를 확인합니다. / 완료했<b>는지</b> 확인합니다.<br>
+      <span style="font-size:13px; color:#6E7681;">'-는지'와 '여부'는 같은 일을 합니다. 둘 중 하나만 씁니다.</span></div>
+  <div style="display:flex; gap:8px; margin:10px 0 4px 0;"><div class="el"><span>연습</span></div></div>
+  <div class="drill left" style="font-size:15px; line-height:2.95;"><span class="enc">①</span> 방호장치 작동 <span style="letter-spacing:0;">＿＿＿＿</span>를 확인한 후에야 재개할 수 있습니다.<br>
+      <span class="enc">②</span> 설비 이상 <span style="letter-spacing:0;">＿＿＿＿</span>를 점검하였습니다.<br>
+      <span class="enc">③</span> (문서로) "다 고쳤는지 확인했어요." → 수리 완료 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿</span></div><div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>09</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="문형종합"><div class="eyebrow">2교시 · 문형</div><h2 class="sec">문형 종합</h2>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">말을 통보문으로 바꿔 쓰십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.95;">
+    <span class="enc">①</span> "컨베이어에 말려들 것 같아서 멈출게요."<br>
+    → 말려들 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span> 작업을 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">②</span> "고치기 전엔 못 해요."<br>
+    → 수리가 완료되<span style="letter-spacing:0;">＿＿＿＿＿</span> 작업<span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span></div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">안내문에서 찾아 쓰십시오.</span></div>
+  <div class="lawq" style="margin-bottom:16px; font-size:14.5px; line-height:2.0; padding:16px 18px; background:#FBFCFE; border:1px solid #D8DDE1; border-radius:6px;">위험을 발견한 근로자는 즉시 작업을 중지할 수 있습니다. 중지 사실을 관리감독자에게 통보합니다. 조치 완료 여부를 확인한 후에 작업을 재개합니다.</div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.8;">
+    <span class="enc">①</span> '했는지 안 했는지'를 줄인 한 단어: <span style="letter-spacing:0;">＿＿＿＿</span><br>
+    <span class="enc">②</span> 재개의 조건이 되는 일: <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span></div>
+  <div class="sechead"><span class="cbadge">C</span><span class="t">미니 쓰기 — 한 문장으로 쓰십시오.</span></div>
+  <div class="drill left" style="font-size:15px; line-height:2.9;">
+    내 작업장의 위험 하나로 중지 문장을 씁니다.<br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span> 우려가 있으므로 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>10</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="실물자료읽기"><div class="eyebrow">3교시 · 읽기</div><h2 class="sec">실물 자료 읽기</h2>
+  <div style="font-weight:800;color:#24418E;font-size:13.5px;margin-bottom:8px;">[가] 작업중지권 행사 절차 안내 — 현장 게시문</div>
+  <div style="border:1.5px solid #24418E; border-radius:9px; padding:18px 22px; margin-bottom:6px;">
+    <div style="text-align:center; font-weight:900; font-size:16px; color:#1B2E6B; margin-bottom:4px;">작업중지권 행사 절차 안내</div>
+    <div style="text-align:center; font-size:13px; color:#6E7681; margin-bottom:14px;">위험하면 즉시 멈추십시오. 작업 중지는 근로자의 권리입니다.</div>
+    <div style="display:flex; gap:11px; margin-bottom:16px; align-items:flex-start;">
+      <span class="enc">①</span>
+      <div style="flex:1;"><span style="font-weight:800; color:#1B2E6B;">발견</span>
+      <span style="font-size:14px;"> — 위험을 발견하면 즉시 작업을 중지할 수 있습니다. 동료의 위험도 됩니다.</span></div></div>
+    <div style="display:flex; gap:11px; margin-bottom:16px; align-items:flex-start;">
+      <span class="enc">②</span>
+      <div style="flex:1;"><span style="font-weight:800; color:#1B2E6B;">통보</span>
+      <span style="font-size:14px;"> — 작업을 중지하였으면 지체 없이 관리감독자에게 통보합니다.</span></div></div>
+    <div style="display:flex; gap:11px; margin-bottom:16px; align-items:flex-start;">
+      <span class="enc">③</span>
+      <div style="flex:1;"><span style="font-weight:800; color:#1B2E6B;">조치</span>
+      <span style="font-size:14px;"> — 회사는 위험 요인을 즉시 확인하고 조치하여야 합니다.</span></div></div>
+    <div style="display:flex; gap:11px; margin-bottom:16px; align-items:flex-start;">
+      <span class="enc">④</span>
+      <div style="flex:1;"><span style="font-weight:800; color:#1B2E6B;">확인·재개</span>
+      <span style="font-size:14px;"> — 조치 완료 여부를 확인한 후에야 작업을 재개할 수 있습니다.</span></div></div>
+    <div style="display:flex; gap:11px; margin-bottom:16px; align-items:flex-start;">
+      <span class="enc">⑤</span>
+      <div style="flex:1;"><span style="font-weight:800; color:#1B2E6B;">보호</span>
+      <span style="font-size:14px;"> — 중지를 이유로 불이익을 줄 수 없습니다. 손실은 회사가 부담합니다.</span></div></div></div>
+  <div class="lnote" style="font-size:11.5px; color:#6E7681; margin-bottom:24px;">근거: 산업안전보건법 제52조(7과) · 기업 현장의 행사 절차 안내(삼성물산·삼성중공업 공개 자료)를 교육용으로 재구성함</div>
+  <div style="font-weight:800;color:#24418E;font-size:13.5px;margin-bottom:8px;">[나] 위험 상황 대화 — 제2공장 컨베이어 라인</div>
+  <div style="border:1.2px solid #D8DDE1;border-radius:9px;padding:26px 28px 10px;margin-bottom:6px;font-size:15.5px;">
+    <div style="display:flex;gap:14px;margin-bottom:19px;align-items:flex-start;"><span style="flex:none;font-weight:800;color:#24418E;width:64px;padding-top:1px;">작업자</span><span style="line-height:1.9;flex:1;">"반장님, 컨베이어에서 이상한 소리가 납니다. 방호장치도 작동하지 않습니다.<br>손이 <b>말려들 우려가 있으므로</b> 작업을 <b>중지하겠습니다</b>."</span></div>
+    <div style="display:flex;gap:14px;margin-bottom:19px;align-items:flex-start;"><span style="flex:none;font-weight:800;color:#0F766E;width:64px;padding-top:1px;">김 반장</span><span style="line-height:1.9;flex:1;">"알겠습니다. 잘 판단했습니다. 라인에서 나오세요."</span></div>
+    <div style="display:flex;gap:14px;margin-bottom:19px;align-items:flex-start;"><span style="flex:none;font-weight:800;color:#92400E;width:64px;padding-top:1px;">동료</span><span style="line-height:1.9;flex:1;">"오늘 물량이 많은데, 그냥 계속하면 안 됩니까?"</span></div>
+    <div style="display:flex;gap:14px;margin-bottom:19px;align-items:flex-start;"><span style="flex:none;font-weight:800;color:#24418E;width:64px;padding-top:1px;">작업자</span><span style="line-height:1.9;flex:1;">"죄송하지만, 방호장치가 <b>고쳐지기 전에는</b> 작업<b>할 수 없습니다</b>."</span></div>
+    <div style="text-align:center;color:#6E7681;font-size:12px;margin:10px 0 20px;">— 수리 후 —</div>
+    <div style="display:flex;gap:14px;margin-bottom:19px;align-items:flex-start;"><span style="flex:none;font-weight:800;color:#0F766E;width:64px;padding-top:1px;">김 반장</span><span style="line-height:1.9;flex:1;">"수리가 끝났습니다. 확인해 보세요."</span></div>
+    <div style="display:flex;gap:14px;margin-bottom:19px;align-items:flex-start;"><span style="flex:none;font-weight:800;color:#24418E;width:64px;padding-top:1px;">작업자</span><span style="line-height:1.9;flex:1;">"방호장치 작동 <b>여부를 확인</b>한 후에 재개하겠습니다."</span></div>
+  </div>
+  <div class="lnote" style="font-size:11.5px; color:#6E7681;">실제 행사 사례(발견→요청→조치→재개)의 담화 구조를 제조 현장 상황으로 재구성함</div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>11</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="읽고답하기"><div class="eyebrow">3교시 · 읽기</div><h2 class="sec">읽고 답하기</h2>
+  <div class="tintbox" style="margin-bottom:22px; font-size:14px;">11쪽의 안내문과 대화를 다시 보면서 답하십시오.</div>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">기본 — 맞으면 ○, 틀리면 ✗를 쓰십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.75;">
+    <span class="enc">①</span> 동료의 위험을 발견해도 작업을 중지할 수 있다. ( <span style="letter-spacing:0;">＿＿</span> )<br>
+    <span class="enc">②</span> 조치가 끝나기 전에도 물량이 급하면 재개할 수 있다. ( <span style="letter-spacing:0;">＿＿</span> )<br>
+    <span class="enc">③</span> 중지로 인한 손실은 근로자가 부담한다. ( <span style="letter-spacing:0;">＿＿</span> )</div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">심화 — 안내문·대화에서 찾아 쓰십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:2.7;">
+    <span class="enc">①</span> 작업을 중지한 다음, 누구에게 무엇을 합니까?<br>
+    → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">②</span> 작업자가 동료의 요구를 거절할 때 붙인 조건은 무엇입니까?<br>
+    → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="sechead"><span class="cbadge">C</span><span class="t">확장 — 생각을 쓰십시오.</span></div>
+  <div class="drill left" style="font-size:15px; line-height:2.6;">
+    작업자는 "안 됩니다"라고만 하지 않고 조건을 말했습니다. 조건을 말하면 무엇이 좋습니까?<br>
+    → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>12</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="연습"><div class="eyebrow">3교시 · 읽기</div><h2 class="sec">연습</h2>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">상황을 읽고 알맞은 말을 고르십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:3.05;">
+    <span class="enc">①</span> 프레스에서 연기가 납니다. → ( 계속 지켜본다 · 즉시 중지한다 )<br>
+    <span class="enc">②</span> 조치가 아직 안 끝났는데 재개 지시가 옵니다. → ( 재개한다 · 정중히 거절한다 )<br>
+    <span class="enc">③</span> 수리가 끝났습니다. → ( 바로 재개한다 · 작동 여부를 확인한 후 재개한다 )</div>
+  <div class="sechead"><span class="cbadge">B</span><span class="t">대화를 완성해 쓰십시오.</span></div>
+  <div class="drill left" style="margin-bottom:48px; font-size:15px; line-height:3.1;">
+    <span class="enc">①</span> 지게차 브레이크가 밀립니다.<br>
+    → 부딪힐 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span> 운행을 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span><br>
+    <span class="enc">②</span> "안전 교육 아직인데 그냥 투입하죠."<br>
+    → 죄송하지만, 교육을 받<span style="letter-spacing:0;">＿＿＿＿＿</span> 작업<span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="sechead"><span class="cbadge">C</span><span class="t">통보문의 순서를 바로잡아 번호를 쓰십시오.</span></div>
+  <div class="tintbox" style="margin-bottom:14px; font-size:14.5px; line-height:1.9;">
+    ㉮ 조치 완료 여부를 확인한 후에 재개하겠습니다. ㉯ 컨베이어 방호장치가 작동하지 않습니다. ㉰ 말려들 우려가 있으므로 작업을 중지하였습니다.</div>
+  <div class="drill left" style="font-size:15px; line-height:2.6;">
+    올바른 순서: ( <span style="letter-spacing:0;">＿＿</span> ) → ( <span style="letter-spacing:0;">＿＿</span> ) → ( <span style="letter-spacing:0;">＿＿</span> )</div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>13</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="상황쓰기"><div class="eyebrow">3교시 · 쓰기</div><h2 class="sec">상황 쓰기 — 작업 중지 통보문</h2>
+  <div class="prose" style="margin-bottom:16px;">내 작업장의 위험 상황 하나를 정해 중지 통보문을 씁니다. 이 글은 상급자에게 보내는 문서입니다.</div>
+  <div class="tintbox" style="margin-bottom:22px;">
+    <div style="font-weight:800; color:#1B2E6B; margin-bottom:6px;">통보문 공식 — 세 문장</div>
+    <div style="font-size:14.5px; line-height:2.1;">[상황]<span class="enc">＋</span>[<span style="letter-spacing:0;"></span>우려가 있으므로 …중지하겠습니다]<span class="enc">＋</span>[완료 여부를 확인한 후에 재개하겠습니다]<br><br>
+    <span style="font-size:13px; color:#6E7681;">예: 컨베이어 방호장치가 작동하지 않습니다. 손이 말려들 우려가 있으므로 작업을 중지하겠습니다. 조치 완료 여부를 확인한 후에 재개하겠습니다.</span></div>
+  </div>
+  <div class="sechead"><span class="cbadge">A</span><span class="t">통보문을 쓰십시오. (세 문장)</span></div>
+  <div class="drill left" style="margin-bottom:34px; font-size:15px; line-height:3.75;">
+    상황: <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    중지: <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    재개: <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span><br>
+    <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span></div>
+  <div class="caution" style="font-size:14px; line-height:1.95; padding:16px 18px;">
+    <b>제출</b> · 완성한 통보문을 이번 주 <b>LMS 과제방</b>에 제출합니다. 이 글은 <b>과제②(11주)의 필수 구성요소</b>입니다.</div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>14</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div><div class="page" data-document-role="page" data-label="정리"><div class="eyebrow">3교시 · 읽기</div><h2 class="sec">정리</h2>
+  <div style="display:flex;flex-direction:column;gap:12px;font-size:15px;line-height:1.6;margin-bottom:18px;">
+    <div style="display:flex;gap:12px;align-items:flex-start;"><span class="num">1</span><span style="padding-top:2px;">중지는 선언이다 — <b>우려가 있으므로 중지하겠습니다</b>. 허락을 구하지 않는다.</span></div>
+    <div style="display:flex;gap:12px;align-items:flex-start;"><span class="num">2</span><span style="padding-top:2px;">거절은 조건이다 — <b>-기 전에는 할 수 없습니다</b>. 애매하게 말하지 않는다.</span></div>
+    <div style="display:flex;gap:12px;align-items:flex-start;"><span class="num">3</span><span style="padding-top:2px;">재개는 확인 뒤다 — 조치 완료 <b>여부를 확인</b>한 후에야 다시 시작한다.</span></div>
+  </div>
+  <div style="border-top:1px solid #D8DDE1;margin-bottom:16px;"></div>
+  <div style="margin-bottom:12px;"><span style="display:inline-block;background:#1B2E6B;color:#fff;font-size:13px;font-weight:800;letter-spacing:.18em;padding:7px 16px;">자가 점검 ① 체크리스트</span></div>
+  <div class="left" style="display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;font-size:14.5px;line-height:1.55;margin-bottom:22px;">
+    <div>☐ 중지 선언을 격식체로 말할 수 있다</div>
+    <div>☐ 조건을 붙여 정중하게 거절할 수 있다</div>
+    <div>☐ 중지 절차 다섯 단계를 말할 수 있다</div>
+    <div>☐ '여부'를 써서 점검 문장을 쓸 수 있다</div>
+    <div>☐ 세 문장 통보문을 쓸 수 있다</div>
+  </div>
+  <div style="margin-bottom:12px;"><span style="display:inline-block;background:#1B2E6B;color:#fff;font-size:13px;font-weight:800;letter-spacing:.18em;padding:7px 16px;">자가 점검 ② 문제로 확인</span></div>
+  <div class="left" style="font-size:15px;line-height:2.25;margin-bottom:22px;">
+    ① 중지 선언의 문장 끝을 쓰십시오. → <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿</span><br>
+    ② '했는지 안 했는지'를 한 단어로 쓰십시오. → <span style="letter-spacing:0;">＿＿＿＿</span><br>
+    ③ 다음 중 <u>틀린</u> 문장을 고르십시오. ( <span style="letter-spacing:0;">＿＿</span> )<br>
+    <span style="font-size:14.5px;">㉮ 말려들 우려가 있으므로 중지하겠습니다 ㉯ 조치가 끝나기 전에는 재개할 수 없습니다 ㉰ 물량이 많으므로 조치 전에 재개하겠습니다</span><br>
+    ④ '우려가 있<span class="x">으니까</span> 중지하겠습니다'에서 틀린 부분을 바르게 고치십시오. → <span style="letter-spacing:0;">＿＿＿＿＿＿</span><br>
+    ⑤ "좀 어려울 것 같아요."를 명확한 거절로 바꾸십시오. → 수리되기 <span style="letter-spacing:0;">＿＿＿＿＿＿＿＿＿＿＿＿</span>.</div>
+  <div style="margin-bottom:12px;"><span style="display:inline-block;background:#1B2E6B;color:#fff;font-size:13px;font-weight:800;letter-spacing:.18em;padding:7px 16px;">10초 어휘 셀프 체크</span></div>
+  <div style="font-size:13px;color:#6E7681;margin-bottom:10px;">각 단어의 뜻이 3초 안에 떠오르지 않으면 ☐에 ✔ 하십시오. ✔한 단어는 2쪽으로 돌아가 예문과 함께 다시 읽으십시오.</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;"><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 거절</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 요청</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 상급자</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 즉시</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 발견</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 동료</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 판단</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 재개</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 행사</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 통보</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 불이익</div><div style="border:1px solid #D8DDE1;border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ 손실</div></div>
+  <div class="footer">
+      <div class="frow"><span>산업안전한국어 · 3부 권리 제8과 작업 중지와 거절</span><span>15</span></div>
+      <div class="cr">ⓒ 2026 한국공학대학교 · 산업안전한국어 · 강의용 배부본 · 무단 전재·배포 금지</div>
+    </div></div></body></html>
