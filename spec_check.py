@@ -84,6 +84,10 @@ def check(html_path, pdf_path=None):
         if drill and 'font-size' not in drill.group(1):
             warns.append("실물읽기 문제부 크기 미지정 — 실물≥문제 확인 필요")
 
+    # 13. 태그 절단 노출 (텍스트에 class=/style=/</span 등 코드 조각)
+    for frag in ('class="', "class=&quot;", 'style="', '</span', '&lt;span'):
+        if frag in T: errs.append(f"태그 절단/코드 노출: '{frag}'"); break
+
     # 12. 도비라 라벨·푸터 존재
     if '2부 · 작업절차' not in T and '1부' not in T and '3부' not in T and '4부' not in T:
         errs.append("부 라벨 없음")
