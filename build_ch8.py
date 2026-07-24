@@ -68,7 +68,7 @@ def klass_icon(g):
     return f'<div style="width:62px;height:62px;border-radius:50%;background:{TINT};display:flex;align-items:center;justify-content:center;margin:0 auto 10px auto;">{g}</div>'
 def kcol(g, pilltxt, pillbg, c1, c2):
     return f'''<div style="width:200px;text-align:center;">{klass_icon(g)}
-      <div><span style="display:inline-block;background:{pillbg};color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.1em;padding:6px 15px;border-radius:15px;">{pilltxt}</span></div>
+      <div><span style="display:inline-block;background:{pillbg};color:#fff;font-size:12.5px;font-weight:800;height:27px;line-height:27px;padding:0 16px;border-radius:14px;">{pilltxt}</span></div>
       <div style="font-size:12px;color:{SUB};line-height:1.6;margin-top:9px;">{c1}<br>{c2}</div></div>'''
 CHEV = '<div style="color:#C4CBD7;font-size:15px;margin-top:26px;">〉</div>'
 
@@ -81,7 +81,7 @@ dobira = f"""
   <div style="display:flex;gap:26px;margin-top:34px;">
     <div style="flex:1;padding-top:20px;">
       <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:118px;font-weight:900;color:{NAVY};line-height:.95;">08</div>
-      <div style="margin-top:14px;"><span style="display:inline-block;background:{DEEP};color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.34em;padding:7px 16px 7px 20px;">제 8 과</span></div>
+      <div style="margin-top:14px;"><span style="display:inline-block;background:{DEEP};color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.34em;height:30px;line-height:30px;padding:0 12px 0 20px;">제 8 과</span></div>
       <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:42px;font-weight:900;color:{INK};margin-top:22px;">작업 중지와 거절</div>
     </div>
     <div style="flex:none;width:322px;height:462px;position:relative;background:#E7EDF6;overflow:hidden;">
@@ -468,7 +468,7 @@ page("상황쓰기", p14)
 
 # ═══ 15쪽 정리 (1과 확정 틀) ═══
 def npill(t):
-    return f'<div style="margin-bottom:12px;"><span style="display:inline-block;background:{DEEP};color:#fff;font-size:13px;font-weight:800;letter-spacing:.18em;padding:7px 16px;">{t}</span></div>'
+    return f'<div style="margin-bottom:12px;"><span style="display:inline-block;background:{DEEP};color:#fff;font-size:13px;font-weight:800;height:29px;line-height:29px;padding:0 16px;">{t}</span></div>'
 vgrid12 = ''.join(f'<div style="border:1px solid {HAIR};border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ {w}</div>'
     for w in ['거절','요청','상급자','즉시','발견','동료','판단','재개','행사','통보','불이익','손실'])
 

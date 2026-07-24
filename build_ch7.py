@@ -83,8 +83,7 @@ G_SHIELD = f'<svg width="15" height="15" viewBox="0 0 100 100"><path d="M50 8 L8
 
 def kcol(glyph, pilltxt, pillbg, cap1, cap2):
     return f"""<div style="width:200px;text-align:center;">{klass_icon(glyph)}
-      <div><span style="display:inline-block;background:{pillbg};color:#fff;font-size:12.5px;font-weight:800;
-        letter-spacing:.1em;padding:6px 15px;border-radius:15px;">{pilltxt}</span></div>
+      <div><span style="display:inline-block;background:{pillbg};color:#fff;font-size:12.5px;font-weight:800;height:27px;line-height:27px;padding:0 16px;border-radius:14px;">{pilltxt}</span></div>
       <div style="font-size:12px;color:{SUB};line-height:1.6;margin-top:9px;">{cap1}<br>{cap2}</div></div>"""
 
 CHEV = f'<div style="color:#C4CBD7;font-size:15px;margin-top:26px;">〉</div>'
@@ -99,7 +98,7 @@ dobira = f"""
       <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:118px;font-weight:900;
         color:{NAVY};line-height:.95;">07</div>
       <div style="margin-top:14px;"><span style="display:inline-block;background:{DEEP};color:#fff;
-        font-size:12.5px;font-weight:800;letter-spacing:.34em;padding:7px 16px 7px 20px;">제 7 과</span></div>
+        font-size:12.5px;font-weight:800;letter-spacing:.34em;height:30px;line-height:30px;padding:0 12px 0 20px;">제 7 과</span></div>
       <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:46px;font-weight:900;
         color:{INK};margin-top:22px;">권리와 의무</div>
     </div>
@@ -505,7 +504,7 @@ page("상황쓰기", p14)
 
 # ═══════════ 15쪽 정리 + 자가점검 ═══════════
 def npill(t):
-    return f'<div style="margin-bottom:12px;"><span style="display:inline-block;background:{DEEP};color:#fff;font-size:13px;font-weight:800;letter-spacing:.18em;padding:7px 16px;">{t}</span></div>'
+    return f'<div style="margin-bottom:12px;"><span style="display:inline-block;background:{DEEP};color:#fff;font-size:13px;font-weight:800;height:29px;line-height:29px;padding:0 16px;">{t}</span></div>'
 
 vgrid12 = ''.join(f'<div style="border:1px solid {HAIR};border-radius:6px;padding:8px 12px;font-size:13.5px;">☐ {w}</div>'
     for w in ['권리','의무','근로자','사업주','중지','해고','모국어','채용','급박','처우','관리감독자','유해'])
