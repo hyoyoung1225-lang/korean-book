@@ -1,0 +1,513 @@
+# -*- coding: utf-8 -*-
+"""build_ch9.py — 산업안전한국어 제9과 「산재 서류」 (3부 권리 · 11주차 · Q9 · 과제② 수합)
+   기반: build_ch7.py 검증 완료 오버라이드(표제어 돋움·connect enc 내장·전각 밑줄·1과식 gcard 헤더·정리 틀)
+   내용 확정: 2026-07-17 (진행DB 8과 행·색인 15건·오류기록 11번)
+   실물: 작업중지권 행사 절차 안내문(기업 사례 재구성) + 위험 상황 대화(제조 소재)
+"""
+import sys
+sys.path.insert(0, '/home/claude/sik')
+exec(open('/home/claude/sik/kit_sik_v3_UPLOAD_ME.py').read())
+
+OVERRIDE_CSS = f"""
+.vcard .w{{font-family:'Arimo','Noto Sans KR','Noto Sans CJK KR',sans-serif !important;
+  font-size:18px; font-weight:800; color:{DEEP};}}
+.vcard .ex b{{color:{NAVY};}}
+.vcard{{padding:13px 16px;}}
+table.cellwide td{{padding:14px 12px !important;}}
+"""
+HEAD = HEAD.replace('</style>\n</head>', OVERRIDE_CSS + '</style>\n</head>')
+
+def blank(n=8):
+    return '<span style="letter-spacing:0;">' + '＿' * n + '</span>'
+
+def connect(left, right, lw=140, rw=150, rowgap=18):
+    dot = '<span style="color:#8A929E;font-size:14px;line-height:1;flex:none;">&middot;</span>'
+    def L(t):
+        n, w = t.split(" ", 1)
+        return (f'<div style="display:flex;align-items:center;gap:9px;margin-bottom:{rowgap}px;width:{lw}px;">'
+                f'<span class="enc">{n}</span><span style="flex:1;">{w}</span>{dot}</div>')
+    def R(t):
+        n, w = t.split(" ", 1)
+        return (f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:{rowgap}px;width:{rw}px;">'
+                f'{dot}<span class="enc">{n}</span><span>{w}</span></div>')
+    return ('<div style="display:flex;justify-content:space-between;">'
+            f'<div>{"".join(L(t) for t in left)}</div><div>{"".join(R(t) for t in right)}</div></div>')
+
+FOOT_L = "산업안전한국어 · 3부 권리 제9과 산재 서류"
+def foot(n): return footer(FOOT_L, f"{n:02d}")
+def enc(t): return f'<span class="enc">{t}</span>'
+PAGES = []
+def page(label, body):
+    PAGES.append(f'<div class="page" data-document-role="page" data-label="{label}">{body}</div>')
+
+
+# ═══ 픽토·아이콘 (9과 고유: 서식·기입·첨부·접수) ═══
+def picto_form():
+    return f'''<svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="{NAVY}"/>
+      <rect x="32" y="24" width="36" height="52" rx="3" fill="#fff"/>
+      <line x1="38" y1="36" x2="62" y2="36" stroke="{NAVY}" stroke-width="4"/>
+      <line x1="38" y1="46" x2="62" y2="46" stroke="{NAVY}" stroke-width="4"/>
+      <line x1="38" y1="56" x2="54" y2="56" stroke="{NAVY}" stroke-width="4"/></svg>'''
+def picto_pen():
+    return f'''<svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="{NAVY}"/>
+      <path d="M32 68 L36 56 L58 34 L66 42 L44 64 Z" fill="#fff"/>
+      <path d="M60 32 l8 8 l5 -5 a4 4 0 0 0 0 -6 l-2 -2 a4 4 0 0 0 -6 0 Z" fill="#fff"/>
+      <line x1="30" y1="74" x2="70" y2="74" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>'''
+def picto_clip():
+    return f'''<svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="{NAVY}"/>
+      <path d="M40 30 v30 a10 10 0 0 0 20 0 V32 a6 6 0 0 0 -12 0 v26 a2.5 2.5 0 0 0 5 0 V34" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>'''
+def picto_stamp():
+    return f'''<svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="{NAVY}"/>
+      <rect x="30" y="60" width="40" height="10" rx="3" fill="#fff"/>
+      <path d="M42 60 v-8 a8 8 0 0 1 4 -7 a9 9 0 1 1 8 0 a8 8 0 0 1 4 7 v8 Z" fill="#fff"/>
+      <path d="M40 78 h20" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>'''
+
+G_TALK = f'<svg width="30" height="30" viewBox="0 0 100 100"><path d="M14 22 h72 v44 h-40 l-16 16 v-16 h-16 Z" fill="none" stroke="{NAVY}" stroke-width="8" stroke-linejoin="round"/><line x1="30" y1="38" x2="70" y2="38" stroke="{NAVY}" stroke-width="7"/><line x1="30" y1="52" x2="58" y2="52" stroke="{NAVY}" stroke-width="7"/></svg>'
+G_AA   = f'<span style="font-family:\'Noto Serif KR\',serif;font-size:24px;font-weight:900;color:{NAVY};">Aa</span>'
+G_BOOK = f'<svg width="30" height="30" viewBox="0 0 100 100"><path d="M50 26 q-16 -10 -34 -4 v52 q18 -6 34 4 q16 -10 34 -4 v-52 q-18 -6 -34 4 Z M50 26 v52" fill="none" stroke="{NAVY}" stroke-width="8" stroke-linejoin="round"/></svg>'
+G_TARGET = f'<svg width="19" height="19" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="{NAVY}" stroke-width="10"/><circle cx="50" cy="50" r="16" fill="{NAVY}"/></svg>'
+G_BULB = f'<svg width="17" height="17" viewBox="0 0 100 100"><path d="M50 12 a26 26 0 0 1 14 48 v10 h-28 v-10 a26 26 0 0 1 14 -48 Z" fill="none" stroke="{NAVY}" stroke-width="9"/><line x1="40" y1="82" x2="60" y2="82" stroke="{NAVY}" stroke-width="8"/></svg>'
+G_SHIELD = f'<svg width="15" height="15" viewBox="0 0 100 100"><path d="M50 8 L86 20 V52 q0 28 -36 40 q-36 -12 -36 -40 V20 Z" fill="{NAVY}"/><path d="M36 50 l10 10 l20 -22" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/></svg>'
+
+def klass_icon(g):
+    return f'<div style="width:62px;height:62px;border-radius:50%;background:{TINT};display:flex;align-items:center;justify-content:center;margin:0 auto 10px auto;">{g}</div>'
+def kcol(g, pilltxt, pillbg, c1, c2):
+    return f'''<div style="width:200px;text-align:center;">{klass_icon(g)}
+      <div><span style="display:inline-block;background:{pillbg};color:#fff;font-size:12.5px;font-weight:800;height:27px;line-height:27px;padding:0 16px;border-radius:14px;">{pilltxt}</span></div>
+      <div style="font-size:12px;color:{SUB};line-height:1.6;margin-top:9px;">{c1}<br>{c2}</div></div>'''
+CHEV = '<div style="color:#C4CBD7;font-size:15px;margin-top:26px;">〉</div>'
+
+dobira = f"""
+  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid {NAVY};padding-bottom:11px;">
+    <span style="font-size:13px;font-weight:700;letter-spacing:.5em;color:{INK};">산업안전한국어</span>
+    <span style="font-size:13px;font-weight:800;letter-spacing:.14em;color:{NAVY};">3부 · 권리</span>
+  </div>
+  <div style="display:flex;gap:26px;margin-top:34px;">
+    <div style="flex:1;padding-top:20px;">
+      <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:118px;font-weight:900;color:{NAVY};line-height:.95;">09</div>
+      <div style="margin-top:14px;"><span style="display:inline-block;background:{DEEP};color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.34em;height:30px;line-height:30px;padding:0 12px 0 20px;">제 9 과</span></div>
+      <div style="font-family:'Noto Serif KR','Noto Serif CJK KR',serif;font-size:46px;font-weight:900;color:{INK};margin-top:22px;">산재 서류</div>
+    </div>
+    <div style="flex:none;width:322px;height:462px;position:relative;background:#E7EDF6;overflow:hidden;">
+      <div style="position:absolute;top:120px;left:24px;width:56px;height:400px;background:#D8E1EF;"></div>
+      <div style="position:absolute;top:230px;right:16px;width:70px;height:300px;background:#D1DBEC;"></div>
+      <div style="position:absolute;top:-70px;left:150px;width:52px;height:640px;background:{NAVY};transform:rotate(16deg);"></div>
+      <div style="position:absolute;top:52px;left:34px;right:34px;background:#fff;border-radius:16px;box-shadow:0 10px 26px rgba(20,35,80,.16);padding:26px 20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;justify-items:center;">
+          {picto_form()}{picto_pen()}{picto_clip()}{picto_stamp()}</div></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:26px;margin-top:40px;">
+    <div style="flex:1.06;">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:16px;">
+        {G_TARGET}<span style="font-size:16px;font-weight:800;color:{INK};">학습 목표</span>
+        <div style="flex:1;border-top:1px solid {HAIR};"></div></div>
+      <div style="display:flex;flex-direction:column;gap:13px;font-size:14.5px;line-height:1.6;">
+        <div style="display:flex;gap:11px;"><span class="num" style="flex:none;width:26px;height:26px;font-size:14px;">1</span><span style="padding-top:2px;">산재 신청 <b>서식의 항목</b>을 읽고 이해합니다.</span></div>
+        <div style="display:flex;gap:11px;"><span class="num" style="flex:none;width:26px;height:26px;font-size:14px;">2</span><span style="padding-top:2px;">가상 인물의 정보로 서식을 <b>직접 기입</b>합니다.</span></div>
+        <div style="display:flex;gap:11px;"><span class="num" style="flex:none;width:26px;height:26px;font-size:14px;">3</span><span style="padding-top:2px;">재해 발생 <b>경위를 다섯 물음</b>에 따라 씁니다.</span></div>
+      </div>
+    </div>
+    <div style="flex:1;background:#EDF2FA;border-radius:12px;padding:20px 24px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:11px;">
+        {G_BULB}<span style="font-size:15px;font-weight:800;color:{INK};">생각해 보기</span></div>
+      <div style="font-size:13.5px;line-height:1.75;color:{INK};">일하다가 다치면 치료비는 누가 냅니까?</div>
+      <div style="border-top:1px dashed #C9D2E2;margin:11px 0;"></div>
+      <div style="font-size:13.5px;line-height:1.75;color:{INK};">서류의 빈칸 앞에서 무엇부터 확인하겠습니까?</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:center;align-items:flex-start;gap:4px;margin-top:42px;">
+    {kcol(G_TALK,'1교시 · 어휘',NAVY,'핵심 어휘 12개 + 연습','서식의 말')}
+    {CHEV}
+    {kcol(G_AA,'2교시 · 문형',LIGHT,'위와 같이 · -(으)ㅁ 종결','N와/과 관련하여 + 종합')}
+    {CHEV}
+    {kcol(G_BOOK,'3교시 · 읽기',DEEP,'서식 완성본 읽기','경위 쓰기 + 정리')}
+  </div>
+  <div style="position:absolute;top:{FOOTER_Y}px;left:64px;right:64px;border-top:1px solid {HAIR};padding-top:12px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:800;color:{INK};">
+      {G_SHIELD} 쓸 수 있어야 받을 수 있습니다.</span>
+    <span style="font-size:13px;font-weight:800;color:{NAVY};">01</span>
+  </div>"""
+page("도비라", dobira)
+
+# ═══ 2쪽 어휘 12 ═══
+V = [
+ ("산재","기본","'산업재해'를 줄인 말입니다. 일하다가 다치는 것입니다.","<b>산재</b>가 나면 서류로 신청합니다."),
+ ("신청","기본","공식적으로 요구하는 것입니다.","요양급여를 <b>신청</b>합니다."),
+ ("제출","기본","서류를 내는 것입니다.","신청서를 공단에 <b>제출</b>합니다."),
+ ("치료","기본","다친 곳을 낫게 하는 것입니다.","<b>치료</b>를 받은 후에 서류를 냅니다."),
+ ("서식","기본","정해진 모양의 문서입니다. 칸을 채워서 씁니다.","<b>서식</b>의 항목을 먼저 읽습니다."),
+ ("기입","기본","칸에 써넣는 것입니다.","내 정보를 정확히 <b>기입</b>합니다."),
+ ("접수","기본","서류가 받아들여지는 것입니다.","신청서가 오늘 <b>접수</b>되었습니다."),
+ ("목격자","기본","그 일을 직접 본 사람입니다.","<b>목격자</b>의 이름과 연락처를 씁니다."),
+ ("요양","심화","치료하며 쉬는 것입니다. 서식의 말입니다.","<b>요양</b>급여를 신청하였습니다."),
+ ("급여","심화","지급되는 돈입니다. 월급이 아닙니다.","요양<b>급여</b>는 치료비로 쓰입니다."),
+ ("경위","심화","일이 일어난 과정입니다.","재해 발생 <b>경위</b>를 다섯 물음으로 씁니다."),
+ ("첨부","심화","서류에 다른 서류를 붙이는 것입니다.","소견서를 <b>첨부</b>하여 제출합니다."),
+]
+v_cards = ''.join(vcard(w, lv, m, e) for w, lv, m, e in V)
+p2 = f"""{head_sec('1교시 · 어휘', '핵심 어휘 12')}
+  <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:{SUB}; margin-bottom:16px;">
+    <span class="lv b">기본</span><span>모든 학생 필수</span>
+    <span class="lv a" style="margin-left:10px;">심화</span><span>법규·보고서의 문어 표현 — 읽고 이해할 수 있으면 충분합니다.</span></div>
+  <div class="vgrid" style="gap:16px;">{v_cards}</div>
+  {foot(2)}"""
+page("핵심어휘", p2)
+
+# ═══ 3쪽 어휘 연습 ═══
+p3 = f"""{head_sec('1교시 · 어휘', '어휘 연습')}
+  {sechead('A','알맞은 단어를 골라 빈칸을 채우십시오.')}
+  <div class="wbank" style="margin-bottom:22px;">기입 · 첨부 · 접수 · 경위</div>
+  <div class="left" style="font-size:15px; line-height:2.75; margin-bottom:{SP_XL}px;">
+    ① 서식의 칸에 내 정보를 {blank(5)}합니다.<br>
+    ② 소견서를 {blank(5)}하여 함께 냅니다.<br>
+    ③ 서류가 공단에 {blank(5)}되었습니다.<br>
+    ④ 재해가 일어난 과정을 {blank(5)}라고 합니다.</div>
+  {sechead('B','짝이 되는 말을 선으로 연결하십시오.')}
+  <div style="margin-bottom:{SP_XL}px;">
+  {connect(
+    ["① 급여를", "② 서류를", "③ 정보를", "④ 소견서를", "⑤ 치료를"],
+    ["㉠ 받다", "㉡ 첨부하다", "㉢ 신청하다", "㉣ 기입하다", "㉤ 제출하다"],
+    lw=160, rw=230, rowgap=34)}
+  </div>
+  {sechead('C','B에서 연결한 표현 중 두 개를 골라 문장을 쓰십시오.')}
+  <div class="left" style="font-size:15px; line-height:3.4;">
+    ① {blank(40)}<br>
+    ② {blank(40)}</div>
+  {foot(3)}"""
+page("어휘연습", p3)
+
+# ═══ 4쪽 개념 — 산재 처리 절차 ═══
+def stepcard(pic, num, title, desc):
+    return f'''<div style="border:1px solid {HAIR}; border-radius:8px; padding:19px 18px; display:flex; gap:18px; align-items:center;">
+      <div style="flex:none;">{pic}</div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:baseline; gap:10px;">
+          <span class="enc">{num}</span><span style="font-weight:800; font-size:16px; color:{DEEP};">{title}</span></div>
+        <div style="font-size:14px; line-height:1.6; margin-top:5px;">{desc}</div></div></div>'''
+
+p4 = f"""{head_sec('1교시 · 어휘', '산재 신청의 네 단계')}
+  <div class="prose" style="margin-bottom:30px;">다치면 먼저 치료를 받습니다. 그다음은 서류의 일입니다. 네 단계를 순서대로 기억합니다.</div>
+  <div style="display:flex; flex-direction:column; gap:22px; margin-bottom:{SP_L}px;">
+    {stepcard(picto_form(),'①','치료와 서식 준비', '병원에서 치료를 받고, 요양급여 신청 서식을 준비합니다.')}
+    {stepcard(picto_pen(),'②','기입', '재해자·사업장·재해 발생 경위를 서식에 기입합니다.')}
+    {stepcard(picto_clip(),'③','첨부와 제출', '의사의 소견서를 첨부하여 근로복지공단에 제출합니다.')}
+    {stepcard(picto_stamp(),'④','접수와 결정', '공단이 접수한 날부터 7일 안에 지급 여부를 알려 줍니다.')}
+  </div>
+  <div class="tintbox">
+    <div style="font-weight:800; color:{DEEP}; margin-bottom:6px;">3부가 여기에서 완성됩니다</div>
+    <div style="font-size:14.5px; line-height:1.85;">7과에서 권리를 <b>읽었고</b>, 8과에서 권리를 <b>말했습니다</b>. 9과에서는 권리를 <b>씁니다</b>. 서류를 쓸 수 있는 사람이 보상을 받습니다.</div>
+  </div>
+  {foot(4)}"""
+page("개념", p4)
+
+# ═══ 5쪽 확장① — 누가 채우는 칸입니까? ═══
+p5 = f"""{head_sec('1교시 · 어휘', '어휘 확장 ① — 누가 채우는 칸입니까?')}
+  <div class="prose" style="margin-bottom:24px;">서식의 칸마다 채우는 사람이 다릅니다. 내가 쓰는 칸, 물어봐야 하는 칸, 의사가 쓰는 서류를 구별합니다.</div>
+  <table class="f cellwide" style="margin-bottom:{SP_XL}px;">
+    <tr><th style="width:140px;height:8px;">누가</th><th>어느 칸</th></tr>
+    <tr><td><b>나</b></td><td>성명 · 외국인등록번호 · 주소 · 재해 발생 일시 · 재해 발생 경위 · 목격자</td></tr>
+    <tr><td><b>회사에 문의</b></td><td>사업장관리번호 · 사업장 주소 · 채용일자</td></tr>
+    <tr><td><b>의사(병원)</b></td><td>소견서 — 내가 쓰지 않고 첨부만 합니다.</td></tr>
+  </table>
+  <div class="tintbox" style="margin-bottom:{SP_L}px;">
+    <div style="font-weight:800; color:{DEEP}; margin-bottom:6px;">서식이 알려 주는 기입 규칙</div>
+    <div style="font-size:14.5px; line-height:1.9;">성명 칸에 이렇게 쓰여 있습니다: "외국인은 외국인등록증상 <b>영문명 대문자</b>". 서식이 외국인 근로자를 위한 안내를 이미 갖고 있습니다.</div>
+  </div>
+  {sechead('A','누가 채웁니까? 알맞은 쪽을 고르십시오.')}
+  <div class="left" style="font-size:15px; line-height:3.3; margin-bottom:{SP_L}px;">
+    ① 재해 발생 경위 ( 나 · 회사 · 의사 )<br>
+    ② 사업장관리번호 ( 나 · 회사에 문의 · 의사 )<br>
+    ③ 소견서 ( 나 · 회사 · 의사 )</div>
+  {sechead('B','위의 표와 도움말에서 찾아 빈칸을 채우십시오.')}
+  <div class="left" style="font-size:15px; line-height:3.4;">
+    ① 외국인은 성명을 외국인등록증의 영문명 {blank(5)}로 기입합니다.<br>
+    ② 소견서는 {blank(4)}가 작성하고, 나는 {blank(4)}만 합니다.</div>
+  {foot(5)}"""
+page("어휘확장1", p5)
+
+# ═══ 6쪽 확장② — 함께 쓰는 말 ═══
+def collo(a, b, m, e):
+    return f'''<div style="border:1px solid {HAIR}; border-radius:8px; padding:24px 18px;">
+      <div style="font-size:17px; font-weight:800; color:{DEEP};">{a} <span style="color:{LIGHT};">+</span> {b}</div>
+      <div style="font-size:13.5px; margin-top:5px; line-height:1.6;">{m}</div>
+      <div style="font-size:12.5px; color:{SUB}; border-top:1px dashed {HAIR}; margin-top:12px; padding-top:11px; line-height:1.7;">{e}</div></div>'''
+
+p6 = f"""{head_sec('1교시 · 어휘', '어휘 확장 ② — 함께 쓰는 말')}
+  <div class="prose" style="margin-bottom:24px;">서식의 말도 짝이 정해져 있습니다. 급여의 두 종류도 여기에서 구별합니다.</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-bottom:{SP_XL}px;">
+    {collo('요양급여를','신청하다','치료비를 요구하는 것입니다. 이번 과의 서식입니다.','<b>요양급여</b>는 치료에 드는 돈입니다.')}
+    {collo('휴업급여를','받다','치료 때문에 일을 못 한 날의 돈입니다.','<b>휴업급여</b>는 쉰 날의 임금 일부입니다.')}
+    {collo('소견서를','첨부하다','의사의 판단 서류를 붙이는 것입니다.','의사의 <b>소견서를 첨부</b>하여 제출합니다.')}
+    {collo('경위를','작성하다','일이 일어난 과정을 쓰는 것입니다.','다섯 물음에 따라 <b>경위를 작성</b>합니다.')}
+  </div>
+  {sechead('A','알맞은 짝을 골라 문장을 완성하십시오.')}
+  <div class="wbank" style="margin-bottom:26px;">요양 · 휴업 · 소견서 · 경위</div>
+  <div class="left" style="font-size:15px; line-height:3.8;">
+    ① 치료비는 {blank(4)}급여로 신청합니다.<br>
+    ② 치료로 일을 쉰 날은 {blank(4)}급여를 받습니다.<br>
+    ③ 의사가 쓴 {blank(5)}를 첨부합니다.<br>
+    ④ 재해 발생 {blank(4)}를 사실대로 작성합니다.</div>
+  {foot(6)}"""
+page("어휘확장2", p6)
+
+print(f"[1/3] {len(PAGES)}쪽")
+
+# ═══ 7~9쪽 문형 (8과 검증 gcard) ═══
+def pillrow(*ps):
+    return '<div style="display:flex; gap:8px; margin:10px 0 4px 0;">' + ''.join(pill(t) for t in ps) + '</div>'
+def gcard(num, title, site_img, quote, source, mean_html, comp_pill, comp_html, err_html, drill_html, wide=True, lv='심화', comb='동사'):
+    sb, mm, cm, dl = (28, 20, 26, 3.0) if wide else (26, 18, 24, 2.95)
+    return f"""<div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
+    <span class="num">{num}</span>
+    <span class="formbig" style="white-space:nowrap;">{title}</span>
+    <span class="lv {'b' if lv=='기본' else 'a'}">{lv}</span>
+    <span style="margin-left:auto; font-size:13.5px; color:{SUB};">결합: <b style="color:{INK};">{comb}</b></span></div>
+  <div style="margin-bottom:{sb}px;">{sitebox_img(site_img, quote, source)}</div>
+  {pillrow('의미와 쓰임')}
+  <div class="prose" style="margin-bottom:{mm}px;">{mean_html}</div>
+  {pillrow(comp_pill)}
+  <div style="font-size:14.5px; line-height:{1.8 if wide else 1.7}; margin-bottom:{mm}px;">{comp_html}</div>
+  {pillrow('자주 하는 오류')}
+  <div class="caution" style="font-size:14.5px; line-height:{2.0 if wide else 1.85}; margin-bottom:{cm}px;">{err_html}</div>
+  {pillrow('연습')}
+  <div class="drill left" style="font-size:15px; line-height:{dl};">{drill_html}</div>"""
+
+IMG_SIGN = f'''<svg width="96" height="96" viewBox="0 0 100 100">
+  <rect x="12" y="10" width="76" height="80" rx="5" fill="#fff" stroke="{NAVY}" stroke-width="5"/>
+  <line x1="22" y1="26" x2="78" y2="26" stroke="{HAIR}" stroke-width="5"/>
+  <line x1="22" y1="38" x2="78" y2="38" stroke="{HAIR}" stroke-width="5"/>
+  <text x="22" y="66" font-size="19" font-weight="bold" fill="{NAVY}">서명</text>
+  <line x1="52" y1="66" x2="80" y2="66" stroke="{NAVY}" stroke-width="4"/>
+  <path d="M62 78 L84 50 l7 7 L69 85 l-10 3 Z" fill="{NAVY}"/></svg>'''
+IMG_LOG = f'''<svg width="96" height="96" viewBox="0 0 100 100">
+  <rect x="10" y="14" width="80" height="72" rx="5" fill="#fff" stroke="{NAVY}" stroke-width="5"/>
+  <rect x="10" y="14" width="80" height="18" fill="{NAVY}"/>
+  <text x="50" y="28" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">경위란</text>
+  <text x="50" y="62" text-anchor="middle" font-size="21" font-weight="bold" fill="{NAVY}">끼임.</text>
+  <line x1="20" y1="74" x2="80" y2="74" stroke="{HAIR}" stroke-width="4"/></svg>'''
+IMG_Q = f'''<svg width="96" height="96" viewBox="0 0 100 100">
+  <rect x="10" y="16" width="80" height="68" rx="6" fill="#fff" stroke="{NAVY}" stroke-width="5"/>
+  <rect x="20" y="30" width="18" height="18" fill="none" stroke="{NAVY}" stroke-width="4"/>
+  <path d="M23 39 l6 6 l10 -13" fill="none" stroke="{NAVY}" stroke-width="5" stroke-linecap="round"/>
+  <text x="46" y="45" font-size="16" font-weight="bold" fill="{NAVY}">예</text>
+  <rect x="20" y="58" width="18" height="18" fill="none" stroke="{NAVY}" stroke-width="4"/>
+  <text x="46" y="73" font-size="16" font-weight="bold" fill="{NAVY}">아니오</text></svg>'''
+
+p7 = gcard('1', '위와 같이 N을/를 신청합니다', IMG_SIGN,
+  '<b>위와 같이</b> 요양급여 및 휴업급여를 <b>신청합니다</b>.', '신청서 서명란',
+  """서식 맨 아래, 서명 앞에 쓰는 문장입니다. <b>위와 같이</b>는 '위에 쓴 내용대로'라는 뜻입니다. 위 내용이 사실이라는 약속이기도 합니다.""",
+  '비교 · 동사를 구별합니다',
+  f"""· <b>신청하다</b> — 급여(돈·권리)를 요구합니다.<br>
+      · <b>제출하다</b> — 서류를 냅니다.<br>
+      · <b>첨부하다</b> — 서류에 서류를 붙입니다.<br>
+      요양급여를 <b>신청</b>하려고, 소견서를 <b>첨부</b>한 신청서를 <b>제출</b>합니다.""",
+  f"""<span class="x">✗ 위와 같이 신청서를 신청합니다.</span><br>
+      ○ 위와 같이 요양급여를 <b>신청합니다</b>. / 신청서를 <b>제출합니다</b>.<br>
+      <span style="font-size:13px; color:{SUB};">신청하는 것은 급여, 제출하는 것은 서류입니다.</span>""",
+  f"""{enc('①')} 위와 같이 요양급여를 {blank(6)}.<br>
+      {enc('②')} 소견서를 {blank(5)}하여 신청서를 {blank(6)}.<br>
+      {enc('③')} (서명란에) 위와 {blank(4)} 휴업급여를 신청합니다.""", lv='기본', comb='명사')
+page("문형1", p7 + foot(7))
+
+p8 = gcard('2', '-(으)ㅁ 명사형 종결', IMG_LOG,
+  '금형이 미끄러져 손가락이 <b>끼임</b>.', '재해 발생 경위란',
+  """서식과 일지의 문장 끝입니다. '-습니다' 대신 <b>-(으)ㅁ</b>으로 짧게 끝냅니다. 사실만 남기는 문서의 말투입니다.""",
+  '비교 · 말과 서식',
+  f"""· 말할 때 — 손가락이 끼였<b>습니다</b>.<br>
+      · 서식에 쓸 때 — 손가락이 끼<b>임</b>. / 관리감독자에게 보고<b>함</b>.<br>
+      6과 작업일지에서 이 말투를 읽었습니다. 이제 내가 씁니다.""",
+  f"""<span class="x">✗ 손가락이 끼임입니다.</span><br>
+      ○ 손가락이 끼<b>임</b>. (여기서 문장이 끝납니다)<br>
+      <span style="font-size:13px; color:{SUB};">-(으)ㅁ 뒤에는 아무것도 붙이지 않습니다.</span>""",
+  f"""서식체로 바꿔 쓰십시오.<br>
+      {enc('①')} 방호장치가 작동하지 않았습니다. → 방호장치가 작동하지 {blank(4)}<br>
+      {enc('②')} 반장에게 즉시 보고했습니다. → 반장에게 즉시 {blank(4)}<br>
+      {enc('③')} 병원으로 이동해서 치료를 받았습니다. → 병원으로 이동하여 치료를 {blank(4)}""")
+page("문형2", p8 + foot(8))
+
+p9 = gcard('3', 'N와/과 관련하여', IMG_Q,
+  '위 재해<b>와 관련하여</b> 경찰서에 신고된 사실이 있습니까?', '신청서 확인 문항',
+  """'N에 대해서'의 공문 말입니다. 서식의 확인 문항 세 개가 전부 이 꼴로 묻습니다. 읽고 [예/아니오]에 정확히 표시합니다.""",
+  '비교 · 비슷한 공문 표현',
+  f"""· N<b>와/과 관련하여</b> — 서식·공문에서 가장 자주 만납니다.<br>
+      · N<b>에 관하여 / 에 대하여</b> — 법령과 규정의 말입니다. (7과 조문에서 봤습니다)<br>
+      셋 다 뜻은 같습니다. 문서에 따라 골라 씁니다.""",
+  f"""<span class="x">✗ 위 재해를 관련하여 신고하였습니까?</span><br>
+      ○ 위 재해<b>와 관련하여</b> 신고된 사실이 있습니까?<br>
+      <span style="font-size:13px; color:{SUB};">'관련하여' 앞에는 와/과가 옵니다.</span>""",
+  f"""{enc('①')} 위 재해{blank(5)} 119에 신고된 사실이 있습니까?<br>
+      {enc('②')} 이 사고{blank(5)} 목격자가 있습니까?<br>
+      {enc('③')} (읽고 표시) 위 재해와 관련하여 보상금을 받은 사실이 있습니까? [ 예 · 아니오 ]""", wide=False)
+page("문형3", p9 + foot(9))
+
+# ═══ 10쪽 문형 종합 ═══
+p10 = f"""{head_sec('2교시 · 문형', '문형 종합')}
+  {sechead('A','말을 서식체로 바꿔 쓰십시오.')}
+  <div class="drill left" style="margin-bottom:{SP_XL}px; font-size:15px; line-height:2.95;">
+    {enc('①')} "컨베이어에 손목이 끼였습니다."<br>
+    → 컨베이어에 손목이 {blank(4)}<br>
+    {enc('②')} "치료를 받고 관리감독자에게 보고했습니다."<br>
+    → 치료를 받은 후 관리감독자에게 {blank(4)}</div>
+  {sechead('B','서식에서 찾아 쓰십시오.')}
+  <div class="lawq" style="margin-bottom:16px; font-size:14.5px; line-height:2.0; padding:16px 18px; background:#FBFCFE; border:1px solid {HAIR}; border-radius:6px;">위 재해와 관련하여 경찰서에 신고된 사실이 있습니까? [ ] 예 [ ] 아니오 … 위와 같이 요양급여 및 휴업급여를 신청합니다. 신청인: (서명)</div>
+  <div class="drill left" style="margin-bottom:{SP_XL}px; font-size:15px; line-height:2.8;">
+    {enc('①')} 'N에 대해서'의 공문 표현: {blank(7)}<br>
+    {enc('②')} 서명 앞의 정형 문장 첫 세 글자: {blank(4)}</div>
+  {sechead('C','미니 쓰기 — 서식체 한 줄로 쓰십시오.')}
+  <div class="drill left" style="font-size:15px; line-height:2.9;">
+    어제 작업장에서 있었던 일 하나를 서식체(-(으)ㅁ)로 씁니다.<br>
+    {blank(32)}<br>
+    {blank(32)}</div>
+  {foot(10)}"""
+page("문형종합", p10)
+
+print(f"[2/3] {len(PAGES)}쪽")
+
+# ═══ 11쪽 실물 — 기입 완성본 (시연 인물: 응우옌 반 안) ═══
+FILL = f'color:{NAVY};font-weight:800;'   # 기입값 표시(파란 굵게)
+def frow(label, val, lw=118):
+    return (f'<div style="display:flex;border-bottom:1px solid {HAIR};">'
+            f'<div style="flex:none;width:{lw}px;background:#F4F6FA;padding:12px 10px;font-size:12.5px;color:{INK};">{label}</div>'
+            f'<div style="flex:1;padding:12px 12px;font-size:13.5px;"><span style="{FILL}">{val}</span></div></div>')
+
+p11 = f"""{head_sec('3교시 · 읽기', '실물 자료 읽기 — 기입이 끝난 신청서')}
+  <div style="font-weight:800;color:{NAVY};font-size:13.5px;margin-bottom:8px;">[가] 산업재해보상보험 요양급여 및 휴업급여(최초분) 신청서 — 기입 완성본 <span style="font-weight:500;color:{SUB};font-size:12px;">· 파란 글씨 = 기입한 내용</span></div>
+  <div style="border:1.5px solid {NAVY};border-radius:6px;overflow:hidden;margin-bottom:8px;">
+    <div style="background:{NAVY};color:#fff;text-align:center;font-weight:800;font-size:13.5px;padding:7px;">산업재해보상보험 요양급여 및 휴업급여(최초분) 신청서</div>
+    {frow('성명 <span style="font-size:10.5px;color:#888;">(외국인은 영문명 대문자)</span>','NGUYEN VAN AN')}
+    {frow('외국인등록번호','930215-5●●●●●●')}
+    {frow('주소 · 연락처','경기도 시흥시 ○○로 12 · 010-1234-5678')}
+    {frow('직종 · 채용일자','프레스 조작원 · 2024년 3월 2일')}
+    {frow('재해 발생 일시','2026년 5월 12일 14시 30분')}
+    {frow('신청 구분','☑ 업무상 사고 &nbsp; ☐ 업무상 질병 &nbsp; ☐ 출퇴근 재해')}
+    {frow('사업장명 · 관리번호','○○정밀 · <span style="color:{SUB};font-weight:400;">(회사에 문의하여 기입)</span>')}
+    <div style="display:flex;border-bottom:1px solid {HAIR};">
+      <div style="flex:none;width:118px;background:#F4F6FA;padding:12px 10px;font-size:12.5px;">재해 발생 경위</div>
+      <div style="flex:1;padding:13px 12px;font-size:13.5px;line-height:1.9;"><span style="{FILL}">제3공장 프레스 라인에서 금형을 교체하기 위해 수공구를 사용하여 금형을 옮기다가, 금형이 미끄러져 오른손 둘째 손가락이 끼이는 재해를 당하였음.</span></div></div>
+    {frow('목격자','김민수 (동료 작업자) · 010-9876-5432')}
+    <div style="padding:14px 12px;font-size:13.5px;text-align:center;">위와 같이 요양급여 및 휴업급여를 <b>신청합니다</b>. &nbsp; 신청인: <span style="{FILL}">NGUYEN VAN AN</span> (서명)</div>
+  </div>
+  <div class="lnote" style="font-size:11.5px;color:{SUB};margin-bottom:20px;">산업재해보상보험법 제41조·요양업무처리규정 별지 서식을 교육용으로 재구성 · 인물·번호는 가상(등록번호는 가림)</div>
+  <div style="font-weight:800;color:{NAVY};font-size:13.5px;margin-bottom:8px;">[나] 경위란은 다섯 물음으로 씁니다 <span style="font-weight:500;color:{SUB};font-size:12px;">· 서식 원문의 작성 방식</span></div>
+  <div class="tintbox" style="font-size:13.5px;line-height:2.3;padding:24px 26px;">
+    <b>어디에서</b>(구체적 장소) → <b>무엇을 하기 위해</b>(작업 내용·목적) → <b>무엇을 사용하여</b>(작업 도구·취급 물질) → <b>어떻게 하다가</b>(경위·동작) → <b>어떤 이유로 어떻게 재해를 당하였는지</b><br>
+    <span style="font-size:12.5px;color:{SUB};">위 완성본의 경위문이 이 순서 그대로입니다. 다섯 물음은 서식이 직접 알려 주는 쓰기 공식입니다.</span></div>
+  {foot(11)}"""
+page("실물자료읽기", p11)
+
+# ═══ 12쪽 읽고 답하기 ═══
+p12 = f"""{head_sec('3교시 · 읽기', '읽고 답하기')}
+  <div class="tintbox" style="margin-bottom:{SP_M}px; font-size:14px;">11쪽의 완성본을 다시 보면서 답하십시오.</div>
+  {sechead('A','기본 — 맞으면 ○, 틀리면 ✗를 쓰십시오.')}
+  <div class="drill left" style="margin-bottom:{SP_XL}px; font-size:15px; line-height:2.75;">
+    {enc('①')} 외국인은 성명을 모국어 글자로 씁니다. ( {blank(2)} )<br>
+    {enc('②')} 사업장관리번호는 회사에 문의하여 기입합니다. ( {blank(2)} )<br>
+    {enc('③')} 소견서는 재해자 본인이 씁니다. ( {blank(2)} )</div>
+  {sechead('B','심화 — 완성본에서 찾아 쓰십시오.')}
+  <div class="drill left" style="margin-bottom:{SP_XL}px; font-size:15px; line-height:2.7;">
+    {enc('①')} 재해가 일어난 장소(어디에서)를 찾아 쓰십시오.<br>
+    → {blank(20)}<br>
+    {enc('②')} 경위문의 마지막 서술어(서식체)를 찾아 쓰십시오.<br>
+    → {blank(12)}</div>
+  {sechead('C','확장 — 생각을 쓰십시오.')}
+  <div class="drill left" style="font-size:15px; line-height:2.6;">
+    경위를 다섯 물음의 순서로 쓰면 무엇이 좋습니까?<br>
+    → {blank(26)}<br>
+    {blank(30)}</div>
+  {foot(12)}"""
+page("읽고답하기", p12)
+
+# ═══ 13쪽 연습 — 부분 기입 (연습 인물: 바트자르갈) ═══
+CARD_B = f'''<div style="border:1.5px solid {LIGHT};border-radius:9px;padding:14px 18px;margin-bottom:18px;">
+  <div style="font-weight:800;color:{DEEP};font-size:13.5px;margin-bottom:7px;">연습 인물 카드 — 이 사람이 되어 기입하십시오</div>
+  <div style="font-size:13.5px;line-height:1.85;">이름 <b>BATZAYA BATJARGAL</b> (몽골) · 등록번호 950712-6●●●●●● · 직종 컨베이어 포장원 (제2공장)<br>
+  재해: 2026년 6월 3일 10시 20분, 포장 라인에서 상자를 옮기기 위해 컨베이어 옆을 지나다가, 방호 덮개가 열린 롤러에 장갑이 걸려 왼손 손목이 끼이는 부상 · 목격자: 동료 리시앙(010-2345-6789)</div></div>'''
+
+p13 = f"""{head_sec('3교시 · 읽기', '연습 — 서식에 기입하기')}
+  {CARD_B}
+  {sechead('A','인물 카드를 보고 칸을 채우십시오.')}
+  <div class="drill left" style="margin-bottom:{SP_XL}px; font-size:15px; line-height:3.05;">
+    {enc('①')} 성명(영문 대문자): {blank(16)}<br>
+    {enc('②')} 재해 발생 일시: {blank(16)}<br>
+    {enc('③')} 직종: {blank(10)}<br>
+    {enc('④')} 신청 구분: ( 업무상 사고 · 업무상 질병 · 출퇴근 재해 )</div>
+  {sechead('B','경위의 앞 두 물음을 채우십시오.')}
+  <div class="drill left" style="margin-bottom:{SP_XL}px; font-size:15px; line-height:3.1;">
+    {enc('①')} 어디에서 — {blank(18)}에서<br>
+    {enc('②')} 무엇을 하기 위해 — {blank(14)}기 위해</div>
+  {sechead('C','확인 문항에 표시하십시오.')}
+  <div class="drill left" style="font-size:15px; line-height:2.9;">
+    {enc('①')} 위 재해와 관련하여 119에 신고된 사실이 있습니까? ( 예 · 아니오 )<br>
+    {enc('②')} 위 재해와 관련하여 목격자가 있습니까? ( 예 · 아니오 )</div>
+  {foot(13)}"""
+page("연습", p13)
+
+# ═══ 14쪽 상황 쓰기 — 경위 다섯 물음 ═══
+p14 = f"""{head_sec('3교시 · 쓰기', '상황 쓰기 — 재해 발생 경위')}
+  <div class="prose" style="margin-bottom:16px;">13쪽 인물 카드로 경위문을 완성합니다. 다섯 물음의 순서를 지키고, 문장 끝은 서식체(-(으)ㅁ)로 씁니다.</div>
+  <div class="tintbox" style="margin-bottom:{SP_M}px;">
+    <div style="font-weight:800; color:{DEEP}; margin-bottom:6px;">경위 쓰기 공식 — 서식이 알려 주는 다섯 물음</div>
+    <div style="font-size:14.5px; line-height:2.3;">어디에서 {enc('＋')} 무엇을 하기 위해 {enc('＋')} 무엇을 사용하여 {enc('＋')} 어떻게 하다가 {enc('＋')} 어떤 재해를 당하였음<br>
+    <span style="font-size:13px; color:{SUB};">예(11쪽): 제3공장 프레스 라인에서 … 손가락이 끼이는 재해를 당하였음.</span></div>
+  </div>
+  {sechead('A','경위문을 쓰십시오. (두세 문장, 끝은 -(으)ㅁ)')}
+  <div class="drill left" style="margin-bottom:{SP_L}px; font-size:15px; line-height:4.45;">
+    {blank(34)}<br>
+    {blank(34)}<br>
+    {blank(34)}<br>
+    {blank(34)}<br>
+    {blank(34)}</div>
+  <div class="caution" style="font-size:14px; line-height:1.95; padding:16px 18px;">
+    <b>제출</b> · 완성한 경위문을 이번 주 <b>LMS 과제방</b>에 제출합니다.<br>
+    <b>과제②(이번 주 수합)</b> · 과제방의 <b>입력형 PDF 신청서</b>(과제용 인물: 아웅 코)를 내려받아 전체를 기입해 제출합니다. 8과의 작업 중지 문장도 과제②에 함께 들어갑니다.</div>
+  {foot(14)}"""
+page("상황쓰기", p14)
+
+# ═══ 15쪽 정리 (1과 틀) ═══
+def npill(t):
+    return f'<div style="margin-bottom:12px;"><span style="display:inline-block;background:{DEEP};color:#fff;font-size:13px;font-weight:800;height:29px;line-height:29px;padding:0 16px;">{t}</span></div>'
+vgrid12 = ''.join(f'<div style="border:1px solid {HAIR};border-radius:6px;padding:12px 12px;font-size:13.5px;">☐ {w}</div>'
+    for w in ['산재','신청','제출','치료','서식','기입','접수','목격자','요양','급여','경위','첨부'])
+
+p15 = f"""{head_sec('3교시 · 읽기', '정리')}
+  <div style="display:flex;flex-direction:column;gap:10px;font-size:15px;line-height:1.55;margin-bottom:14px;">
+    <div style="display:flex;gap:12px;align-items:flex-start;"><span class="num">1</span><span style="padding-top:2px;">순서를 안다 — 치료 → <b>기입</b> → 소견서 <b>첨부</b> → 공단 <b>제출</b> → 접수·결정.</span></div>
+    <div style="display:flex;gap:12px;align-items:flex-start;"><span class="num">2</span><span style="padding-top:2px;">경위는 <b>다섯 물음</b>의 순서로, 문장 끝은 서식체 <b>-(으)ㅁ</b>으로 쓴다.</span></div>
+    <div style="display:flex;gap:12px;align-items:flex-start;"><span class="num">3</span><span style="padding-top:2px;">모르는 칸은 비워 두지 않는다 — <b>회사에 문의</b>하거나 도움을 요청한다.</span></div>
+  </div>
+  <div style="border-top:1px solid {HAIR};margin-bottom:16px;"></div>
+  {npill('자가 점검 ① 체크리스트')}
+  <div class="left" style="display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;font-size:14.5px;line-height:1.55;margin-bottom:{SP_M}px;">
+    <div>☐ 산재 신청의 네 단계를 말할 수 있다</div>
+    <div>☐ 서식의 칸을 누가 채우는지 구별할 수 있다</div>
+    <div>☐ 경위를 다섯 물음의 순서로 쓸 수 있다</div>
+    <div>☐ 서식체(-(으)ㅁ)로 문장을 끝낼 수 있다</div>
+    <div>☐ 확인 문항을 읽고 예·아니오에 표시할 수 있다</div>
+  </div>
+  {npill('자가 점검 ② 문제로 확인')}
+  <div class="left" style="font-size:15px;line-height:2.1;margin-bottom:{SP_M}px;">
+    ① 치료비를 요구하는 급여의 이름을 쓰십시오. → {blank(6)}<br>
+    ② "손목이 끼였습니다."를 서식체로 바꾸십시오. → 손목이 {blank(4)}<br>
+    ③ 다음 중 <u>틀린</u> 문장을 고르십시오. ( {blank(2)} )<br>
+    <span style="display:block; padding-left:26px; font-size:14.5px; line-height:1.8;">㉮ 소견서를 첨부하여 제출합니다.<br>㉯ 위와 같이 요양급여를 신청합니다.<br>㉰ 위와 같이 신청서를 신청합니다.</span>
+    ④ '위 재해<span class="x">를 관련하여</span>'에서 틀린 부분을 바르게 고치십시오. → {blank(6)}<br>
+    ⑤ 사업장관리번호를 모르면 어떻게 합니까? → {blank(10)}</div>
+  {npill('10초 어휘 셀프 체크')}
+  <div style="font-size:13px;color:{SUB};margin-bottom:10px;">각 단어의 뜻이 3초 안에 떠오르지 않으면 ☐에 ✔ 하십시오. ✔한 단어는 2쪽으로 돌아가 예문과 함께 다시 읽으십시오.</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">{vgrid12}</div>
+  {foot(15)}"""
+page("정리", p15)
+
+html = HEAD + '<body>' + ''.join(PAGES) + '</body></html>'
+open('/home/claude/sik/ch9_full_15pages.html', 'w', encoding='utf-8').write(html)
+print(f"[3/3] {len(PAGES)}쪽 → ch9_full_15pages.html")
+from playwright.sync_api import sync_playwright
+with sync_playwright() as p:
+    b = p.chromium.launch()
+    pg = b.new_page(viewport={'width': 794, 'height': 1123})
+    pg.goto('file:///home/claude/sik/ch9_full_15pages.html')
+    pg.wait_for_timeout(1200)
+    pg.pdf(path='/home/claude/sik/ch9.pdf', width='794px', height='1123px', print_background=True, page_ranges='1-15')
+    b.close()
+print("PDF ok")
